@@ -10,17 +10,8 @@ background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
 }
 
 
-/* this custom 3 is what I use in the login button! */
-.loginOverlay .gradient-custom-3 {
-  /* Fallback for old browsers */
-  background: #FCB09D;
+/* this custom 3 and this is what I use in the login button! */
 
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to top, #ED8282 0%, #FCB09D 31%, #FCB88D 58%, #FCB88D 81%);
-
-  /* Modern standard browsers */
-  background: linear-gradient(to top, #ED8282 0%, #FCB09D 31%, #FCB88D 58%, #FCB88D 81%);
-}
 
 .loginOverlay .gradient-custom-3 {
   /* Fallback for old browsers */
@@ -31,6 +22,27 @@ background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
 
   /* Modern standard browsers */
   background: linear-gradient(to right, #F56C6C 0%, #FF9B4F 66%, #FFA1A1 84%);
+}
+
+
+/*new button approach */
+.loginOverlay .login-btn {
+  color: #fff;
+  border: none;
+  background: linear-gradient(to right, #F56C6C 0%, #FF9B4F 50%, #FFA1A1 100%);
+  background-size: 200% 100%;      /* gradient is 2x the button width */
+  background-position: left center; /* we only see the left half */
+  transition: background-position 0.4s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.loginOverlay .login-btn:hover {
+  background-position: right center; /* slide to the right half */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 108, 108, 0.4);
+}
+
+.loginOverlay .login-btn:active {
+  transform: translateY(0);          /* press-down feel */
 }
 
 

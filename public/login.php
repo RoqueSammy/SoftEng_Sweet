@@ -9,8 +9,8 @@ include(__DIR__ . '/includes/topbar.php');
 ?>
 
 <section class="loginOverlay">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="container py-5 ">
+        <div class="row d-flex justify-content-center align-items-center ">
             <div class="col-xl-10">
                 <div class="card rounded-3 text-black">
                     <div class="row g-0">
@@ -63,7 +63,7 @@ include(__DIR__ . '/includes/topbar.php');
                                     <div class="d-grid pt-1 mb-3 pb-1">
                                         <button
                                             id="loginButton"
-                                            class="btn btn-primary gradient-custom-3 mb-3"
+                                            class="btn login-btn mb-3"
                                             type="submit">
                                             Login
                                         </button>

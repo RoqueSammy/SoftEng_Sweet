@@ -1,0 +1,58 @@
+/* custom css for verify password and css */
+
+.resetOverlay .reset-card {
+  max-width: 550px;   /* was 390px */
+  margin: auto;
+}
+
+.resetOverlay .reset-lock {
+  width: 90px;        /* was 70px */
+}
+
+.resetOverlay .reset-input {
+  border: 1px solid #8a8a8a;
+  border-radius: .4rem;
+  font-size: .85rem;
+}
+
+/* for header forget password? and new password */
+.resetOverlay .reset-title {
+  color: #D65454;
+}
+
+
+
+
+.resetOverlay .reset-btn {
+  background-color: #F56C6C;
+  color: #fff;
+  border: none;
+  font-size: .85rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, .25);
+  transition: background-color .3s ease, transform .2s ease, box-shadow .2s ease;
+}
+
+.resetOverlay .reset-btn:hover {
+  background-color: #e05555;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(245, 108, 108, .45);
+}
+
+.resetOverlay .reset-btn:active {
+  transform: translateY(0);
+}
+
+.resetOverlay .reset-link {
+  color: #2bb0e0;
+}
+
+.resetOverlay .reset-link:hover {
+  text-decoration: underline !important;
+}
+
+.resetOverlay {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("/SoftEcoms/public/assets/img/strawberry_theme.jpg") center / cover no-repeat;
+}

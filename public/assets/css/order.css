@@ -1,0 +1,143 @@
+.order-listing {
+  padding: 1px 16px 32px;
+}
+
+/* mao ni panel*/
+.order-listing .order-panel {
+  width: 100%;
+  max-width: 1200px;   
+  margin: 0 auto;      
+  background: #fff;    
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.order-listing .order-title {
+  text-align: center;
+  margin: 8px 0 24px;
+}
+
+.order-listing .order-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.order-listing .sort-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.order-listing .sort-chip {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #f1f1f1;
+  color: #555;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.order-listing .sort-chip.active {
+  background: #222;
+  color: #fff;
+}
+
+.order-listing .order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.order-listing .order-card {
+  display: block;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 12px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+}
+
+.order-listing .order-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;   /* every image is a square, so rows line up */
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+.order-listing .order-card:hover img {
+  transform: scale(1.03);
+}
+
+.order-listing .order-card h6 {
+  margin: 12px 0 4px;
+}
+
+.order-listing .order-card .price {
+  font-weight: 700;
+  margin: 0;
+}
+
+
+.order-listing .search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: #fff;
+}
+
+.order-listing .search-box input {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 14px;
+  min-width: 140px;
+}
+
+.order-listing .search-box button {
+  border: 0;
+  background: transparent;
+  color: #555;
+  cursor: pointer;
+}
+
+.order-listing .sort-chip i {
+  margin-right: 4px;
+  font-size: 12px;
+}
+
+.order {
+  min-height: 100vh;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("/SoftEcoms/public/assets/img/strawberry_theme.jpg") center / cover no-repeat;
+}
+
+.order-listing .order-panel {
+  background: #fff;
+}
+
+
+.order-banner {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+    url("/SoftEcoms/public/assets/img/eclair_coffee.jpg") center / cover no-repeat;
+}
+
+.order-banner h1 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
