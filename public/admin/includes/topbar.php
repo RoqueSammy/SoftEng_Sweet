@@ -109,8 +109,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 
                     <a href="/SoftEcoms/public/cart.php"
-                        class="nav-icon"
-                        aria-label="Shopping cart">
+                            class="nav-icon"
+                            id="cartIcon"
+                            aria-label="Shopping cart">
 
                         <svg xmlns="http://www.w3.org/2000/svg"
                             width="22"

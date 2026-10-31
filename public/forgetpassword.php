@@ -1,142 +1,54 @@
-
 <?php
-// public/forgetpassword.php
+session_start();
+
+$pageClass = "index-page";
+
+include('includes/header.php');
+include('includes/topbar.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forgot Password | Sweet!</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<section class="resetOverlay d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 m-auto">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    <form id="forgetpasswordForm" autocomplete="on" class="reset-card bg-white p-5 rounded-4 shadow text-center">
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background: #fff8f0;
-            color: #333;
-        }
+                    <h3 class="reset-title mb-2 fw-bold">Forgot your password?</h3>
 
-        .reset-card {
-            width: 100%;
-            max-width: 430px;
-            padding: 35px;
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
-        }
+                    <img src="/SoftEcoms/public/assets/img/svg/lock.svg"
+                        alt="Lock illustration"
+                        class="reset-lock mb-3">
 
-        h1 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: #8b4513;
-            text-align: center;
-        }
+                    <p class="small mb-3">
+                        Enter your email address and we'll send you an email to verify to reset your password!
+                    </p>
 
-        .description {
-            margin-bottom: 25px;
-            color: #666;
-            line-height: 1.6;
-            text-align: center;
-        }
+                    <input
+                        type="email"
+                        class="form-control reset-input mb-3"
+                        placeholder="Enter Email"
+                        name="email"
+                        id="email"
+                        autocomplete="username"
+                        required>
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
+                    <button
+                        type="submit"
+                        class="btn reset-btn w-100 mb-3 rounded-pill py-2 fw-bold text-uppercase"
+                        id="loginButton">
+                        Reset Password
+                    </button>
 
-        input {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-            font-size: 16px;
-        }
+                    <p class="mb-0 small">
+                        <a href="register" class="reset-link text-decoration-none">Back to Login</a>
+                    </p>
+                </form>
 
-        input:focus {
-            outline: 2px solid #d9a47e;
-            border-color: #8b4513;
-        }
-
-        button {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 7px;
-            background: #8b4513;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #71370e;
-        }
-
-        button:disabled {
-            opacity: 0.65;
-            cursor: not-allowed;
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 20px;
-            color: #8b4513;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-
-    <main class="reset-card">
-        <h1>Forgot Password?</h1>
-
-        <p class="description">
-            Enter the email address associated with your Sweet! account.
-            If your account is active, we will send you a password-reset link.
-        </p>
-
-        <form id="forgetpasswordForm">
-            <label for="email">Email Address</label>
-
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Enter your email address"
-                maxlength="254"
-                autocomplete="email"
-                required
-            >
-
-            <button type="submit" id="loginButton">
-                Send Reset Link
-            </button>
-        </form>
-
-        <a class="back-link" href="login.php">
-            Back to Login
-        </a>
-    </main>
+            </div>
+        </div>
+    </div>
+</section>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -205,5 +117,3 @@
         });
     </script>
 
-</body>
-</html>
