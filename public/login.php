@@ -4,13 +4,19 @@ session_start();
 
 $pageClass = "index-page";
 
+$loginNotice = "";
+
+if (isset($_GET['notice']) && $_GET['notice'] === 'login_required') {
+    $loginNotice = "Please log in to your account before adding products to your cart.";
+}
+
 include(__DIR__ . '/includes/header.php');
 include(__DIR__ . '/includes/topbar.php');
 ?>
 
 <section class="loginOverlay">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+    <div class="container py-5 ">
+        <div class="row d-flex justify-content-center align-items-center ">
             <div class="col-xl-10">
                 <div class="card rounded-3 text-black">
                     <div class="row g-0">
@@ -63,7 +69,7 @@ include(__DIR__ . '/includes/topbar.php');
                                     <div class="d-grid pt-1 mb-3 pb-1">
                                         <button
                                             id="loginButton"
-                                            class="btn btn-primary gradient-custom-3 mb-3"
+                                            class="btn login-btn mb-3"
                                             type="submit">
                                             Login
                                         </button>
@@ -106,6 +112,25 @@ include(__DIR__ . '/includes/topbar.php');
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    <?php if (!empty($loginNotice)): ?>
+
+        Swal.fire({
+            icon: "info",
+            title: "Login Required",
+            text: <?php echo json_encode($loginNotice); ?>,
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#F56C6C"
+        });
+
+    <?php endif; ?>
+
+});
+</script>
+
 
 <script>
 const loginForm = document.getElementById("loginForm");

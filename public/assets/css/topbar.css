@@ -91,3 +91,30 @@ form.d-flex li {
   border-radius: 60px;
   font-weight: 700;
 }
+
+#cartIcon {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    overflow: visible !important;
+}
+
+#cartIcon #cartCount {
+    position: absolute !important;
+    top: -9px !important;
+    right: -9px !important;
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    align-items: center;
+    justify-content: center;
+    background: #F0445A !important;
+    color: white !important;
+    border: 2px solid white !important;
+    border-radius: 50% !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    z-index: 99999 !important;
+}

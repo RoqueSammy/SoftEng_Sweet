@@ -5,8 +5,8 @@ session_start();
 $pageClass = "index-page";
 
 include_once __DIR__ . "/../app/config/config.php";
-include __DIR__ . "/admin/includes/header.php";
-include __DIR__ . "/admin/includes/topbar.php";
+include('includes/header.php');
+include('includes/topbar.php');
 
 /* Sweet Tooths products */
 $sweetQuery = "
