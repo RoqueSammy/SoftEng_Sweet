@@ -1,21 +1,13 @@
 <?php
 session_start();
 
-<<<<<<< HEAD
 include_once __DIR__ . "/../app/config/config.php";
 
 include __DIR__ . "/admin/includes/header.php";
 include __DIR__ . "/admin/includes/topbar.php";
 
-=======
-$pageClass = "index-page";
-
-include('includes/header.php');
-include('includes/topbar.php');
->>>>>>> cg
 ?>
 
-<<<<<<< HEAD
     <!-- Shared Reset Password CSS -->
     <link rel="stylesheet" href="/SoftEcoms/public/assets/css/forgetpass.css">
 
@@ -92,63 +84,6 @@ include('includes/topbar.php');
         </p>
 
     </main>
-=======
-<section class="resetOverlay d-flex align-items-center">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-8 m-auto">
-
-                <form id="forgetpasswordForm" autocomplete="on" class="reset-card bg-white p-5 rounded-4 shadow">
-
-                    <h3 class="reset-title mb-3 fw-bold text-center">New Password</h3>
-
-                    <p class="small text-start mb-3">
-                        To make sure your account is secure, Don't use the same old password.
-                    </p>
-
-                    <label for="password" class="d-block text-start small mb-1">
-                        New Password<span class="text-danger">*</span>
-                    </label>
-                    <input
-                        type="password"
-                        class="form-control reset-input mb-3"
-                        id="password"
-                        name="password"
-                        minlength="8"
-                        required
-                        autocomplete="new-password"
-                    >
-
-                    <label for="confirmPassword" class="d-block text-start small mb-1">
-                        Confirm New Password<span class="text-danger">*</span>
-                    </label>
-                    <input
-                        type="password"
-                        class="form-control reset-input mb-3"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        minlength="8"
-                        required
-                        autocomplete="new-password"
-                    >
-
-                    <button
-                        type="submit"
-                        class="btn reset-btn w-100 mb-3 rounded-pill py-2 fw-bold text-uppercase"
-                        id="loginButton"
-                    >
-                        Change Password
-                    </button>
-
-                    <p class="mb-0 small text-center">
-                        <a href="register" class="reset-link text-decoration-none">Back to Login</a>
-                    </p>
-                </form>
-
-            </div>
-        </div>
-    </div>
->>>>>>> cg
 </section>
 
 <script>
