@@ -53,7 +53,11 @@ $cart = $_SESSION['cart'] ?? [];
 
 <div class="container my-5 px-4">
 
+<<<<<<< HEAD
     <h2 class="text-center mb-5">My Shopping Cart</h2>
+=======
+    <h1 class="text-center mb-5">My Shopping Cart</h1>
+>>>>>>> cg
 
     <?php if (empty($cart)) { ?>
 

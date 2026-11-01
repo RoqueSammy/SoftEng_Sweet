@@ -202,6 +202,10 @@ include('includes/topbar.php');
 }
 </style>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cg
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -211,7 +215,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const increaseButton = document.getElementById("increaseQuantity");
     const addButton = form.querySelector(".buy-btn");
 
+<<<<<<< HEAD
     // Find the cart icon
+=======
+>>>>>>> cg
     const cartIcon =
         document.getElementById("cartIcon") ||
         document.querySelector('a.nav-icon[href*="cart.php"]');
@@ -259,6 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         try {
 
+<<<<<<< HEAD
             // Start flying product animation
             const animation = animateProductToCart();
 
@@ -278,12 +286,37 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             // If user is not logged in, redirect to login
+=======
+            // Send the product information to PHP
+            const formData = new FormData(form);
+
+            // PHP checks this field to process the cart request
+            formData.set("add_to_cart", "1");
+
+            const response = await fetch(
+                "../app/controllers/cartController.php",
+                {
+                    method: "POST",
+                    body: formData,
+                    credentials: "same-origin",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest",
+                        "Accept": "application/json"
+                    }
+                }
+            );
+
+            const data = await response.json();
+
+            // Redirect only if the user is not logged in
+>>>>>>> cg
             if (data.redirect) {
                 window.location.href = data.redirect;
                 return;
             }
 
             if (!response.ok || !data.success) {
+<<<<<<< HEAD
                 throw new Error(data.message || "Unable to add product.");
             }
 
@@ -307,6 +340,33 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
 
             showMessage("✕ " + error.message, true);
+=======
+                showMessage(data.message || "Unable to add product.", true);
+                return;
+            }
+
+            // Update cart count
+            const cartCount = document.getElementById("cartCount");
+
+            if (cartCount) {
+                cartCount.textContent = data.cartCount;
+            }
+
+            // Animate product image toward cart icon
+            await animateProductToCart();
+
+            // Show success notification
+            showMessage(data.message || "Product added to cart!");
+
+        } catch (error) {
+
+            console.error("Add to cart error:", error);
+
+            showMessage(
+                "Something went wrong. Please try again.",
+                true
+            );
+>>>>>>> cg
 
         } finally {
 
@@ -316,6 +376,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cg
     // Flying image animation
     function animateProductToCart() {
 
@@ -325,7 +389,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".image-wrapper img");
 
             if (!productImage || !cartIcon) {
+<<<<<<< HEAD
                 console.error("Product image or cart icon was not found.");
+=======
+>>>>>>> cg
                 resolve();
                 return;
             }
@@ -346,13 +413,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.body.appendChild(flyingImage);
 
+<<<<<<< HEAD
             // Force browser to register starting position
+=======
+>>>>>>> cg
             flyingImage.getBoundingClientRect();
 
             requestAnimationFrame(function () {
 
+<<<<<<< HEAD
                 const moveX = (end.left + end.width / 2) - (start.left + start.width / 2);
                 const moveY = (end.top + end.height / 2) - (start.top + start.height / 2);
+=======
+                const moveX =
+                    (end.left + end.width / 2) -
+                    (start.left + start.width / 2);
+
+                const moveY =
+                    (end.top + end.height / 2) -
+                    (start.top + start.height / 2);
+>>>>>>> cg
 
                 flyingImage.style.transform =
                     `translate(${moveX}px, ${moveY}px) scale(0.12)`;
@@ -375,7 +455,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+<<<<<<< HEAD
     // Notification
+=======
+
+    // Toast notification
+>>>>>>> cg
     function showMessage(message, isError = false) {
 
         const toast = document.createElement("div");
@@ -395,6 +480,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         setTimeout(function () {
+<<<<<<< HEAD
+=======
+
+>>>>>>> cg
             toast.classList.remove("show");
 
             setTimeout(function () {
@@ -406,3 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<<<<<<< HEAD
+=======
+
+>>>>>>> cg

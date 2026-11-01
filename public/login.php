@@ -4,6 +4,7 @@ session_start();
 
 $pageClass = "login-page";
 
+<<<<<<< HEAD
 include_once __DIR__ . "/../app/config/config.php";
 
 include __DIR__ . "/admin/includes/header.php";
@@ -16,6 +17,23 @@ include __DIR__ . "/admin/includes/topbar.php";
             <div class="col-xl-10 col-lg-11">
 
                 <div class="card login-card">
+=======
+$loginNotice = "";
+
+if (isset($_GET['notice']) && $_GET['notice'] === 'login_required') {
+    $loginNotice = "Please log in to your account before adding products to your cart.";
+}
+
+include(__DIR__ . '/includes/header.php');
+include(__DIR__ . '/includes/topbar.php');
+?>
+
+<section class="loginOverlay">
+    <div class="container py-5 ">
+        <div class="row d-flex justify-content-center align-items-center ">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+>>>>>>> cg
                     <div class="row g-0">
 
                         <!-- LEFT SIDE: LOGIN FORM -->
@@ -49,7 +67,10 @@ include __DIR__ . "/admin/includes/topbar.php";
                                             id="email"
                                             name="email"
                                             class="form-control"
+<<<<<<< HEAD
                                             placeholder="Enter your email address"
+=======
+>>>>>>> cg
                                             autocomplete="email"
                                             maxlength="254"
                                             required>
@@ -65,12 +86,26 @@ include __DIR__ . "/admin/includes/topbar.php";
                                             id="password"
                                             name="password"
                                             class="form-control"
+<<<<<<< HEAD
                                             placeholder="Enter your password"
+=======
+>>>>>>> cg
                                             autocomplete="current-password"
                                             required>
                                     </div>
 
+<<<<<<< HEAD
                                     <div class="text-end mb-3">
+=======
+                                    <div class="d-grid pt-1 mb-3 pb-1">
+                                        <button
+                                            id="loginButton"
+                                            class="btn login-btn mb-3"
+                                            type="submit">
+                                            Login
+                                        </button>
+
+>>>>>>> cg
                                         <a
                                             href="/SoftEcoms/public/forgetpassword.php"
                                             class="forgot-password-link">
@@ -120,6 +155,25 @@ include __DIR__ . "/admin/includes/topbar.php";
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    <?php if (!empty($loginNotice)): ?>
+
+        Swal.fire({
+            icon: "info",
+            title: "Login Required",
+            text: <?php echo json_encode($loginNotice); ?>,
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#F56C6C"
+        });
+
+    <?php endif; ?>
+
+});
+</script>
+
 
 <script>
 const loginForm = document.getElementById("loginForm");
