@@ -1,6 +1,12 @@
 
 <?php
-// public/verifyforgetpassword.php
+session_start();
+
+include_once __DIR__ . "/../app/config/config.php";
+
+include __DIR__ . "/admin/includes/header.php";
+include __DIR__ . "/admin/includes/topbar.php";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -9,254 +15,202 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reset Password | Sweet!</title>
 
+    <!-- Shared Reset Password CSS -->
+    <link rel="stylesheet" href="/SoftEcoms/public/assets/css/forgetpass.css">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            background: #fff8f0;
-            color: #333;
-        }
-
-        .reset-card {
-            width: 100%;
-            max-width: 430px;
-            padding: 35px;
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
-        }
-
-        h1 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: #8b4513;
-            text-align: center;
-        }
-
-        .description {
-            margin-bottom: 25px;
-            color: #666;
-            line-height: 1.6;
-            text-align: center;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            margin-bottom: 18px;
-            border: 1px solid #ccc;
-            border-radius: 7px;
-            font-size: 16px;
-        }
-
-        input:focus {
-            outline: 2px solid #d9a47e;
-            border-color: #8b4513;
-        }
-
-        button {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 7px;
-            background: #8b4513;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #71370e;
-        }
-
-        button:disabled {
-            opacity: 0.65;
-            cursor: not-allowed;
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 20px;
-            color: #8b4513;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
-<body>
 
-    <main class="reset-card">
-        <h1>Reset Your Password</h1>
+<body class="reset-page">
 
-        <p class="description">
+<section class="resetOverlay">
+    <main class="reset-card text-center">
+
+        <h3 class="reset-title mb-2">
+            Reset Your Password
+        </h3>
+
+        <p class="reset-description mb-4">
             Choose a new password for your Sweet! account.
         </p>
 
         <form id="resetPasswordForm">
-            <label for="password">New Password</label>
 
-            <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Enter your new password"
-                minlength="8"
-                maxlength="72"
-                autocomplete="new-password"
-                required
+            <div class="text-start">
+                <label for="password" class="reset-label">
+                    New Password
+                </label>
+
+                <input
+                    type="password"
+                    class="reset-input"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your new password"
+                    minlength="8"
+                    maxlength="72"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <label for="confirmPassword" class="reset-label">
+                    Confirm New Password
+                </label>
+
+                <input
+                    type="password"
+                    class="reset-input"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirm your new password"
+                    minlength="8"
+                    maxlength="72"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <button
+                type="submit"
+                class="reset-btn"
+                id="resetPasswordButton"
             >
-
-            <label for="confirmPassword">Confirm New Password</label>
-
-            <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm your new password"
-                minlength="8"
-                maxlength="72"
-                autocomplete="new-password"
-                required
-            >
-
-            <button type="submit" id="resetPasswordButton">
-                Reset Password
+                RESET PASSWORD
             </button>
+
         </form>
 
-        <a class="back-link" href="login.php">
-            Back to Login
-        </a>
+        <p class="mt-4 mb-0 small">
+            Remember your password?
+            <a
+                href="/SoftEcoms/public/login.php"
+                class="reset-link"
+            >
+                Back to Login
+            </a>
+        </p>
+
     </main>
+</section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("resetPasswordForm");
-            const passwordInput = document.getElementById("password");
-            const confirmInput = document.getElementById("confirmPassword");
-            const button = document.getElementById("resetPasswordButton");
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-            const token = new URLSearchParams(
-                window.location.search
-            ).get("token") || "";
+    const form = document.getElementById("resetPasswordForm");
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirmPassword");
+    const button = document.getElementById("resetPasswordButton");
 
-            if (!/^[a-f0-9]{64}$/i.test(token)) {
-                form.querySelectorAll("input, button").forEach((element) => {
-                    element.disabled = true;
-                });
+    const token = new URLSearchParams(
+        window.location.search
+    ).get("token") || "";
 
-                Swal.fire({
-                    title: "Invalid Reset Link",
-                    text: "This link is invalid or missing. Please request a new password-reset email.",
-                    icon: "error",
-                    confirmButtonColor: "#8b4513"
-                });
+    // Validate reset token
+    if (!/^[a-f0-9]{64}$/i.test(token)) {
 
-                return;
+        form.querySelectorAll("input, button").forEach((element) => {
+            element.disabled = true;
+        });
+
+        Swal.fire({
+            title: "Invalid Reset Link",
+            text: "This link is invalid or missing. Please request a new password-reset email.",
+            icon: "error",
+            confirmButtonColor: "#8b4513"
+        });
+
+        return;
+    }
+
+    form.addEventListener("submit", async (event) => {
+
+        event.preventDefault();
+
+        const password = passwordInput.value;
+        const confirmPassword = confirmInput.value;
+
+        if (password.length < 8 || password.length > 72) {
+            await Swal.fire({
+                title: "Invalid Password",
+                text: "Your password must be between 8 and 72 characters.",
+                icon: "warning",
+                confirmButtonColor: "#8b4513"
+            });
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            await Swal.fire({
+                title: "Passwords Do Not Match",
+                text: "Please make sure both password fields match.",
+                icon: "warning",
+                confirmButtonColor: "#8b4513"
+            });
+            return;
+        }
+
+        const originalText = button.textContent;
+
+        button.disabled = true;
+        button.textContent = "Resetting...";
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:3000/reset-password",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        token,
+                        password,
+                        confirmPassword
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to reset your password."
+                );
             }
 
-            form.addEventListener("submit", async (event) => {
-                event.preventDefault();
-
-                const password = passwordInput.value;
-                const confirmPassword = confirmInput.value;
-
-                if (password.length < 8 || password.length > 72) {
-                    await Swal.fire({
-                        title: "Invalid Password",
-                        text: "Your password must be between 8 and 72 characters.",
-                        icon: "warning",
-                        confirmButtonColor: "#8b4513"
-                    });
-                    return;
-                }
-
-                if (password !== confirmPassword) {
-                    await Swal.fire({
-                        title: "Passwords Do Not Match",
-                        text: "Please make sure both password fields match.",
-                        icon: "warning",
-                        confirmButtonColor: "#8b4513"
-                    });
-                    return;
-                }
-
-                const originalText = button.textContent;
-                button.disabled = true;
-                button.textContent = "Resetting...";
-
-                try {
-                    const response = await fetch(
-                        "http://localhost:3000/reset-password",
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                token,
-                                password,
-                                confirmPassword
-                            })
-                        }
-                    );
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(
-                            data.message || "Unable to reset your password."
-                        );
-                    }
-
-                    await Swal.fire({
-                        title: "Password Reset Successful",
-                        text: data.message,
-                        icon: "success",
-                        confirmButtonColor: "#8b4513"
-                    });
-
-                    window.location.href =
-                        data.redirect || "/SoftEcoms/public/login.php";
-
-                } catch (error) {
-                    console.error("Password-reset error:", error);
-
-                    await Swal.fire({
-                        title: "Reset Failed",
-                        text: error.message || "Unable to reset your password. Please try again.",
-                        icon: "error",
-                        confirmButtonColor: "#8b4513"
-                    });
-                } finally {
-                    button.disabled = false;
-                    button.textContent = originalText;
-                }
+            await Swal.fire({
+                title: "Password Reset Successful",
+                text: data.message,
+                icon: "success",
+                confirmButtonColor: "#8b4513"
             });
-        });
-    </script>
+
+            window.location.href =
+                data.redirect || "/SoftEcoms/public/login.php";
+
+        } catch (error) {
+
+            console.error("Password-reset error:", error);
+
+            await Swal.fire({
+                title: "Reset Failed",
+                text: error.message || "Unable to reset your password. Please try again.",
+                icon: "error",
+                confirmButtonColor: "#8b4513"
+            });
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = originalText;
+
+        }
+
+    });
+
+});
+</script>
 
 </body>
 </html>

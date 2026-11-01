@@ -8,7 +8,7 @@ include_once __DIR__ . "/../app/config/config.php";
 include __DIR__ . "/admin/includes/header.php";
 include __DIR__ . "/admin/includes/topbar.php";
 
-/* Sweet Tooths products */
+
 $sweetQuery = "
     SELECT id, productName, productDescription, price, img
     FROM product_item
@@ -26,10 +26,7 @@ if (!$sweetResult) {
     mysqli_free_result($sweetResult);
 }
 
-/* Best sellers
-   NOTE: This currently displays the four latest products.
-   Add a sales-based ORDER BY later if you track actual sales.
-*/
+
 $bestQuery = "
     SELECT id, productName, price, img
     FROM product_item
@@ -47,7 +44,7 @@ if (!$bestResult) {
     mysqli_free_result($bestResult);
 }
 
-/* Safely generate product image URLs */
+
 function sweetProductImage($imageName)
 {
     $imageName = basename((string) $imageName);
@@ -63,7 +60,7 @@ function sweetProductImage($imageName)
 }
 ?>
 
-<!-- HERO SECTION -->
+
 <section class="intro">
     <div class="container hero-box">
         <div class="row">
@@ -75,7 +72,7 @@ function sweetProductImage($imageName)
     </div>
 </section>
 
-<!-- FEATURES / CONTINUOUS ANIMATION -->
+
 <section class="new">
     <div class="container py-5">
         <div class="carousel">
@@ -113,7 +110,7 @@ function sweetProductImage($imageName)
     </div>
 </section>
 
-<!-- SWEET TOOTHS PRODUCT SLIDER -->
+
 <section class="product" id="sweet-tooths">
     <div class="container py-5">
 
@@ -416,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!activeSlide || wrapperWidth === 0) return;
 
-        // Add side space so the first and last cards can be centered.
+
         const sidePadding = Math.max(
             0,
             (wrapperWidth - activeSlide.offsetWidth) / 2
@@ -425,7 +422,7 @@ document.addEventListener("DOMContentLoaded", function () {
         slider.style.paddingLeft = sidePadding + "px";
         slider.style.paddingRight = sidePadding + "px";
 
-        // Center the active card in the visible slider area.
+
         const slideCenter =
             activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
 
@@ -433,7 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         slider.style.transform = `translateX(${offset}px)`;
 
-        // Highlight the active card and its neighbors.
+
         slides.forEach(function (slide, index) {
             slide.classList.toggle("is-active", index === activeIndex);
 
@@ -497,7 +494,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
 
-        // Guests do not need to complete a profile.
+
         if (response.status === 401) {
             return;
         }
@@ -516,12 +513,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const role = data.role || user.role;
 
-        // Only customer accounts need delivery details.
+
         if (role !== "customer") {
             return;
         }
 
-        // Use the server result when available.
+
         const needsCompletion =
             typeof data.needsProfileCompletion === "boolean"
                 ? data.needsProfileCompletion
@@ -618,7 +615,7 @@ async function showProfileCompletion() {
         }
     });
 
-    // Allow the customer to complete the profile later.
+
     if (!result.isConfirmed) {
         return;
     }
@@ -664,7 +661,7 @@ async function showProfileCompletion() {
             confirmButtonText: "Continue"
         });
 
-        // Refresh the homepage after successfully saving.
+     
         window.location.reload();
 
     } catch (error) {

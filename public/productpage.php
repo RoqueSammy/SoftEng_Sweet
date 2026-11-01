@@ -67,12 +67,12 @@ if (!$product) {
     exit("Product not found.");
 }
 
-include __DIR__ . "/admin/includes/header.php";
-include __DIR__ . "/admin/includes/topbar.php";
+include('includes/header.php');
+include('includes/topbar.php');
 ?>
 
 <main class="product-page">
-    <div class="product-container">
+    <div class="product-container" style="margin-top: 60px;">
 
         <section class="product-image-panel">
             <div class="image-wrapper">
@@ -147,21 +147,86 @@ include __DIR__ . "/admin/includes/topbar.php";
     </div>
 </main>
 
+
+<style>
+/* Flying product */
+.flying-product {
+    position: fixed !important;
+    z-index: 999999 !important;
+    object-fit: cover;
+    pointer-events: none;
+    border-radius: 15px;
+    will-change: transform, opacity, border-radius;
+    transition:
+        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.8s ease,
+        border-radius 0.8s ease;
+}
+/* Cart bounce */
+#cartIcon.cart-bounce {
+    animation: cartBounce 0.6s ease;
+}
+
+@keyframes cartBounce {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(1.35) rotate(-12deg); }
+    60% { transform: scale(0.9) rotate(8deg); }
+}
+
+/* SUCCESS NOTIFICATION */
+.cart-toast {
+    position: fixed;
+    z-index: 1000000;
+    top: 160px;
+    left: 50%;
+    bottom: auto;
+    transform: translate(-50%, -20px);
+    opacity: 0;
+    padding: 14px 25px;
+    border-radius: 30px;
+    color: white;
+    background: linear-gradient(to right, #F56C6C, #FF9B4F, #FFA1A1);
+    box-shadow: 0 5px 15px rgba(245, 108, 108, .3);
+    font-weight: 600;
+    transition: all .3s ease;
+    pointer-events: none;
+}
+
+.cart-toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.cart-toast.error {
+    background: #B94040;
+}
+</style>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("cartForm");
     const quantityInput = document.getElementById("quantity_input");
     const decreaseButton = document.getElementById("decreaseQuantity");
     const increaseButton = document.getElementById("increaseQuantity");
-    const cartForm = document.getElementById("cartForm");
+    const addButton = form.querySelector(".buy-btn");
 
+    // Find the cart icon
+    const cartIcon =
+        document.getElementById("cartIcon") ||
+        document.querySelector('a.nav-icon[href*="cart.php"]');
+
+    // Quantity controls
     decreaseButton.addEventListener("click", function () {
-        const quantity = parseInt(quantityInput.value, 10) || 1;
-        quantityInput.value = Math.max(1, quantity - 1);
+        quantityInput.value = Math.max(
+            1,
+            (parseInt(quantityInput.value, 10) || 1) - 1
+        );
     });
 
     increaseButton.addEventListener("click", function () {
-        const quantity = parseInt(quantityInput.value, 10) || 1;
-        quantityInput.value = quantity + 1;
+        quantityInput.value =
+            (parseInt(quantityInput.value, 10) || 1) + 1;
     });
 
     quantityInput.addEventListener("change", function () {
@@ -172,16 +237,172 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    cartForm.addEventListener("submit", function (event) {
+    // Add product to cart
+    form.addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
         const quantity = Number(quantityInput.value);
 
         if (!Number.isInteger(quantity) || quantity < 1) {
-            event.preventDefault();
             quantityInput.value = 1;
             quantityInput.focus();
+            return;
+        }
+
+        if (addButton.disabled) return;
+
+        addButton.disabled = true;
+
+        const originalText = addButton.innerHTML;
+        addButton.innerHTML = "Adding...";
+
+        try {
+
+            // Start flying product animation
+            const animation = animateProductToCart();
+
+            const formData = new FormData(form);
+            formData.append("add_to_cart", "1");
+
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Accept": "application/json"
+                },
+                credentials: "same-origin"
+            });
+
+            const data = await response.json();
+
+            // If user is not logged in, redirect to login
+            if (data.redirect) {
+                window.location.href = data.redirect;
+                return;
+            }
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "Unable to add product.");
+            }
+
+            await animation;
+
+            // Update cart count
+            const badge = document.getElementById("cartCount");
+
+            if (badge) {
+                badge.textContent = data.cartCount;
+                badge.style.display = data.cartCount > 0 ? "flex" : "none";
+            }
+
+            showMessage("✓ Added to your cart!");
+
+            // Automatically open cart page
+            setTimeout(function () {
+                window.location.href = "/SoftEcoms/public/cart.php";
+            }, 700);
+
+        } catch (error) {
+
+            showMessage("✕ " + error.message, true);
+
+        } finally {
+
+            addButton.disabled = false;
+            addButton.innerHTML = originalText;
+
         }
     });
+
+    // Flying image animation
+    function animateProductToCart() {
+
+        return new Promise(function (resolve) {
+
+            const productImage =
+                document.querySelector(".image-wrapper img");
+
+            if (!productImage || !cartIcon) {
+                console.error("Product image or cart icon was not found.");
+                resolve();
+                return;
+            }
+
+            const start = productImage.getBoundingClientRect();
+            const end = cartIcon.getBoundingClientRect();
+
+            const flyingImage = productImage.cloneNode(true);
+
+            flyingImage.classList.add("flying-product");
+
+            Object.assign(flyingImage.style, {
+                left: start.left + "px",
+                top: start.top + "px",
+                width: start.width + "px",
+                height: start.height + "px"
+            });
+
+            document.body.appendChild(flyingImage);
+
+            // Force browser to register starting position
+            flyingImage.getBoundingClientRect();
+
+            requestAnimationFrame(function () {
+
+                const moveX = (end.left + end.width / 2) - (start.left + start.width / 2);
+                const moveY = (end.top + end.height / 2) - (start.top + start.height / 2);
+
+                flyingImage.style.transform =
+                    `translate(${moveX}px, ${moveY}px) scale(0.12)`;
+
+                flyingImage.style.opacity = "0.3";
+                flyingImage.style.borderRadius = "50%";
+            });
+
+            setTimeout(function () {
+
+                flyingImage.remove();
+
+                cartIcon.classList.remove("cart-bounce");
+                void cartIcon.offsetWidth;
+                cartIcon.classList.add("cart-bounce");
+
+                resolve();
+
+            }, 800);
+        });
+    }
+
+    // Notification
+    function showMessage(message, isError = false) {
+
+        const toast = document.createElement("div");
+
+        toast.className = "cart-toast";
+
+        if (isError) {
+            toast.classList.add("error");
+        }
+
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        requestAnimationFrame(function () {
+            toast.classList.add("show");
+        });
+
+        setTimeout(function () {
+            toast.classList.remove("show");
+
+            setTimeout(function () {
+                toast.remove();
+            }, 300);
+
+        }, 2200);
+    }
+
 });
 </script>
-
-<?php include __DIR__ . "/admin/includes/footer.php"; ?>

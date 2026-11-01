@@ -27,6 +27,11 @@
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08);
 }
 
+.product-container{
+top: 60px;
+position: relative;
+}
+
 /* Product image */
 
 .product-page .product-image-panel {
@@ -265,4 +270,39 @@
   .product-page .price {
     font-size: 1.65rem;
   }
+}
+
+/* Fix cart badge visibility on product page */
+.product-page ~ .cart-count {
+    display: flex;
+}
+
+#cartIcon {
+    position: relative !important;
+    display: inline-flex !important;
+    overflow: visible !important;
+}
+
+#cartIcon .cart-count {
+    position: absolute !important;
+    top: -9px !important;
+    right: -9px !important;
+
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #F0445A !important;
+    color: white !important;
+    border: 2px solid white;
+    border-radius: 50%;
+
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    z-index: 9999;
 }

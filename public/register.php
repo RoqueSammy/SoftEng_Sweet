@@ -1,7 +1,8 @@
+
 <?php
 session_start();
 
-$pageClass = "index-page";
+$pageClass = "register-page";
 
 include_once __DIR__ . "/../app/config/config.php";
 include __DIR__ . "/includes/header.php";
@@ -9,98 +10,179 @@ include __DIR__ . "/includes/topbar.php";
 ?>
 
 <section class="registerOverlay">
-    <div class="container py-5">
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col">
-                <div class="card card-registration my-4">
-                    <div class="row g-0">
-                        <div class="col-xl-5 d-none d-xl-block registerSide"></div>
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-xl-10 col-lg-11">
 
-                        <div class="col-xl-7">
-                            <div class="card-body p-4 p-md-5 text-black">
-                                <h3 class="mb-4 text-uppercase text-center">Create Account</h3>
+                <div class="card register-card">
+                    <div class="row g-0">
+
+                        <!-- LEFT SIDE: IMAGE -->
+                        <div class="col-lg-5 d-none d-lg-flex register-image-column">
+                            <div class="registerSide"></div>
+                        </div>
+
+                        <!-- RIGHT SIDE: REGISTRATION FORM -->
+                        <div class="col-lg-7 register-form-column">
+                            <div class="card-body register-card-body">
+
+                                <div class="text-center register-heading">
+                                    <h3 class="register-title">
+                                        Create Account
+                                    </h3>
+
+                                    <p class="register-subtitle">
+                                        Join SweetClaire and enjoy our delicious treats!
+                                    </p>
+                                </div>
 
                                 <form id="registerForm" autocomplete="on">
+
+                                    <!-- FIRST AND LAST NAME -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="firstName">
                                                 First Name <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control" id="firstName"
-                                                   name="firstName" required maxlength="100"
-                                                   autocomplete="given-name">
+
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="firstName"
+                                                name="firstName"
+                                                placeholder="Enter first name"
+                                                required
+                                                maxlength="100"
+                                                autocomplete="given-name">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="lastName">
                                                 Last Name <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control" id="lastName"
-                                                   name="lastName" required maxlength="100"
-                                                   autocomplete="family-name">
+
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="lastName"
+                                                name="lastName"
+                                                placeholder="Enter last name"
+                                                required
+                                                maxlength="100"
+                                                autocomplete="family-name">
                                         </div>
                                     </div>
 
+                                    <!-- MIDDLE NAME -->
                                     <div class="mb-3">
-                                        <label class="form-label" for="middleName">Middle Name (optional)</label>
-                                        <input type="text" class="form-control" id="middleName"
-                                               name="middleName" maxlength="100"
-                                               autocomplete="additional-name">
+                                        <label class="form-label" for="middleName">
+                                            Middle Name
+                                            <span class="text-muted">(Optional)</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            id="middleName"
+                                            name="middleName"
+                                            placeholder="Enter middle name"
+                                            maxlength="100"
+                                            autocomplete="additional-name">
                                     </div>
 
+                                    <!-- EMAIL -->
                                     <div class="mb-3">
                                         <label class="form-label" for="email">
                                             Email Address <span class="text-danger">*</span>
                                         </label>
-                                        <input type="email" class="form-control" id="email"
-                                               name="email" required maxlength="254"
-                                               autocomplete="email">
+
+                                        <input
+                                            type="email"
+                                            class="form-control"
+                                            id="email"
+                                            name="email"
+                                            placeholder="Enter your email address"
+                                            required
+                                            maxlength="254"
+                                            autocomplete="email">
                                     </div>
 
+                                    <!-- PASSWORDS -->
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="password">
                                                 Password <span class="text-danger">*</span>
                                             </label>
-                                            <input type="password" class="form-control" id="password"
-                                                   name="password" minlength="8" required
-                                                   autocomplete="new-password">
+
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                id="password"
+                                                name="password"
+                                                placeholder="Create password"
+                                                minlength="8"
+                                                required
+                                                autocomplete="new-password">
                                         </div>
 
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label" for="confirmPassword">
                                                 Confirm Password <span class="text-danger">*</span>
                                             </label>
-                                            <input type="password" class="form-control" id="confirmPassword"
-                                                   name="confirmPassword" minlength="8" required
-                                                   autocomplete="new-password">
+
+                                            <input
+                                                type="password"
+                                                class="form-control"
+                                                id="confirmPassword"
+                                                name="confirmPassword"
+                                                placeholder="Confirm password"
+                                                minlength="8"
+                                                required
+                                                autocomplete="new-password">
                                         </div>
                                     </div>
 
-                                    <p class="small text-muted">
-                                        You can add your phone number and delivery address after verifying your email.
+                                    <!-- INFORMATION -->
+                                    <p class="register-note">
+                                        You can add your phone number and delivery address
+                                        after verifying your email.
                                     </p>
 
-                                    <button type="submit" id="registerButton"
-                                            class="btn btn-register w-100 mt-2 border-0">
+                                    <!-- REGISTER BUTTON -->
+                                    <button
+                                        type="submit"
+                                        id="registerButton"
+                                        class="btn btn-register w-100 mt-2">
+
                                         Register
                                     </button>
 
-                                    <p class="text-center mt-3 mb-0">
-                                        Already have an account?
-                                        <a href="/SoftEcoms/public/login.php">Login</a>
-                                    </p>
+                                    <!-- LOGIN LINK -->
+                                    <div class="register-login-prompt text-center">
+                                        <p class="mb-0">
+                                            Already have an account?
+
+                                            <a href="/SoftEcoms/public/login.php">
+                                                Login
+                                            </a>
+                                        </p>
+                                    </div>
+
                                 </form>
+
                             </div>
                         </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
 const registerForm = document.getElementById("registerForm");
 const registerButton = document.getElementById("registerButton");
@@ -108,10 +190,12 @@ const registerButton = document.getElementById("registerButton");
 registerForm.addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const data = Object.fromEntries(new FormData(registerForm).entries());
+    const data = Object.fromEntries(
+        new FormData(registerForm).entries()
+    );
 
     if (data.password !== data.confirmPassword) {
-        Swal.fire({
+        await Swal.fire({
             icon: "error",
             title: "Password mismatch",
             text: "Your passwords do not match."
@@ -125,7 +209,9 @@ registerForm.addEventListener("submit", async function (event) {
     try {
         const response = await fetch("http://localhost:3000/register", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
             credentials: "include",
             body: JSON.stringify(data)
         });
@@ -133,7 +219,9 @@ registerForm.addEventListener("submit", async function (event) {
         const result = await response.json();
 
         if (!response.ok) {
-            throw new Error(result.message || "Registration failed.");
+            throw new Error(
+                result.message || "Registration failed."
+            );
         }
 
         await Swal.fire({
@@ -143,14 +231,19 @@ registerForm.addEventListener("submit", async function (event) {
             confirmButtonText: "Go to Login"
         });
 
-        window.location.href = result.redirect || "/SoftEcoms/public/login.php";
+        window.location.href =
+            result.redirect || "/SoftEcoms/public/login.php";
+
     } catch (error) {
         console.error("Registration error:", error);
-        Swal.fire({
+
+        await Swal.fire({
             icon: "error",
             title: "Registration failed",
-            text: error.message || "Could not connect to the server. Please try again."
+            text: error.message ||
+                "Could not connect to the server. Please try again."
         });
+
     } finally {
         registerButton.disabled = false;
         registerButton.textContent = "Register";
@@ -158,4 +251,5 @@ registerForm.addEventListener("submit", async function (event) {
 });
 </script>
 
-<?php include __DIR__ . "/includes/footer.php"; ?>
+</body>
+</html>

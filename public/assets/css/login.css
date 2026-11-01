@@ -1,61 +1,287 @@
-.loginOverlay .gradient-custom-2 {
-/* fallback for old browsers */
-background: #fccb90;
+/* =========================================================
+   LOGIN PAGE BACKGROUND
+========================================================= */
 
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
-}
-
-
-/* this custom 3 is what I use in the login button! */
-.loginOverlay .gradient-custom-3 {
-  /* Fallback for old browsers */
-  background: #FCB09D;
-
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to top, #ED8282 0%, #FCB09D 31%, #FCB88D 58%, #FCB88D 81%);
-
-  /* Modern standard browsers */
-  background: linear-gradient(to top, #ED8282 0%, #FCB09D 31%, #FCB88D 58%, #FCB88D 81%);
-}
-
-.loginOverlay .gradient-custom-3 {
-  /* Fallback for old browsers */
-  background: #FF9B4F;
-
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to right, #F56C6C 0%, #FF9B4F 66%, #FFA1A1 84%);
-
-  /* Modern standard browsers */
-  background: linear-gradient(to right, #F56C6C 0%, #FF9B4F 66%, #FFA1A1 84%);
-}
-
-
-@media (min-width: 768px) {
-.loginOverlay .gradient-form {
-height: 100vh !important;
-}
-}
-@media (min-width: 769px) {
-.loginOverlay .gradient-custom-2 {
-border-top-right-radius: .3rem;
-border-bottom-right-radius: .3rem;
-}
-}
-
-.loginOverlay {
+body.login-page {
   min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: #f1d0c9;
+}
+
+/* =========================================================
+   BACKGROUND IMAGE
+========================================================= */
+
+body.login-page .loginOverlay {
+  min-height: 100vh;
+  width: 100%;
+  padding: 40px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   background:
     linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
-    url("/SoftEcoms/public/assets/img/strawberry_theme.jpg") center / cover no-repeat;
+    url("/SoftEcoms/public/assets/img/strawberry_theme.jpg") center / cover
+      no-repeat;
+}
+
+/* =========================================================
+   MAIN CONTAINER AND CARD
+========================================================= */
+
+.loginOverlay > .container {
+  width: 100%;
+  max-width: 1150px;
+  margin: auto;
+}
+
+.loginOverlay .login-card {
+  width: 100%;
+  border: none;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* =========================================================
+   FORM COLUMN
+========================================================= */
+
+.loginOverlay .login-form-column {
+  background: #fff;
+}
+
+.loginOverlay .login-card-body {
+  padding: 45px 40px;
+}
+
+/* =========================================================
+   LOGO AND HEADING
+========================================================= */
+
+.loginOverlay .login-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.loginOverlay .greet_login {
+  color: #d65454;
+  font-size: 1.65rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.loginOverlay .login-subtitle {
+  color: #777;
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+/* =========================================================
+   FORM INPUTS
+========================================================= */
+
+.loginOverlay .form-label {
+  color: #444;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+.loginOverlay .form-control {
+  width: 100%;
+  min-height: 47px;
+  padding: 11px 14px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  color: #333;
+  background: #fff;
+  font-size: 0.95rem;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.loginOverlay .form-control:focus {
+  border-color: #f56c6c;
+  box-shadow: 0 0 0 3px rgba(245, 108, 108, 0.15);
+  outline: none;
+}
+
+/* =========================================================
+   FORGOT PASSWORD
+========================================================= */
+
+.loginOverlay .forgot-password-link {
+  color: #d65454;
+  font-size: 0.88rem;
+  text-decoration: none;
+}
+
+.loginOverlay .forgot-password-link:hover {
+  color: #b83f3f;
+  text-decoration: underline;
+}
+
+/* =========================================================
+   LOGIN BUTTON
+========================================================= */
+
+.loginOverlay .login-btn {
+  width: 100%;
+  min-height: 47px;
+  padding: 11px 20px;
+
+  border: none;
+  border-radius: 25px;
+
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  background: linear-gradient(90deg, #f56c6c, #ff9b4f, #ffa1a1);
+
+  background-size: 200% 100%;
+  background-position: left center;
+
+  transition:
+    background-position 0.4s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.loginOverlay .login-btn:hover:not(:disabled) {
+  color: #fff;
+  background-position: right center;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(245, 108, 108, 0.35);
+}
+
+.loginOverlay .login-btn:active {
+  transform: translateY(0);
+}
+
+.loginOverlay .login-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   REGISTER PROMPT
+========================================================= */
+
+.loginOverlay .register-prompt {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.loginOverlay .register-prompt p {
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.loginOverlay .register-btn {
+  border-radius: 25px;
+  padding: 8px 22px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   RIGHT IMAGE COLUMN
+========================================================= */
+
+.loginOverlay .login-image-column {
+  min-height: 560px;
+  padding: 0;
+  overflow: hidden;
 }
 
 .loginOverlay .login-side-img {
+  display: block;
   width: 100%;
   height: 100%;
+  min-height: 560px;
   object-fit: cover;
-  border-radius: 0 .3rem .3rem 0;
+  object-position: center;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 991px) {
+  .loginOverlay .login-card-body {
+    padding: 35px 30px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 767px) {
+  body.login-page .loginOverlay {
+    padding: 25px 15px;
+  }
+
+  .loginOverlay > .container {
+    max-width: 500px;
+  }
+
+  .loginOverlay .login-card {
+    border-radius: 14px;
+  }
+
+  .loginOverlay .login-card-body {
+    padding: 35px 25px;
+  }
+
+  .loginOverlay .login-logo {
+    width: 85px;
+    height: 85px;
+  }
+
+  .loginOverlay .greet_login {
+    font-size: 1.4rem;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+  .loginOverlay .login-card-body {
+    padding: 28px 20px;
+  }
+
+  .loginOverlay .form-control {
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  .loginOverlay .login-btn {
+    min-height: 44px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .loginOverlay *,
+  .loginOverlay *::before,
+  .loginOverlay *::after {
+    transition: none !important;
+  }
 }

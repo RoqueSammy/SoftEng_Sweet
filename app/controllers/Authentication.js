@@ -13,9 +13,6 @@ class Authentication {
     this.userModel = new User(db);
   }
 
-  // ==========================================
-  // REGISTER
-  // ==========================================
   register = async (req, res) => {
     try {
       const {
@@ -192,9 +189,6 @@ class Authentication {
     }
   };
 
-  // ==========================================
-  // LOGIN
-  // ==========================================
   login = async (req, res) => {
     try {
       const email = String(req.body?.email || "")
@@ -227,7 +221,6 @@ class Authentication {
 
         passwordMatches = await bcrypt.compare(password, compatibleHash);
       } else if (typeof user.password === "string") {
-        // Compatibility for legacy plaintext passwords.
         passwordMatches = password === user.password;
 
         if (passwordMatches) {
@@ -336,40 +329,45 @@ class Authentication {
     }
   };
 
-
-  // ==========================================
-  // FORGOT PASSWORD
-  // POST /forgot-password
-  // Always returns a generic response to avoid revealing registered emails.
-  // ==========================================
   forgotPassword = async (req, res) => {
     const genericMessage =
       "If an active account exists for that email, password-reset instructions will be sent shortly.";
 
     try {
-      const email = String(req.body?.email || "").trim().toLowerCase();
+      const email = String(req.body?.email || "")
+        .trim()
+        .toLowerCase();
 
-      if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (
+        !email ||
+        email.length > 254 ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+      ) {
         return res.status(200).json({ message: genericMessage });
       }
 
       const user = await this.userModel.findByEmail(email);
 
-      // Only active accounts may reset passwords. Do not disclose account status.
       if (!user || user.accountStatus !== "active") {
         return res.status(200).json({ message: genericMessage });
       }
 
       const rawToken = crypto.randomBytes(32).toString("hex");
-      const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+      const tokenHash = crypto
+        .createHash("sha256")
+        .update(rawToken)
+        .digest("hex");
       const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
 
-      await this.userModel.savePasswordResetToken(user.id, tokenHash, expiresAt);
+      await this.userModel.savePasswordResetToken(
+        user.id,
+        tokenHash,
+        expiresAt,
+      );
 
       try {
         await sendPasswordResetEmail(email, rawToken);
       } catch (emailError) {
-        // Do not leave a valid token behind when the email could not be delivered.
         await this.userModel.clearPasswordResetToken(user.id);
         console.error("Password reset email failed:", emailError.message);
       }
@@ -377,15 +375,11 @@ class Authentication {
       return res.status(200).json({ message: genericMessage });
     } catch (error) {
       console.error("Forgot password error:", error);
-      // Generic response also avoids exposing account existence on server errors.
+
       return res.status(200).json({ message: genericMessage });
     }
   };
 
-  // ==========================================
-  // RESET PASSWORD
-  // POST /reset-password
-  // ==========================================
   resetPassword = async (req, res) => {
     try {
       const rawToken = String(req.body?.token || "");
@@ -394,12 +388,17 @@ class Authentication {
 
       if (!/^[a-f0-9]{64}$/i.test(rawToken)) {
         return res.status(400).json({
-          message: "This password-reset link is invalid or has expired. Please request a new one.",
+          message:
+            "This password-reset link is invalid or has expired. Please request a new one.",
         });
       }
 
-      if (typeof password !== "string" || typeof confirmPassword !== "string" ||
-          password.length < 8 || password.length > 72) {
+      if (
+        typeof password !== "string" ||
+        typeof confirmPassword !== "string" ||
+        password.length < 8 ||
+        password.length > 72
+      ) {
         return res.status(400).json({
           message: "Password must be between 8 and 72 characters.",
         });
@@ -409,18 +408,26 @@ class Authentication {
         return res.status(400).json({ message: "Passwords do not match." });
       }
 
-      const tokenHash = crypto.createHash("sha256").update(rawToken).digest("hex");
+      const tokenHash = crypto
+        .createHash("sha256")
+        .update(rawToken)
+        .digest("hex");
       const hashedPassword = await bcrypt.hash(password, 12);
-      const changed = await this.userModel.resetPasswordWithToken(tokenHash, hashedPassword);
+      const changed = await this.userModel.resetPasswordWithToken(
+        tokenHash,
+        hashedPassword,
+      );
 
       if (!changed) {
         return res.status(400).json({
-          message: "This password-reset link is invalid or has expired. Please request a new one.",
+          message:
+            "This password-reset link is invalid or has expired. Please request a new one.",
         });
       }
 
       return res.status(200).json({
-        message: "Your password has been reset successfully. You can now log in.",
+        message:
+          "Your password has been reset successfully. You can now log in.",
         redirect: "/SoftEcoms/public/login.php",
       });
     } catch (error) {
@@ -431,9 +438,6 @@ class Authentication {
     }
   };
 
-  // ==========================================
-  // VERIFY EMAIL
-  // ==========================================
   verifyEmail = async (req, res) => {
     try {
       const rawToken = String(req.query?.token || "");
@@ -501,15 +505,6 @@ class Authentication {
     }
   };
 
-  // ==========================================
-  // CURRENT LOGGED-IN USER
-  // Used by index.php to decide whether to show the profile popup.
-  // ==========================================
-
-  // ==========================================
-  // CURRENT LOGGED-IN USER
-  // GET /me
-  // ==========================================
   me = async (req, res) => {
     try {
       if (!req.session || !req.session.authUser) {
@@ -565,7 +560,6 @@ class Authentication {
         String(user.city || "").trim(),
       );
 
-      // Keep the session user object synchronized with the database.
       req.session.authUser = {
         ...req.session.authUser,
         user_id: user.id,
@@ -603,10 +597,6 @@ class Authentication {
     }
   };
 
-  // ==========================================
-  // SAVE CUSTOMER PROFILE
-  // POST /complete-profile
-  // ==========================================
   completeProfile = async (req, res) => {
     try {
       if (!req.session || !req.session.authUser) {
@@ -729,9 +719,6 @@ class Authentication {
     }
   };
 
-  // ==========================================
-  // LOGOUT
-  // ==========================================
   logout = (req, res) => {
     if (!req.session) {
       res.clearCookie("connect.sid");
