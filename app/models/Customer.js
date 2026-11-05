@@ -1,9 +1,41 @@
 const User = require("./User");
+const Cart = require("./Cart");
 
 class Customer extends User {
   constructor(db) {
     super(db);
+
+    // Customer has a Cart
+    this.cart = new Cart(db);
   }
+
+  // ==========================================
+  // ADD PRODUCT TO CART
+  // ==========================================
+
+  async addToCart(userId, productUUID, quantity) {
+    const parsedUserId = Number(userId);
+    const parsedQuantity = Number(quantity);
+    const cleanUUID = String(productUUID || "").trim();
+
+    if (!Number.isInteger(parsedUserId) || parsedUserId < 1) {
+      throw new Error("Invalid customer ID.");
+    }
+
+    if (!cleanUUID) {
+      throw new Error("Product UUID is required.");
+    }
+
+    if (!Number.isInteger(parsedQuantity) || parsedQuantity < 1) {
+      throw new Error("Invalid product quantity.");
+    }
+
+    return await this.cart.addProduct(parsedUserId, cleanUUID, parsedQuantity);
+  }
+
+  // ==========================================
+  // VIEW CUSTOMER PROFILE
+  // ==========================================
 
   async manageProfile(userId) {
     const [rows] = await this.db.execute(
@@ -20,16 +52,13 @@ class Customer extends User {
     return rows[0] || null;
   }
 
+  // ==========================================
+  // UPDATE CUSTOMER PROFILE
+  // ==========================================
+
   async editProfile(userId, profile) {
-    const {
-      firstName,
-      lastName,
-      middleName,
-      contact,
-      street,
-      barangay,
-      city,
-    } = profile;
+    const { firstName, lastName, middleName, contact, street, barangay, city } =
+      profile;
 
     const cleanFirstName = String(firstName || "").trim();
     const cleanLastName = String(lastName || "").trim();
@@ -42,7 +71,8 @@ class Customer extends User {
       throw new Error("First name and last name are required.");
     }
 
-    // Contact and address are allowed to be empty until profile completion.
+    // Contact and address are allowed to be empty
+    // until profile completion.
     const [result] = await this.db.execute(
       `UPDATE users
        SET firstName = ?,

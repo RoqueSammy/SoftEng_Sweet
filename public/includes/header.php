@@ -18,7 +18,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/main.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/topbar.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/card.css">
-
+<link rel="stylesheet" href="/SoftEcoms/public/assets/css/auth.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/product_page.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/cart_page.css">
 

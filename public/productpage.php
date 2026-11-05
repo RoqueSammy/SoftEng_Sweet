@@ -105,11 +105,11 @@ include('includes/topbar.php');
                 ));
             ?></p>
 
-            <form
-                method="POST"
-                action="../app/controllers/cartController.php"
-                id="cartForm"
-            >
+          <form
+    method="POST"
+    action="http://localhost:3000/cart/add"
+    id="cartForm"
+>
                 <input
                     type="hidden"
                     name="product_uuid"
@@ -237,16 +237,25 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+   
     // Add product to cart
     form.addEventListener("submit", async function (event) {
-
         event.preventDefault();
 
         const quantity = Number(quantityInput.value);
 
+        const productUUID = form.querySelector(
+            'input[name="product_uuid"]'
+        ).value;
+
         if (!Number.isInteger(quantity) || quantity < 1) {
             quantityInput.value = 1;
             quantityInput.focus();
+            return;
+        }
+
+        if (!productUUID) {
+            showMessage("Product UUID is missing.", true);
             return;
         }
 
@@ -258,63 +267,80 @@ document.addEventListener("DOMContentLoaded", function () {
         addButton.innerHTML = "Adding...";
 
         try {
+            const response = await fetch(
+                "http://localhost:3000/cart/add",
+                {
+                    method: "POST",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        product_uuid: productUUID,
+                        quantity: quantity
+                    })
+                }
+            );
 
-            // Start flying product animation
-            const animation = animateProductToCart();
+            // Read response as text first
+            const responseText = await response.text();
 
-            const formData = new FormData(form);
-            formData.append("add_to_cart", "1");
+            console.log("Cart API Status:", response.status);
+            console.log("Cart API Response:", responseText);
 
-            const response = await fetch(form.action, {
-                method: "POST",
-                body: formData,
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Accept": "application/json"
-                },
-                credentials: "same-origin"
-            });
+            let data;
 
-            const data = await response.json();
+            try {
+                data = JSON.parse(responseText);
+            } catch (error) {
+                throw new Error(
+                    "The Node.js server returned an invalid response. Check the console."
+                );
+            }
 
-            // If user is not logged in, redirect to login
-            if (data.redirect) {
-                window.location.href = data.redirect;
+            // Handle authentication
+            if (response.status === 401) {
+                window.location.href =
+                    data.redirect || "/SoftEcoms/public/login.php";
                 return;
             }
 
             if (!response.ok || !data.success) {
-                throw new Error(data.message || "Unable to add product.");
+                throw new Error(
+                    data.message || "Unable to add product to cart."
+                );
             }
 
-            await animation;
+            // Start flying product animation after successful addition
+            await animateProductToCart();
 
             // Update cart count
             const badge = document.getElementById("cartCount");
 
             if (badge) {
                 badge.textContent = data.cartCount;
-                badge.style.display = data.cartCount > 0 ? "flex" : "none";
+                badge.style.display =
+                    data.cartCount > 0 ? "flex" : "none";
             }
 
             showMessage("✓ Added to your cart!");
 
-            // Automatically open cart page
+            // Open cart page
             setTimeout(function () {
                 window.location.href = "/SoftEcoms/public/cart.php";
             }, 700);
 
         } catch (error) {
-
+            console.error("Add to cart error:", error);
             showMessage("✕ " + error.message, true);
 
         } finally {
-
             addButton.disabled = false;
             addButton.innerHTML = originalText;
-
         }
     });
+
 
     // Flying image animation
     function animateProductToCart() {
