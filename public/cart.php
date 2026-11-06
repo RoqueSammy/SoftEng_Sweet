@@ -45,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
     exit();
 }
 
-include('includes/header.php');
-include('includes/topbar.php');
+include('./admin/includes/header.php');
+include('./admin/includes/topbar.php');
 
 $cart = $_SESSION['cart'] ?? [];
 ?>
