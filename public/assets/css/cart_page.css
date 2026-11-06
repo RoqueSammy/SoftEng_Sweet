@@ -1,248 +1,419 @@
-@font-face {
-  font-family: "Coffee";
-  src: url("../fonts/CoffeeShopDemo-Regular.otf") format("opentype");
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+/* =====================================
+   CART PAGE
+===================================== */
+
+.cart-page {
+    min-height: 100vh;
+    background: #FFF5F2;
+    color: #704638;
+    font-family: 'Poppins', sans-serif;
+    padding-bottom: 50px;
 }
 
-.cart-page body {
-  background: linear-gradient(135deg, #8ec5fc, #e0c3fc);
-  min-height: 100vh;
+/* CART TITLE */
+
+.cart-page h1 {
+    font-family: Georgia, serif;
+    font-size: clamp(32px, 5vw, 45px);
+    color: #D85C5C;
+    margin: 12px 0;
 }
 
-.cart-page .cart-layout {
-  display: flex;
-  gap: 40px;
-  margin-top: 60px;
-  align-items: flex-start;
+/* =====================================
+   CART ITEM CARD
+===================================== */
+
+.cart-page .cart-item-card {
+    border: 2px solid transparent !important;
+    border-radius: 20px !important;
+    background: #FFFFFF;
+    box-shadow: 0 5px 20px rgba(245, 108, 108, 0.09);
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+    cursor: pointer;
+    overflow: hidden;
 }
 
-.cart-page .cart-left {
-  flex: 2;
+/* HOVER EFFECT */
 
-  background: #ffffff;
-
-  border: 1px solid #e5e5e5;
-
-  padding: 25px;
-  border-radius: 15px;
-
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+.cart-page .cart-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 25px rgba(245, 108, 108, 0.16);
 }
 
-.cart-page .cart-right {
-  flex: 1;
+/* SELECTED PRODUCT */
+
+.cart-page .cart-item-card.selected {
+    border-color: #F0445A !important;
+    box-shadow: 0 0 0 3px rgba(240, 68, 90, 0.12);
 }
 
-.cart-page .checkout-box {
-  background: #ffffff;
+/* PRODUCT IMAGE */
 
-  border: 1px solid #e5e5e5;
-
-  padding: 30px;
-  border-radius: 15px;
-
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+.cart-page .card img {
+    border-radius: 15px;
+    transition: transform 0.35s ease;
 }
 
-.cart-page table {
-  width: 100%;
-  border-collapse: collapse;
-  overflow: hidden;
-  border-radius: 10px;
-  background: white !important;
+.cart-page .card img:hover {
+    transform: scale(1.05);
 }
 
-.cart-page table,
-.cart-page tbody,
-.cart-page tr,
-.cart-page td,
-.cart-page .small.container.cart-page {
-  background: white !important;
+/* PRODUCT NAME */
+
+.cart-page .cart-item-card h5 {
+    color: #704638;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
 }
 
-.cart-page th {
-  text-align: left;
-  padding: 14px;
-  color: white;
+/* PRODUCT DESCRIPTION */
 
-  background: linear-gradient(135deg, #09d658, #28c966) !important;
-
-  font-weight: 600;
-  letter-spacing: 0.5px;
+.cart-page .cart-item-card p {
+    color: #8A7770;
+    font-size: 13px;
 }
 
-.cart-page td {
-  padding: 15px 10px;
-  vertical-align: middle;
+/* =====================================
+   ORDER SUMMARY
+===================================== */
 
-  border-bottom: 1px solid #eeeeee;
-
-  color: #222;
+.cart-page .col-lg-4 > .card {
+    border: 1px solid #F8DED8;
+    border-radius: 20px;
+    background: #FFFFFF;
+    box-shadow: 0 5px 20px rgba(245, 108, 108, 0.10);
+    padding: 28px !important;
 }
 
-.cart-page .cart-info {
-  display: flex;
-  gap: 15px;
-  align-items: center;
+/* SUMMARY TITLE */
+
+.cart-page .col-lg-4 h4 {
+    color: #D85C5C;
+    font-family: Georgia, serif;
+    font-size: 25px;
+    font-weight: 700;
 }
 
-.cart-page td img {
-  width: 90px;
-  height: 90px;
+/* TOTAL PRICE */
 
-  object-fit: cover;
-
-  border-radius: 10px;
-  border: 1px solid #dddddd;
-
-  transition: transform 0.3s ease;
+.cart-page .col-lg-4 h5 {
+    color: #704638;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
 }
 
-.cart-page td img:hover {
-  transform: scale(1.05);
-}
+/* SUMMARY TEXT */
 
-.cart-page td input {
-  width: 60px;
-  height: 35px;
-
-  border-radius: 6px;
-  border: 1px solid #cccccc;
-
-  text-align: center;
-
-  background: #ffffff;
-}
-
-.cart-page .remove-btn {
-  width: 110px;
-  height: 36px;
-
-  background: #ffecec;
-  color: #e74c3c;
-
-  border: 1px solid #f5b5b5;
-
-  font-size: 13px;
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transition: all 0.25s ease;
-}
-
-.cart-page .remove-btn:hover {
-  background: #e74c3c;
-  color: #fff;
-
-  border-color: #e74c3c;
-
-  transform: translateY(-1px);
-}
-
-.cart-page .remove-btn:active {
-  transform: scale(0.95);
-}
-
-.cart-page p {
-  font-size: 16px;
-  color: #222;
-
-  font-weight: 500;
-
-  margin-bottom: 5px;
-}
-
-.cart-page small {
-  color: #666;
+.cart-page .col-lg-4 p,
+.cart-page .col-lg-4 span {
+    color: #8A7770;
+    font-size: 13px;
 }
 
 .cart-page .checkout-btn {
-  width: 100%;
-  padding: 14px;
-
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-
-  border: none;
-  color: white;
-
-  font-size: 16px;
-  font-weight: 600;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  transition: 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border: none;
+    border-radius: 30px;
+    padding: 16px;
+    background: linear-gradient(
+        to right,
+        #F56C6C 0%,
+        #FF9B4F 50%,
+        #FFA1A1 100%
+    );
+    background-size: 200% 100%;
+    background-position: left center;
+    color: white;
+    margin-top: 28px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition:
+        background-position 0.4s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+    cursor: pointer;
 }
 
-.cart-page .checkout-btn:hover {
-  transform: translateY(-2px);
 
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+/* =====================================
+   UPDATE BUTTON
+===================================== */
+
+.cart-page .btn-outline-dark {
+    color: #D85C5C;
+    border: 1px solid #F56C6C;
+    border-radius: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.25s ease;
 }
 
-.cart-page .subtotal-row td,
-.cart-page .tax-row td {
-  font-size: 16px;
-  font-weight: 500;
+.cart-page .btn-outline-dark:hover {
+    color: #FFFFFF;
+    background: #F56C6C;
+    border-color: #F56C6C;
+    transform: translateY(-2px);
 }
 
-.cart-page .total-row.total-final td {
-  font-size: 20px;
-  font-weight: bold;
+/* =====================================
+   GRADIENT BUTTONS
+===================================== */
 
-  color: #28c966;
-
-  border-top: 2px solid #28c966;
+.cart-page .btn-dark {
+    color: #FFFFFF;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    background: linear-gradient(
+        to right,
+        #F56C6C 0%,
+        #FF9B4F 50%,
+        #FFA1A1 100%
+    );
+    background-size: 200% 100%;
+    background-position: left center;
+    transition:
+        background-position 0.4s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.cart-page .checkout-box input {
-  border-radius: 8px;
-  border: 1px solid #dddddd;
-
-  padding: 10px;
-
-  background: #ffffff;
-
-  transition: 0.3s;
+.cart-page .btn-dark:hover {
+    background-position: right center;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 108, 108, 0.30);
+    color: #FFFFFF;
 }
 
-.cart-page .checkout-box input:focus {
-  border-color: #28c966;
-
-  box-shadow: 0 0 5px rgba(40, 201, 102, 0.3);
-
-  outline: none;
-}
-
-.cart-page .form-check-input {
-  cursor: pointer;
-}
-
-.cart-page .form-check-label {
-  color: #222;
-}
+/* REMOVE LINK */
 
 .cart-page .text-danger {
-  font-weight: 500;
+    color: #E65B65 !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
 }
 
-@media (max-width: 992px) {
-  .cart-page .cart-layout {
-    flex-direction: column;
-  }
+.cart-page .text-danger:hover {
+    color: #C94350 !important;
+    text-decoration: underline;
+}
 
-  .cart-page td img {
-    width: 70px;
-    height: 70px;
-  }
+/* =====================================
+   EMPTY CART
+===================================== */
 
-  .cart-page .cart-left,
-  .cart-page .cart-right {
-    width: 100%;
-  }
+.cart-page .text-center h4 {
+    color: #D85C5C;
+    font-family: 'Playfair Display', serif;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.cart-page .text-center p {
+    color: #8A7770;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+}
+
+/* =====================================
+   QUANTITY INPUT
+===================================== */
+
+.cart-page .quantity-input {
+    cursor: text;
+    border: 1px solid #F2D6CE;
+    border-radius: 9px;
+    background: #FFFAF8;
+    color: #704638;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+.cart-page .quantity-input:focus {
+    border-color: #F56C6C;
+    box-shadow: 0 0 0 3px rgba(245, 108, 108, 0.12);
+    outline: none;
+}
+
+/* =====================================
+   CHECKOUT DISABLED STATE
+===================================== */
+
+.cart-page #checkoutButton[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+/* =====================================
+   REMOVE CONFIRMATION MODAL
+===================================== */
+
+.remove-modal .modal-content {
+    background: #FFFFFF;
+    border: 1px solid #F8DED8;
+    border-radius: 22px;
+    box-shadow: 0 10px 35px rgba(107, 72, 56, 0.15);
+    overflow: hidden;
+}
+
+.remove-modal .modal-body {
+    padding: 35px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+/* TRASH ICON */
+
+.remove-modal .remove-icon {
+    width: 65px;
+    height: 65px;
+    margin: 0 auto 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #FFF0EC;
+    color: #F56C6C;
+    font-size: 25px;
+}
+
+/* HEART */
+
+.remove-modal .remove-heart {
+    color: #D85C5C !important;
+}
+
+/* MODAL TITLE */
+
+.remove-modal .remove-title {
+    color: #D85C5C !important;
+    font-family: 'Playfair Display', serif !important;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+/* MODAL MESSAGE */
+
+.remove-modal .remove-message {
+    color: #8A7770 !important;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 27px;
+}
+
+.remove-modal .remove-message strong {
+    color: #704638 !important;
+    font-weight: 700;
+}
+
+/* MODAL BUTTONS */
+
+.remove-modal .remove-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* KEEP ITEM BUTTON */
+
+.remove-modal .keep-item-btn {
+    min-width: 145px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    background: #FFFFFF;
+    border: 1px solid #F56C6C;
+    color: #D85C5C;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.remove-modal .keep-item-btn:hover {
+    background: #FFF5F2;
+    color: #D85C5C;
+    transform: translateY(-2px);
+}
+
+/* CONFIRM REMOVE BUTTON */
+
+.remove-modal .confirm-remove-btn {
+    min-width: 145px;
+    padding: 12px 20px;
+    border-radius: 30px;
+    background: linear-gradient(
+        to right,
+        #F56C6C,
+        #FF9B4F,
+        #FFA1A1
+    );
+    border: none;
+    color: #FFFFFF !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.25s ease;
+}
+
+.remove-modal .confirm-remove-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 108, 108, 0.25);
+    color: #FFFFFF !important;
+}
+
+/* =====================================
+   MOBILE RESPONSIVE
+===================================== */
+
+@media (max-width: 576px) {
+
+    .cart-page h2 {
+        font-size: 29px;
+    }
+
+    .cart-page .cart-item-card {
+        border-radius: 15px !important;
+    }
+
+    .cart-page .col-lg-4 > .card {
+        padding: 20px !important;
+    }
+
+    .remove-modal .modal-body {
+        padding: 25px 20px;
+    }
+
+    .remove-modal .remove-title {
+        font-size: 23px;
+    }
+
+    .remove-modal .remove-actions {
+        flex-direction: column;
+    }
+
+    .remove-modal .keep-item-btn,
+    .remove-modal .confirm-remove-btn {
+        width: 100%;
+    }
+
 }

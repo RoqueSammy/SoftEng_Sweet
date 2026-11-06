@@ -1,6 +1,18 @@
-
 <?php
-$current_page = basename($_SERVER['PHP_SELF']);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$current_page = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+$isCartPage = ($current_page === 'cart.php');
+
+$cartCount = 0;
+
+if (!empty($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $item) {
+        $cartCount += (int) $item['quantity'];
+    }
+}
 ?>
 
 <nav class="navbar navbar-expand-lg">
@@ -9,10 +21,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <a class="navbar-brand" href="/SoftEcoms/public/index.php">
 
             <!-- Full wordmark: hidden on mobile, shown from lg up -->
-            <!-- if naay changes regarding ani, consider look sa css/topbar.css --> 
+            <!-- if naay changes regarding ani, consider look sa css/topbar.css -->
             <img src="/SoftEcoms/public/assets/img/svg/sweet-claire-logo.svg"
-            alt="Sweetclaire"
-            class="logo-full d-none d-lg-block">
+                alt="Sweetclaire"
+                class="logo-full d-none d-lg-block">
 
             <!-- Small version: shown on mobile, hidden from lg up -->
             <img src="/SoftEcoms/public/assets/img/svg/logo.svg"
@@ -21,7 +33,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         </a>
 
-        <?php if (!in_array($current_page, ['login.php', 'register.php'], true)) : ?>
+        <?php if (!in_array($current_page, ['login.php', 'register.php', 'verifyforgetpassword.php', 'forgetpassword.php'], true)) : ?>
 
             <button
                 class="navbar-toggler"
@@ -30,8 +42,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll"
                 aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -40,38 +51,39 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <ul class="navbar-nav ms-lg-auto my-2 my-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link active"
-                           href="/SoftEcoms/public/index.php">
+                        <a class="nav-link <?= (!$isCartPage && $current_page === 'index.php') ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/index.php">
                             Home
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="/SoftEcoms/public/productpage.php">
+                        <a class="nav-link <?= in_array($current_page, ['productpage.php', 'product.php']) ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/productpage.php">
                             Menu
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="/SoftEcoms/public/contactUs.php">
+                        <a class="nav-link <?= $current_page === 'contactUs.php' ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/contactUs.php">
                             Contact Us
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="/SoftEcoms/public/order.php">
+                        <a class="nav-link <?= $current_page === 'order.php' ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/order.php">
                             Order
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link"
-                           href="/SoftEcoms/public/aboutUs.php">
+                        <a class="nav-link <?= $current_page === 'aboutUs.php' ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/aboutUs.php">
                             About
                         </a>
+                        
                     </li>
 
                 </ul>
@@ -97,35 +109,42 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </a> -->
 
                     <!-- Shopping cart -->
-                    
+
 
                     <!-- Account dropdown: populated by Node.js -->
-                    <div id="accountNav">
-    <a class="nav-link"
-       href="/SoftEcoms/public/login.php"
-       style="background-color: black; color: #F1D0C9; padding: 8px 20px;  
-       display: inline-block;  "
-       >
-        Login
-    </a>
-</div>
+                    <div id="accountNav" style="visibility: hidden;">
+                        <a class="nav-link"
+                            href="/SoftEcoms/public/login.php"
+                            style="background-color: black; color: #F1D0C9; padding: 8px 20px;  
+       display: inline-block;  ">
+                            Login
+                        </a>
+                    </div>
 
 
                     <a href="/SoftEcoms/public/cart.php"
-                       class="nav-icon"
-                       aria-label="Shopping cart">
+                    class="nav-icon <?= $isCartPage ? 'active' : '' ?>"
+                    id="cartIcon"
+                    aria-label="Shopping cart">
 
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             width="22"
-                             height="22"
-                             fill="currentColor"
-                             class="bi bi-cart"
-                             viewBox="0 0 16 16">
+                            width="22"
+                            height="22"
+                            fill="currentColor"
+                            class="bi bi-cart"
+                            viewBox="0 0 16 16">
 
-                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7z"/>
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7z" />
 
-                            <path d="M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+                            <path d="M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
                         </svg>
+
+                        <span id="cartCount"
+                            class="cart-count"
+                            style="<?php echo $cartCount === 0 ? 'display:none;' : ''; ?>">
+                            <?php echo $cartCount; ?>
+                        </span>
+
                     </a>
 
                 </div>
@@ -138,18 +157,27 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
+
     const accountNav = document.getElementById("accountNav");
 
     if (!accountNav) return;
 
+    function showAccountNav() {
+        accountNav.style.visibility = "visible";
+    }
+
     try {
+
         const response = await fetch("http://localhost:3000/me", {
             method: "GET",
-            credentials: "include"
+            credentials: "include",
+            cache: "no-store"
         });
 
-        if (response.status === 401) {
-            return; // Keep Sign In visible for guests.
+        // Guest user: display Login button
+        if (response.status === 100) {
+            showAccountNav();
+            return;
         }
 
         if (!response.ok) {
@@ -159,9 +187,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         const data = await response.json();
         const user = data.user;
 
-        if (!user) return;
+        if (!user) {
+            showAccountNav();
+            return;
+        }
 
-        // Create the dropdown without inserting user data as HTML.
+        // Account dropdown
         const wrapper = document.createElement("div");
         wrapper.className = "nav-item dropdown";
 
@@ -176,28 +207,37 @@ document.addEventListener("DOMContentLoaded", async function () {
         const menu = document.createElement("ul");
         menu.className = "dropdown-menu dropdown-menu-end";
 
+        // Profile
         const profileItem = document.createElement("li");
         const profileLink = document.createElement("a");
+
         profileLink.className = "dropdown-item";
         profileLink.href = "/SoftEcoms/public/users/profilePage.php";
         profileLink.textContent = "Profile";
+
         profileItem.appendChild(profileLink);
 
+        // Divider
         const dividerItem = document.createElement("li");
         const divider = document.createElement("hr");
+
         divider.className = "dropdown-divider";
         dividerItem.appendChild(divider);
 
+        // Sign Out
         const logoutItem = document.createElement("li");
         const logoutButton = document.createElement("button");
+
         logoutButton.type = "button";
         logoutButton.className = "dropdown-item";
         logoutButton.textContent = "Sign Out";
 
         logoutButton.addEventListener("click", async function () {
+
             logoutButton.disabled = true;
 
             try {
+
                 const logoutResponse = await fetch(
                     "http://localhost:3000/logout",
                     {
@@ -213,8 +253,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                 window.location.href = "/SoftEcoms/public/login.php";
 
             } catch (error) {
+
                 console.error("Sign out error:", error);
+
                 alert("Could not sign out. Check whether the Node.js server is running.");
+
                 logoutButton.disabled = false;
             }
         });
@@ -223,11 +266,19 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         menu.append(profileItem, dividerItem, logoutItem);
         wrapper.append(toggle, menu);
+
         accountNav.replaceChildren(wrapper);
 
+        // Reveal account after verification
+        showAccountNav();
+
     } catch (error) {
+
         console.error("Account navbar error:", error);
-        // Leave Sign In visible if the API is unavailable.
+
+        // Show Login if authentication cannot be checked
+        showAccountNav();
     }
+
 });
 </script>

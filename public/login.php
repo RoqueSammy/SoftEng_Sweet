@@ -2,47 +2,62 @@
 <?php
 session_start();
 
-$pageClass = "index-page";
+$pageClass = "login-page";
 
-include(__DIR__ . '/includes/header.php');
-include(__DIR__ . '/includes/topbar.php');
+$loginNotice = "";
+
+if (isset($_GET['notice']) && $_GET['notice'] === 'login_required') {
+    $loginNotice = "Please log in to your account before adding products to your cart.";
+}
+
+include_once __DIR__ . "/../app/config/config.php";
+
+include('includes/header.php');
+include('includes/topbar.php');
 ?>
 
 <section class="loginOverlay">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-xl-10">
-                <div class="card rounded-3 text-black">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-xl-10 col-lg-11">
+
+                <div class="card login-card">
                     <div class="row g-0">
 
-                        <div class="col-lg-6">
-                            <div class="card-body p-md-5 mx-md-4">
+                        <!-- LEFT SIDE: LOGIN FORM -->
+                        <div class="col-lg-6 login-form-column">
+                            <div class="card-body login-card-body">
 
-                                <div class="text-center">
+                                <div class="text-center login-heading">
                                     <img
                                         src="/SoftEcoms/public/assets/img/svg/logo.svg"
-                                        style="width: 100px;"
-                                        alt="Sweetclaire">
+                                        class="login-logo"
+                                        alt="SweetClaire Logo">
 
-                                    <h4 class="greet_login mt-1 mb-3 pb-1">
+                                    <h4 class="greet_login mt-3 mb-2">
                                         Welcome to SweetClaire!
                                     </h4>
+
+                                    <p class="login-subtitle">
+                                        Please login to your account
+                                    </p>
                                 </div>
 
                                 <form id="loginForm">
-                                    <p>Please login to your account</p>
 
                                     <div class="mb-3">
                                         <label class="form-label" for="email">
-                                            Email
+                                            Email Address
                                         </label>
 
                                         <input
                                             type="email"
                                             id="email"
+                                            name="email"
                                             class="form-control"
-                                            placeholder="Email Address"
+                                            placeholder="Enter your email address"
                                             autocomplete="email"
+                                            maxlength="254"
                                             required>
                                     </div>
 
@@ -54,44 +69,48 @@ include(__DIR__ . '/includes/topbar.php');
                                         <input
                                             type="password"
                                             id="password"
+                                            name="password"
                                             class="form-control"
-                                            placeholder="Password"
+                                            placeholder="Enter your password"
                                             autocomplete="current-password"
                                             required>
                                     </div>
 
-                                    <div class="d-grid pt-1 mb-3 pb-1">
-                                        <button
-                                            id="loginButton"
-                                            class="btn btn-primary gradient-custom-3 mb-3"
-                                            type="submit">
-                                            Login
-                                        </button>
-
+                                    <div class="text-end mb-3">
                                         <a
-                                            class="text-muted text-center"
-                                            href="/SoftEcoms/public/forgetpassword.php">
+                                            href="/SoftEcoms/public/forgetpassword.php"
+                                            class="forgot-password-link">
                                             Forgot password?
                                         </a>
                                     </div>
 
-                                    <div class="d-flex align-items-center justify-content-center pb-4">
-                                        <p class="mb-0 me-2">
+                                    <div class="d-grid mb-4">
+                                        <button
+                                            id="loginButton"
+                                            class="btn login-btn"
+                                            type="submit">
+                                            Login
+                                        </button>
+                                    </div>
+
+                                    <div class="register-prompt text-center">
+                                        <p class="mb-2">
                                             Don't have an account?
                                         </p>
 
                                         <a
                                             href="/SoftEcoms/public/register.php"
-                                            class="btn btn-outline-danger">
-                                            Create new
+                                            class="btn btn-outline-danger register-btn">
+                                            Create new account
                                         </a>
                                     </div>
-                                </form>
 
+                                </form>
                             </div>
                         </div>
 
-                        <div class="col-lg-6 d-none d-lg-block">
+                        <!-- RIGHT SIDE: IMAGE -->
+                        <div class="col-lg-6 d-none d-lg-flex login-image-column">
                             <img
                                 src="/SoftEcoms/public/assets/img/Top_Viewclair.jpg"
                                 alt="SweetClaire products"
@@ -100,6 +119,7 @@ include(__DIR__ . '/includes/topbar.php');
 
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -107,6 +127,26 @@ include(__DIR__ . '/includes/topbar.php');
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- LOGIN REQUIRED NOTIFICATION -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    <?php if (!empty($loginNotice)): ?>
+
+        Swal.fire({
+            icon: "info",
+            title: "Login Required",
+            text: <?php echo json_encode($loginNotice); ?>,
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#F56C6C"
+        });
+
+    <?php endif; ?>
+
+});
+</script>
+
+<!-- LOGIN FUNCTIONALITY -->
 <script>
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
@@ -153,15 +193,14 @@ loginForm.addEventListener("submit", async function (event) {
             return;
         }
 
-        // Admins go directly to their dashboard.
+        // Admin redirect
         if (data.role === "admin") {
             window.location.href =
                 data.redirect || "/SoftEcoms/public/admin/index.php";
             return;
         }
 
-        // Do not show the profile completion popup here.
-        // The homepage will check the profile after login.
+        // Customer/user login success
         await Swal.fire({
             toast: true,
             position: "top-end",
@@ -191,4 +230,4 @@ loginForm.addEventListener("submit", async function (event) {
 </script>
 
 </body>
-</html>
+</html> 

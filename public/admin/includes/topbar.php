@@ -46,13 +46,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                     <li class="nav-item">
                         <a class="nav-link"
-                            href="/SoftEcoms/public/productpage.php">
-                            Menu
-                        </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link"
                             href="/SoftEcoms/public/contactUs.php">
                             Contact Us
                         </a>
@@ -109,8 +102,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 
                     <a href="/SoftEcoms/public/cart.php"
-                        class="nav-icon"
-                        aria-label="Shopping cart">
+                            class="nav-icon"
+                            id="cartIcon"
+                            aria-label="Shopping cart">
 
                         <svg xmlns="http://www.w3.org/2000/svg"
                             width="22"

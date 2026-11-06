@@ -1,0 +1,142 @@
+/* ========================================
+   RESET PASSWORD PAGES
+======================================== */
+
+body.reset-page {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: linear-gradient(
+    to right,
+    #efd9c3,
+    #f0d5c6,
+    #f1d0c9,
+    #f3cacd,
+    #f3c6d0
+  );
+}
+
+/* BACKGROUND */
+
+.resetOverlay {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 15px;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+    url("/SoftEcoms/public/assets/img/strawberry_theme.jpg") center / cover
+      no-repeat;
+}
+
+/* RESET CARD */
+
+.resetOverlay .reset-card {
+  width: 100%;
+  max-width: 550px;
+  margin: auto;
+  padding: 35px;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* LOCK ILLUSTRATION */
+
+.resetOverlay .reset-lock {
+  width: 90px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* TITLES AND DESCRIPTION */
+
+.resetOverlay .reset-title {
+  color: #d65454;
+  font-weight: bold;
+}
+
+.resetOverlay .reset-description {
+  color: #666;
+  line-height: 1.6;
+}
+
+/* FORM LABELS */
+
+.resetOverlay .reset-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  text-align: left;
+}
+
+/* INPUTS */
+
+.resetOverlay .reset-input {
+  width: 100%;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.resetOverlay .reset-input:focus {
+  border-color: #d65454;
+  box-shadow: 0 0 0 0.2rem rgba(214, 84, 84, 0.15);
+  outline: none;
+}
+
+/* BUTTON */
+
+.resetOverlay .reset-btn {
+  width: 100%;
+  padding: 11px;
+  background-color: #f56c6c;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.resetOverlay .reset-btn:hover {
+  background-color: #e05555;
+  color: white;
+}
+
+.resetOverlay .reset-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* LINKS */
+
+.resetOverlay .reset-link {
+  color: #2bb0e0;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.resetOverlay .reset-link:hover {
+  text-decoration: underline;
+}
+
+/* MOBILE */
+
+@media (max-width: 767px) {
+  .resetOverlay {
+    padding: 20px 15px;
+  }
+
+  .resetOverlay .reset-card {
+    padding: 25px;
+  }
+
+  .resetOverlay .reset-lock {
+    width: 75px;
+  }
+}
