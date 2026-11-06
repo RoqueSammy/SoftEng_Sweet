@@ -2,6 +2,11 @@
 session_start();
 
 $pageClass = "reset-page";
+<<<<<<< HEAD
+=======
+
+include_once __DIR__ . "/../app/config/config.php";
+>>>>>>> 6bfae598763c6b5665e64c08d09075c7771b02f6
 
 include_once __DIR__ . "/../app/config/config.php";
 
@@ -163,3 +168,58 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
+        const originalText = button.textContent;
+
+        button.disabled = true;
+        button.textContent = "Sending...";
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:3000/forgot-password",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Unable to process your request."
+                );
+            }
+
+            await Swal.fire({
+                title: "Request received!",
+                text: data.message,
+                icon: "success",
+                confirmButtonColor: "#8b4513"
+            });
+
+        } catch (error) {
+
+            console.error("Forgot-password error:", error);
+
+            await Swal.fire({
+                title: "Request failed",
+                text: "Unable to contact the authentication server. Make sure Node.js is running on port 3000.",
+                icon: "error",
+                confirmButtonColor: "#8b4513"
+            });
+
+        } finally {
+
+            button.disabled = false;
+            button.textContent = originalText;
+
+        }
+
+    });
+
+});
+</script>
