@@ -1,4 +1,3 @@
-
 <?php
 session_start();
 
@@ -20,15 +19,8 @@ if (isset($_GET['remove'])) {
 // UPDATE PRODUCT QUANTITY
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
 
-    $product_id = filter_var(
-        $_POST['product_id'] ?? null,
-        FILTER_VALIDATE_INT
-    );
-
-    $quantity = filter_var(
-        $_POST['quantity'] ?? null,
-        FILTER_VALIDATE_INT
-    );
+    $product_id = filter_var($_POST['product_id'] ?? null, FILTER_VALIDATE_INT);
+    $quantity = filter_var($_POST['quantity'] ?? null, FILTER_VALIDATE_INT);
 
     if (
         $product_id !== false &&
@@ -37,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
         $quantity > 0 &&
         isset($_SESSION['cart'][$product_id])
     ) {
-
         $_SESSION['cart'][$product_id]['quantity'] = $quantity;
     }
 
@@ -70,6 +61,7 @@ $cart = $_SESSION['cart'] ?? [];
 
         <div class="row">
 
+            <!-- CART ITEMS -->
             <div class="col-lg-8">
 
                 <?php foreach ($cart as $id => $item) { ?>
@@ -114,9 +106,11 @@ $cart = $_SESSION['cart'] ?? [];
                                 <!-- QUANTITY -->
                                 <div class="col-md-3">
 
-                                    <form method="POST"
-                                          action="cart.php"
-                                          class="d-flex align-items-center gap-2 quantity-form">
+                                    <form
+                                        method="POST"
+                                        action="cart.php"
+                                        class="d-flex align-items-center gap-2 quantity-form"
+                                    >
 
                                         <input
                                             type="hidden"
@@ -181,43 +175,34 @@ $cart = $_SESSION['cart'] ?? [];
                         tabindex="-1"
                         aria-hidden="true"
                     >
+
                         <div class="modal-dialog modal-dialog-centered">
 
                             <div class="modal-content">
 
                                 <div class="modal-body text-center">
 
-                                    <!-- Decorative corner -->
                                     <div class="modal-decoration top-decoration"></div>
                                     <div class="modal-decoration bottom-decoration"></div>
 
-                                    <!-- Trash Icon -->
                                     <div class="remove-icon">
                                         <i class="fas fa-trash-alt"></i>
                                     </div>
 
-                                    <!-- Heart -->
                                     <div class="remove-heart">
                                         <i class="fas fa-heart"></i>
                                     </div>
 
-                                    <!-- Title -->
                                     <h4 class="remove-title">Remove Item?</h4>
 
-                                    <!-- Message -->
                                     <p class="remove-message">
                                         Are you sure you want to remove
                                         <strong>
-                                            <?php echo htmlspecialchars(
-                                                $item['name'],
-                                                ENT_QUOTES,
-                                                'UTF-8'
-                                            ); ?>
+                                            <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
                                         </strong>
                                         from your cart?
                                     </p>
 
-                                    <!-- Buttons -->
                                     <div class="remove-actions">
 
                                         <button
@@ -242,6 +227,7 @@ $cart = $_SESSION['cart'] ?? [];
                             </div>
 
                         </div>
+
                     </div>
 
                 <?php } ?>
@@ -272,15 +258,27 @@ $cart = $_SESSION['cart'] ?? [];
                         <h5 id="total">₱0.00</h5>
                     </div>
 
-                    <a href="checkout.php"
-                       class="btn btn-dark w-100 rounded-pill"
-                       id="checkoutButton"
-                       aria-disabled="true">
-                        Proceed to Checkout
-                    </a>
+                    <!-- CHECKOUT FORM -->
+                    <form method="POST" action="checkout.php" id="selectedCheckoutForm">
 
-                    <a href="order.php"
-                       class="btn btn-outline-dark w-100 rounded-pill mt-3">
+                        <div id="selectedProducts"></div>
+
+                        <button
+                            type="submit"
+                            class="btn btn-dark w-100 rounded-pill"
+                            id="checkoutButton"
+                            aria-disabled="true"
+                            disabled
+                        >
+                            Proceed to Checkout
+                        </button>
+
+                    </form>
+
+                    <a
+                        href="order.php"
+                        class="btn btn-outline-dark w-100 rounded-pill mt-3"
+                    >
                         Continue Shopping
                     </a>
 
@@ -308,12 +306,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const subtotalElement = document.getElementById("subtotal");
     const totalElement = document.getElementById("total");
     const selectedCountElement = document.getElementById("selectedCount");
+
     const checkoutButton = document.getElementById("checkoutButton");
+    const selectedProducts = document.getElementById("selectedProducts");
 
     function updateSummary() {
 
         let total = 0;
         let selectedCount = 0;
+
+        // Clear previously generated hidden inputs
+        selectedProducts.innerHTML = "";
 
         cards.forEach(function (card) {
 
@@ -325,6 +328,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 total += price * quantity;
                 selectedCount++;
 
+                // Get product ID from its quantity form
+                const productId = card.querySelector(
+                    'input[name="product_id"]'
+                ).value;
+
+                // Create hidden input for selected product
+                const hiddenInput = document.createElement("input");
+
+                hiddenInput.type = "hidden";
+                hiddenInput.name = "selected_ids[]";
+                hiddenInput.value = productId;
+
+                selectedProducts.appendChild(hiddenInput);
             }
 
         });
@@ -332,6 +348,9 @@ document.addEventListener("DOMContentLoaded", function () {
         subtotalElement.textContent = "₱" + total.toFixed(2);
         totalElement.textContent = "₱" + total.toFixed(2);
         selectedCountElement.textContent = selectedCount;
+
+        // Enable checkout only when at least one product is selected
+        checkoutButton.disabled = selectedCount === 0;
 
         checkoutButton.style.pointerEvents =
             selectedCount > 0 ? "auto" : "none";
@@ -364,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
             updateSummary();
         });
 
-        // Keyboard selection
+        // KEYBOARD SELECTION
         card.addEventListener("keydown", function (event) {
 
             if (event.target !== card) return;
@@ -384,16 +403,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         });
-
-    });
-
-    // PREVENT CHECKOUT IF NOTHING IS SELECTED
-    checkoutButton.addEventListener("click", function (event) {
-
-        if (checkoutButton.getAttribute("aria-disabled") === "true") {
-            event.preventDefault();
-            alert("Please select at least one product first.");
-        }
 
     });
 

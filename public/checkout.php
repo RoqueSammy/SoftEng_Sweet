@@ -2,24 +2,72 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
 session_start();
 
 $pageClass = "checkout-page";
 
-$cart = $_SESSION['cart'] ?? [];
+// Get all products in the shopping cart
+$allCart = $_SESSION['cart'] ?? [];
 
+// RECEIVE SELECTED PRODUCTS FROM CART.PHP
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (empty($_POST['selected_ids']) || !is_array($_POST['selected_ids'])) {
+
+        unset($_SESSION['checkout_selected_ids']);
+
+        header("Location: cart.php");
+        exit();
+    }
+
+    $selectedIds = array_unique(
+        array_filter(
+            array_map('intval', $_POST['selected_ids']),
+            function ($id) {
+                return $id > 0;
+            }
+        )
+    );
+
+    $_SESSION['checkout_selected_ids'] = $selectedIds;
+}
+
+// GET SELECTED PRODUCT IDS
+$selectedIds = $_SESSION['checkout_selected_ids'] ?? [];
+
+// BUILD CHECKOUT CART USING SELECTED PRODUCTS ONLY
+$cart = [];
+
+foreach ($selectedIds as $id) {
+
+    if (isset($allCart[$id])) {
+        $cart[$id] = $allCart[$id];
+    }
+}
+
+// PREVENT CHECKOUT IF NO VALID PRODUCTS ARE SELECTED
+if (empty($cart)) {
+
+    unset($_SESSION['checkout_selected_ids']);
+
+    header("Location: cart.php");
+    exit();
+}
+
+// CALCULATE SELECTED PRODUCTS SUBTOTAL
 $subtotal = 0;
 
 foreach ($cart as $item) {
+
     $price = (float) ($item['price'] ?? 0);
     $quantity = (int) ($item['quantity'] ?? 0);
+
     $subtotal += $price * $quantity;
 }
 
 $deliveryFee = 50;
-?>
 
-<?php
 include('./admin/includes/header.php');
 include('./admin/includes/topbar.php');
 ?>
