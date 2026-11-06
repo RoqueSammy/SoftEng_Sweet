@@ -4,6 +4,12 @@ session_start();
 
 $pageClass = "login-page";
 
+$loginNotice = "";
+
+if (isset($_GET['notice']) && $_GET['notice'] === 'login_required') {
+    $loginNotice = "Please log in to your account before adding products to your cart.";
+}
+
 include_once __DIR__ . "/../app/config/config.php";
 
 include __DIR__ . "/admin/includes/header.php";
@@ -121,6 +127,7 @@ include __DIR__ . "/admin/includes/topbar.php";
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- LOGIN REQUIRED NOTIFICATION -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -139,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-
+<!-- LOGIN FUNCTIONALITY -->
 <script>
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
