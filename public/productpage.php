@@ -105,11 +105,11 @@ include('includes/topbar.php');
                 ));
             ?></p>
 
-          <form
-    method="POST"
-    action="http://localhost:3000/cart/add"
-    id="cartForm"
->
+            <form
+                method="POST"
+                action="../app/controllers/cartController.php"
+                id="cartForm"
+            >
                 <input
                     type="hidden"
                     name="product_uuid"
@@ -202,6 +202,7 @@ include('includes/topbar.php');
 }
 </style>
 
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -211,7 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const increaseButton = document.getElementById("increaseQuantity");
     const addButton = form.querySelector(".buy-btn");
 
-    // Find the cart icon
     const cartIcon =
         document.getElementById("cartIcon") ||
         document.querySelector('a.nav-icon[href*="cart.php"]');
@@ -237,25 +237,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-   
     // Add product to cart
     form.addEventListener("submit", async function (event) {
+
         event.preventDefault();
 
         const quantity = Number(quantityInput.value);
 
-        const productUUID = form.querySelector(
-            'input[name="product_uuid"]'
-        ).value;
-
         if (!Number.isInteger(quantity) || quantity < 1) {
             quantityInput.value = 1;
             quantityInput.focus();
-            return;
-        }
-
-        if (!productUUID) {
-            showMessage("Product UUID is missing.", true);
             return;
         }
 
@@ -267,77 +258,66 @@ document.addEventListener("DOMContentLoaded", function () {
         addButton.innerHTML = "Adding...";
 
         try {
+
+            // Send the product information to PHP
+            const formData = new FormData(form);
+
+            // PHP checks this field to process the cart request
+            formData.set("add_to_cart", "1");
+
             const response = await fetch(
-                "http://localhost:3000/cart/add",
+                "../app/controllers/cartController.php",
                 {
                     method: "POST",
-                    credentials: "include",
+                    body: formData,
+                    credentials: "same-origin",
                     headers: {
-                        "Content-Type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest",
                         "Accept": "application/json"
-                    },
-                    body: JSON.stringify({
-                        product_uuid: productUUID,
-                        quantity: quantity
-                    })
+                    }
                 }
             );
 
-            // Read response as text first
-            const responseText = await response.text();
+            const data = await response.json();
 
-            console.log("Cart API Status:", response.status);
-            console.log("Cart API Response:", responseText);
-
-            let data;
-
-            try {
-                data = JSON.parse(responseText);
-            } catch (error) {
-                throw new Error(
-                    "The Node.js server returned an invalid response. Check the console."
-                );
-            }
-
-            // Handle authentication
-            if (response.status === 401) {
-                window.location.href =
-                    data.redirect || "/SoftEcoms/public/login.php";
+            // Redirect only if the user is not logged in
+            if (data.redirect) {
+                window.location.href = data.redirect;
                 return;
             }
 
             if (!response.ok || !data.success) {
-                throw new Error(
-                    data.message || "Unable to add product to cart."
-                );
+                showMessage(data.message || "Unable to add product.", true);
+                return;
             }
-
-            // Start flying product animation after successful addition
-            await animateProductToCart();
 
             // Update cart count
-            const badge = document.getElementById("cartCount");
+            const cartCount = document.getElementById("cartCount");
 
-            if (badge) {
-                badge.textContent = data.cartCount;
-                badge.style.display =
-                    data.cartCount > 0 ? "flex" : "none";
+            if (cartCount) {
+                cartCount.textContent = data.cartCount;
             }
 
-            showMessage("✓ Added to your cart!");
+            // Animate product image toward cart icon
+            await animateProductToCart();
 
-            // Open cart page
-            setTimeout(function () {
-                window.location.href = "/SoftEcoms/public/cart.php";
-            }, 700);
+            // Show success notification
+            showMessage(data.message || "Product added to cart!");
 
         } catch (error) {
+
             console.error("Add to cart error:", error);
-            showMessage("✕ " + error.message, true);
+
+            showMessage(
+                "Something went wrong. Please try again.",
+                true
+            );
 
         } finally {
+
             addButton.disabled = false;
             addButton.innerHTML = originalText;
+
         }
     });
 
@@ -351,7 +331,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.querySelector(".image-wrapper img");
 
             if (!productImage || !cartIcon) {
-                console.error("Product image or cart icon was not found.");
                 resolve();
                 return;
             }
@@ -372,13 +351,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.body.appendChild(flyingImage);
 
-            // Force browser to register starting position
             flyingImage.getBoundingClientRect();
 
             requestAnimationFrame(function () {
 
-                const moveX = (end.left + end.width / 2) - (start.left + start.width / 2);
-                const moveY = (end.top + end.height / 2) - (start.top + start.height / 2);
+                const moveX =
+                    (end.left + end.width / 2) -
+                    (start.left + start.width / 2);
+
+                const moveY =
+                    (end.top + end.height / 2) -
+                    (start.top + start.height / 2);
 
                 flyingImage.style.transform =
                     `translate(${moveX}px, ${moveY}px) scale(0.12)`;
@@ -401,7 +384,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Notification
+
+    // Toast notification
     function showMessage(message, isError = false) {
 
         const toast = document.createElement("div");
@@ -421,6 +405,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         setTimeout(function () {
+
             toast.classList.remove("show");
 
             setTimeout(function () {

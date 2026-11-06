@@ -4,765 +4,400 @@ session_start();
 
 $pageClass = "cart-page";
 
-// Keep your existing website header and navigation.
+// REMOVE ITEM FROM CART
+if (isset($_GET['remove'])) {
+
+    $product_id = filter_var($_GET['remove'], FILTER_VALIDATE_INT);
+
+    if ($product_id !== false && isset($_SESSION['cart'][$product_id])) {
+        unset($_SESSION['cart'][$product_id]);
+    }
+
+    header("Location: cart.php");
+    exit();
+}
+
+// UPDATE PRODUCT QUANTITY
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+
+    $product_id = filter_var(
+        $_POST['product_id'] ?? null,
+        FILTER_VALIDATE_INT
+    );
+
+    $quantity = filter_var(
+        $_POST['quantity'] ?? null,
+        FILTER_VALIDATE_INT
+    );
+
+    if (
+        $product_id !== false &&
+        $product_id > 0 &&
+        $quantity !== false &&
+        $quantity > 0 &&
+        isset($_SESSION['cart'][$product_id])
+    ) {
+
+        $_SESSION['cart'][$product_id]['quantity'] = $quantity;
+    }
+
+    header("Location: cart.php");
+    exit();
+}
+
 include('./admin/includes/header.php');
 include('./admin/includes/topbar.php');
+
+$cart = $_SESSION['cart'] ?? [];
 ?>
 
-<link rel="stylesheet" href="assets/css/cart_page.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+<div class="container my-5 px-4">
 
-<div class="container cart-layout my-5">
+    <h1 class="text-center mb-5">My Shopping Cart</h1>
 
-    <h2 class="text-center mb-5">My Shopping Cart</h2>
+    <?php if (empty($cart)) { ?>
 
-    <div id="cartLoading" class="text-center py-5">
-        Loading your cart...
-    </div>
+        <div class="text-center py-5" style="margin-top: 210px;">
+            <h4>Your cart is empty!</h4>
+            <p>Looks like you haven't added any pastries yet.</p>
 
-    <div id="cartError"
-         class="alert alert-danger"
-         style="display:none;">
-    </div>
+            <a href="order.php" class="btn btn-dark mt-3">
+                Continue Shopping
+            </a>
+        </div>
 
-    <div id="cartContent" class="row" style="display:none;">
+    <?php } else { ?>
 
-        <!-- =====================================
-             LEFT SIDE: CART PRODUCTS
-        ====================================== -->
+        <div class="row">
 
-        <div class="col-lg-8">
+            <div class="col-lg-8">
 
-            <div id="cartItems"></div>
+                <?php foreach ($cart as $id => $item) { ?>
 
-            <div id="emptyCart"
-                 class="text-center py-5"
-                 style="display:none;">
+                    <div
+                        class="card cart-item-card mb-4 shadow-sm rounded-4"
+                        data-price="<?php echo (float) $item['price']; ?>"
+                        data-quantity="<?php echo (int) $item['quantity']; ?>"
+                        tabindex="0"
+                        aria-pressed="false"
+                    >
 
-                <h4>Your cart is empty!</h4>
+                        <div class="card-body">
 
-                <p>Looks like you haven't added any pastries yet.</p>
+                            <div class="row align-items-center">
 
-                <a href="order.php" class="btn btn-dark mt-3">
-                    Continue Shopping
-                </a>
+                                <!-- PRODUCT IMAGE -->
+                                <div class="col-md-3">
+
+                                    <img
+                                        src="assets/product_img/<?php echo htmlspecialchars(basename($item['img']), ENT_QUOTES, 'UTF-8'); ?>"
+                                        alt="<?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                                        class="img-fluid rounded-4"
+                                        style="height:120px; width:100%; object-fit:cover;"
+                                    >
+
+                                </div>
+
+                                <!-- PRODUCT DETAILS -->
+                                <div class="col-md-4">
+
+                                    <h5>
+                                        <?php echo htmlspecialchars($item['name'], ENT_QUOTES, 'UTF-8'); ?>
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        ₱<?php echo number_format((float) $item['price'], 2); ?>
+                                    </p>
+
+                                </div>
+
+                                <!-- QUANTITY -->
+                                <div class="col-md-3">
+
+                                    <form method="POST"
+                                          action="cart.php"
+                                          class="d-flex align-items-center gap-2 quantity-form">
+
+                                        <input
+                                            type="hidden"
+                                            name="product_id"
+                                            value="<?php echo (int) $id; ?>"
+                                        >
+
+                                        <input
+                                            type="number"
+                                            name="quantity"
+                                            value="<?php echo (int) $item['quantity']; ?>"
+                                            min="1"
+                                            step="1"
+                                            class="form-control quantity-input"
+                                            style="width:75px;"
+                                            required
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            name="update"
+                                            class="btn btn-outline-dark btn-sm"
+                                        >
+                                            Update
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                                <!-- SUBTOTAL AND REMOVE -->
+                                <div class="col-md-2 text-end">
+
+                                    <p class="fw-bold product-subtotal">
+                                        ₱<?php echo number_format(
+                                            (float) $item['price'] * (int) $item['quantity'],
+                                            2
+                                        ); ?>
+                                    </p>
+
+                                    <a
+                                        href="#"
+                                        class="text-danger text-decoration-none"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#removeModal<?php echo (int) $id; ?>"
+                                    >
+                                        Remove
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- REMOVE CONFIRMATION MODAL -->
+                    <div
+                        class="modal fade remove-modal"
+                        id="removeModal<?php echo (int) $id; ?>"
+                        tabindex="-1"
+                        aria-hidden="true"
+                    >
+                        <div class="modal-dialog modal-dialog-centered">
+
+                            <div class="modal-content">
+
+                                <div class="modal-body text-center">
+
+                                    <!-- Decorative corner -->
+                                    <div class="modal-decoration top-decoration"></div>
+                                    <div class="modal-decoration bottom-decoration"></div>
+
+                                    <!-- Trash Icon -->
+                                    <div class="remove-icon">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
+
+                                    <!-- Heart -->
+                                    <div class="remove-heart">
+                                        <i class="fas fa-heart"></i>
+                                    </div>
+
+                                    <!-- Title -->
+                                    <h4 class="remove-title">Remove Item?</h4>
+
+                                    <!-- Message -->
+                                    <p class="remove-message">
+                                        Are you sure you want to remove
+                                        <strong>
+                                            <?php echo htmlspecialchars(
+                                                $item['name'],
+                                                ENT_QUOTES,
+                                                'UTF-8'
+                                            ); ?>
+                                        </strong>
+                                        from your cart?
+                                    </p>
+
+                                    <!-- Buttons -->
+                                    <div class="remove-actions">
+
+                                        <button
+                                            type="button"
+                                            class="btn keep-item-btn"
+                                            data-bs-dismiss="modal"
+                                        >
+                                            Keep Item
+                                        </button>
+
+                                        <a
+                                            href="cart.php?remove=<?php echo (int) $id; ?>"
+                                            class="btn confirm-remove-btn"
+                                        >
+                                            Remove
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                <?php } ?>
+
+            </div>
+
+            <!-- ORDER SUMMARY -->
+            <div class="col-lg-4">
+
+                <div class="card shadow-sm rounded-4 p-4">
+
+                    <h4 class="mb-4">Order Summary</h4>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Selected Items</span>
+                        <span id="selectedCount">0</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Subtotal</span>
+                        <span id="subtotal">₱0.00</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <h5>Total</h5>
+                        <h5 id="total">₱0.00</h5>
+                    </div>
+
+                    <a href="checkout.php"
+                       class="btn btn-dark w-100 rounded-pill"
+                       id="checkoutButton"
+                       aria-disabled="true">
+                        Proceed to Checkout
+                    </a>
+
+                    <a href="order.php"
+                       class="btn btn-outline-dark w-100 rounded-pill mt-3">
+                        Continue Shopping
+                    </a>
+
+                    <small class="text-muted text-center mt-3">
+                        Select the products you want to purchase.
+                    </small>
+
+                </div>
 
             </div>
 
         </div>
 
-
-        <!-- =====================================
-             RIGHT SIDE: ORDER SUMMARY + CHECKOUT
-        ====================================== -->
-
-        <div class="col-lg-4">
-
-            <div class="card shadow-sm rounded-4 p-4">
-
-                <h4 class="mb-4">Order Summary</h4>
-
-                <div class="d-flex justify-content-between mb-3">
-                    <span>Total Items</span>
-                    <span id="selectedCount">0</span>
-                </div>
-
-                <div class="d-flex justify-content-between mb-3">
-                    <span>Subtotal</span>
-                    <span>₱<span id="subtotal">0.00</span></span>
-                </div>
-
-                <div class="d-flex justify-content-between mb-3">
-                    <span>VAT (12%)</span>
-                    <span>₱<span id="tax">0.00</span></span>
-                </div>
-
-                <hr>
-
-                <div class="d-flex justify-content-between mb-4">
-                    <h5>Total</h5>
-                    <h5>₱<span id="grandTotal">0.00</span></h5>
-                </div>
-
-
-                <!-- CHECKOUT FORM -->
-
-                <form id="checkoutForm">
-
-                    <h5 class="mb-3">Delivery Information</h5>
-
-                    <label for="checkoutAddress" class="form-label">
-                        Delivery Address
-                    </label>
-
-                    <textarea
-                        name="address"
-                        id="checkoutAddress"
-                        class="form-control mb-3"
-                        rows="3"
-                        placeholder="Enter your complete delivery address"
-                        required
-                    ></textarea>
-
-
-                    <label for="checkoutPhone" class="form-label">
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="text"
-                        name="phone"
-                        id="checkoutPhone"
-                        class="form-control mb-3"
-                        placeholder="Enter your contact number"
-                        maxlength="20"
-                        required
-                    >
-
-
-                    <h5 class="mb-3">Form of Payment</h5>
-
-                    <div class="form-check mb-2">
-
-                        <input
-                            class="form-check-input"
-                            type="radio"
-                            name="payment_method"
-                            id="cash"
-                            value="Cash"
-                            required
-                        >
-
-                        <label class="form-check-label" for="cash">
-                            Cash on Delivery
-                        </label>
-
-                    </div>
-
-                    <div class="form-check mb-4">
-
-                        <input
-                            class="form-check-input"
-                            type="radio"
-                            name="payment_method"
-                            id="gcash"
-                            value="GCash"
-                        >
-
-                        <label class="form-check-label" for="gcash">
-                            GCash
-                        </label>
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        id="checkoutButton"
-                        class="btn btn-dark w-100 rounded-pill"
-                        disabled
-                    >
-                        CHECK OUT
-                    </button>
-
-                </form>
-
-
-                <a href="order.php"
-                   class="btn btn-outline-dark w-100 rounded-pill mt-3">
-                    Continue Shopping
-                </a>
-
-                <small class="text-muted text-center mt-3">
-                    Your order total will be calculated securely.
-                </small>
-
-            </div>
-
-        </div>
-
-    </div>
+    <?php } ?>
 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ==========================================
-    // API CONFIGURATION
-    // ==========================================
-
-    const API_URL = "http://localhost:3000";
-
-
-    // ==========================================
-    // HTML ELEMENTS
-    // ==========================================
-
-    const cartLoading = document.getElementById("cartLoading");
-    const cartError = document.getElementById("cartError");
-    const cartContent = document.getElementById("cartContent");
-    const cartItems = document.getElementById("cartItems");
-    const emptyCart = document.getElementById("emptyCart");
+    const cards = document.querySelectorAll(".cart-item-card");
 
     const subtotalElement = document.getElementById("subtotal");
-    const taxElement = document.getElementById("tax");
-    const grandTotalElement = document.getElementById("grandTotal");
+    const totalElement = document.getElementById("total");
     const selectedCountElement = document.getElementById("selectedCount");
-
-    const checkoutForm = document.getElementById("checkoutForm");
     const checkoutButton = document.getElementById("checkoutButton");
-
-    let currentCart = [];
-
-
-    // ==========================================
-    // FORMAT PRICE
-    // ==========================================
-
-    function formatPrice(amount) {
-        return Number(amount).toLocaleString("en-PH", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-    }
-
-
-    // ==========================================
-    // API REQUEST HELPER
-    // ==========================================
-
-    async function apiRequest(endpoint, options = {}) {
-
-        const response = await fetch(API_URL + endpoint, {
-            ...options,
-            credentials: "include",
-            headers: {
-                "Accept": "application/json",
-                ...(options.headers || {})
-            }
-        });
-
-        const responseText = await response.text();
-
-        let data;
-
-        try {
-            data = JSON.parse(responseText);
-        } catch (error) {
-            console.error("Invalid API response:", responseText);
-
-            throw new Error(
-                "The server returned an invalid response. Check your Node.js server."
-            );
-        }
-
-        if (response.status === 401) {
-            window.location.href = "/SoftEcoms/public/login.php";
-
-            throw new Error("Please log in first.");
-        }
-
-        if (!response.ok || data.success === false) {
-            throw new Error(
-                data.message || "Something went wrong."
-            );
-        }
-
-        return data;
-    }
-
-
-    // ==========================================
-    // LOAD CUSTOMER CART
-    // ==========================================
-
-    async function loadCart() {
-
-        cartLoading.style.display = "block";
-        cartError.style.display = "none";
-        cartContent.style.display = "none";
-
-        try {
-
-            const data = await apiRequest("/cart");
-
-            currentCart = data.cart || [];
-
-            displayCart();
-
-            cartContent.style.display = "block";
-
-            await updateCartBadge();
-
-        } catch (error) {
-
-            console.error("Load cart error:", error);
-
-            cartError.textContent = error.message;
-            cartError.style.display = "block";
-
-        } finally {
-
-            cartLoading.style.display = "none";
-
-        }
-    }
-
-
-    // ==========================================
-    // DISPLAY CART PRODUCTS
-    // ==========================================
-
-    function displayCart() {
-
-        cartItems.innerHTML = "";
-
-        if (currentCart.length === 0) {
-
-            emptyCart.style.display = "block";
-
-            checkoutButton.disabled = true;
-
-            updateSummary();
-
-            return;
-        }
-
-        emptyCart.style.display = "none";
-
-        currentCart.forEach(function (item) {
-
-            const price = Number(item.price);
-            const quantity = Number(item.quantity);
-
-            const card = document.createElement("div");
-
-            card.className = "card cart-item-card mb-4 shadow-sm rounded-4";
-
-            // Product card body
-            const cardBody = document.createElement("div");
-            cardBody.className = "card-body";
-
-            const row = document.createElement("div");
-            row.className = "row align-items-center";
-
-            // PRODUCT IMAGE
-            const imageColumn = document.createElement("div");
-            imageColumn.className = "col-md-3";
-
-            const image = document.createElement("img");
-
-            image.src =
-                "assets/product_img/" +
-                encodeURIComponent(item.img || "");
-
-            image.alt = item.productName || "Product";
-
-            image.className = "img-fluid rounded-4";
-
-            image.style.height = "120px";
-            image.style.width = "100%";
-            image.style.objectFit = "cover";
-
-            imageColumn.appendChild(image);
-
-
-            // PRODUCT DETAILS
-            const detailsColumn = document.createElement("div");
-            detailsColumn.className = "col-md-4";
-
-            const productName = document.createElement("h5");
-            productName.textContent = item.productName || "Product";
-
-            const productPrice = document.createElement("p");
-            productPrice.className = "text-muted mb-0";
-            productPrice.textContent = "₱" + formatPrice(price);
-
-            detailsColumn.appendChild(productName);
-            detailsColumn.appendChild(productPrice);
-
-
-            // QUANTITY
-            const quantityColumn = document.createElement("div");
-            quantityColumn.className = "col-md-3";
-
-            const quantityForm = document.createElement("form");
-
-            quantityForm.className =
-                "d-flex align-items-center gap-2 quantity-form";
-
-            const quantityInput = document.createElement("input");
-
-            quantityInput.type = "number";
-            quantityInput.min = "1";
-            quantityInput.step = "1";
-            quantityInput.value = quantity;
-            quantityInput.className = "form-control quantity-input";
-            quantityInput.style.width = "75px";
-            quantityInput.required = true;
-
-            const updateButton = document.createElement("button");
-
-            updateButton.type = "submit";
-            updateButton.className = "btn btn-outline-dark btn-sm";
-            updateButton.textContent = "Update";
-
-            quantityForm.appendChild(quantityInput);
-            quantityForm.appendChild(updateButton);
-
-            quantityColumn.appendChild(quantityForm);
-
-
-            // SUBTOTAL AND REMOVE
-            const subtotalColumn = document.createElement("div");
-            subtotalColumn.className = "col-md-2 text-end";
-
-            const productSubtotal = document.createElement("p");
-
-            productSubtotal.className =
-                "fw-bold product-subtotal";
-
-            productSubtotal.textContent =
-                "₱" + formatPrice(price * quantity);
-
-            const removeButton = document.createElement("button");
-
-            removeButton.type = "button";
-            removeButton.className =
-                "btn btn-link text-danger text-decoration-none p-0";
-
-            removeButton.textContent = "Remove";
-            removeButton.dataset.id = item.cartID;
-
-            subtotalColumn.appendChild(productSubtotal);
-            subtotalColumn.appendChild(removeButton);
-
-
-            // APPEND ELEMENTS
-            row.appendChild(imageColumn);
-            row.appendChild(detailsColumn);
-            row.appendChild(quantityColumn);
-            row.appendChild(subtotalColumn);
-
-            cardBody.appendChild(row);
-            card.appendChild(cardBody);
-
-            cartItems.appendChild(card);
-
-
-            // ==========================================
-            // UPDATE QUANTITY EVENT
-            // ==========================================
-
-            quantityForm.addEventListener("submit", async function (event) {
-
-                event.preventDefault();
-
-                const newQuantity = Number(quantityInput.value);
-
-                if (
-                    !Number.isInteger(newQuantity) ||
-                    newQuantity < 1
-                ) {
-                    Swal.fire(
-                        "Invalid quantity",
-                        "Quantity must be at least 1.",
-                        "warning"
-                    );
-
-                    return;
-                }
-
-                updateButton.disabled = true;
-                updateButton.textContent = "Updating...";
-
-                try {
-
-                    await apiRequest("/cart/update", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            cartID: item.cartID,
-                            quantity: newQuantity
-                        })
-                    });
-
-                    await loadCart();
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "Quantity updated",
-                        timer: 1000,
-                        showConfirmButton: false
-                    });
-
-                } catch (error) {
-
-                    console.error("Update quantity error:", error);
-
-                    Swal.fire(
-                        "Unable to update",
-                        error.message,
-                        "error"
-                    );
-
-                    updateButton.disabled = false;
-                    updateButton.textContent = "Update";
-
-                }
-
-            });
-
-
-            // ==========================================
-            // REMOVE PRODUCT EVENT
-            // ==========================================
-
-            removeButton.addEventListener("click", async function () {
-
-                const confirmation = await Swal.fire({
-                    title: "Remove Item?",
-                    text: "Are you sure you want to remove this product?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Yes, remove it",
-                    cancelButtonText: "Keep Item"
-                });
-
-                if (!confirmation.isConfirmed) return;
-
-                removeButton.disabled = true;
-
-                try {
-
-                    await apiRequest("/cart/remove", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            cartID: item.cartID
-                        })
-                    });
-
-                    await loadCart();
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "Product removed",
-                        timer: 1000,
-                        showConfirmButton: false
-                    });
-
-                } catch (error) {
-
-                    console.error("Remove product error:", error);
-
-                    Swal.fire(
-                        "Unable to remove product",
-                        error.message,
-                        "error"
-                    );
-
-                    removeButton.disabled = false;
-
-                }
-
-            });
-
-        });
-
-        checkoutButton.disabled = false;
-
-        updateSummary();
-    }
-
-
-    // ==========================================
-    // UPDATE ORDER SUMMARY
-    // ==========================================
 
     function updateSummary() {
 
-        let subtotal = 0;
-        let totalItems = 0;
+        let total = 0;
+        let selectedCount = 0;
 
-        currentCart.forEach(function (item) {
+        cards.forEach(function (card) {
 
-            const price = Number(item.price);
-            const quantity = Number(item.quantity);
+            if (card.classList.contains("selected")) {
 
-            subtotal += price * quantity;
-            totalItems += quantity;
+                const price = parseFloat(card.dataset.price);
+                const quantity = parseInt(card.dataset.quantity, 10);
 
-        });
-
-        const tax = Math.round(subtotal * 0.12 * 100) / 100;
-        const grandTotal = subtotal + tax;
-
-        subtotalElement.textContent = formatPrice(subtotal);
-        taxElement.textContent = formatPrice(tax);
-        grandTotalElement.textContent = formatPrice(grandTotal);
-
-        selectedCountElement.textContent = totalItems;
-
-        checkoutButton.disabled = currentCart.length === 0;
-    }
-
-
-    // ==========================================
-    // UPDATE NAVIGATION CART BADGE
-    // ==========================================
-
-    async function updateCartBadge() {
-
-        try {
-
-            const data = await apiRequest("/cart/count");
-
-            const badge = document.getElementById("cartCount");
-
-            if (badge) {
-
-                badge.textContent = data.cartCount;
-
-                badge.style.display =
-                    data.cartCount > 0 ? "flex" : "none";
+                total += price * quantity;
+                selectedCount++;
 
             }
 
-        } catch (error) {
-
-            console.error("Cart badge error:", error);
-
-        }
-    }
-
-
-    // ==========================================
-    // CHECKOUT
-    // ==========================================
-
-    checkoutForm.addEventListener("submit", async function (event) {
-
-        event.preventDefault();
-
-        if (currentCart.length === 0) {
-
-            Swal.fire(
-                "Empty Cart",
-                "Please add products before checking out.",
-                "warning"
-            );
-
-            return;
-        }
-
-        const address = document
-            .getElementById("checkoutAddress")
-            .value.trim();
-
-        const phone = document
-            .getElementById("checkoutPhone")
-            .value.trim();
-
-        const paymentMethod = document.querySelector(
-            'input[name="payment_method"]:checked'
-        )?.value;
-
-        if (!address || !phone || !paymentMethod) {
-
-            Swal.fire(
-                "Incomplete Information",
-                "Please complete your delivery and payment information.",
-                "warning"
-            );
-
-            return;
-        }
-
-        const confirmation = await Swal.fire({
-            title: "Place your order?",
-            text: "Please confirm that your order details are correct.",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Place Order",
-            cancelButtonText: "Review Order"
         });
 
-        if (!confirmation.isConfirmed) return;
+        subtotalElement.textContent = "₱" + total.toFixed(2);
+        totalElement.textContent = "₱" + total.toFixed(2);
+        selectedCountElement.textContent = selectedCount;
 
-        checkoutButton.disabled = true;
-        checkoutButton.textContent = "Processing Order...";
+        checkoutButton.style.pointerEvents =
+            selectedCount > 0 ? "auto" : "none";
 
-        try {
+        checkoutButton.style.opacity =
+            selectedCount > 0 ? "1" : "0.5";
 
-            const data = await apiRequest("/checkout", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    address: address,
-                    phone: phone,
-                    payment_method: paymentMethod
-                })
-            });
+        checkoutButton.setAttribute(
+            "aria-disabled",
+            selectedCount > 0 ? "false" : "true"
+        );
+    }
 
-            await Swal.fire({
-                icon: "success",
-                title: "Order Placed!",
-                html: `
-                    <p>${data.message}</p>
-                    <p>
-                        <strong>Order Number:</strong>
-                        ${data.order.orderNumber}
-                    </p>
-                    <p>
-                        <strong>Total:</strong>
-                        ₱${formatPrice(data.order.totalPrice)}
-                    </p>
-                    <p>
-                        <strong>Payment:</strong>
-                        ${data.order.paymentMethod}
-                    </p>
-                `,
-                confirmButtonText: "Continue Shopping"
-            });
+    // SELECT PRODUCT CARD
+    cards.forEach(function (card) {
 
-            window.location.href = "order.php";
+        card.addEventListener("click", function (event) {
 
-        } catch (error) {
+            if (event.target.closest("button, a, input, form, select, textarea")) {
+                return;
+            }
 
-            console.error("Checkout error:", error);
+            card.classList.toggle("selected");
 
-            Swal.fire(
-                "Checkout Failed",
-                error.message,
-                "error"
+            card.setAttribute(
+                "aria-pressed",
+                card.classList.contains("selected") ? "true" : "false"
             );
 
-            checkoutButton.disabled = false;
-            checkoutButton.textContent = "CHECK OUT";
+            updateSummary();
+        });
 
+        // Keyboard selection
+        card.addEventListener("keydown", function (event) {
+
+            if (event.target !== card) return;
+
+            if (event.key === "Enter" || event.key === " ") {
+
+                event.preventDefault();
+
+                card.classList.toggle("selected");
+
+                card.setAttribute(
+                    "aria-pressed",
+                    card.classList.contains("selected") ? "true" : "false"
+                );
+
+                updateSummary();
+            }
+
+        });
+
+    });
+
+    // PREVENT CHECKOUT IF NOTHING IS SELECTED
+    checkoutButton.addEventListener("click", function (event) {
+
+        if (checkoutButton.getAttribute("aria-disabled") === "true") {
+            event.preventDefault();
+            alert("Please select at least one product first.");
         }
 
     });
 
-
-    // ==========================================
-    // INITIALIZE
-    // ==========================================
-
-    loadCart();
+    updateSummary();
 
 });
 </script>
