@@ -26,12 +26,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/login.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/register.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/reset.css">
-<<<<<<< HEAD
 ]
-=======
-<link rel="stylesheet" href="/SoftEcoms/public/assets/css/confirmation.css">
-
->>>>>>> fed254a05750ac8eece79f3c3ddfb89b8bf59502
 
 
 <!-- -external links that I used -carlo -->

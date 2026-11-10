@@ -8,10 +8,6 @@ include_once __DIR__ . "/../app/config/config.php";
 include('includes/header.php');
 include('includes/topbar.php');
 
-<<<<<<< HEAD
-
-=======
->>>>>>> fed254a05750ac8eece79f3c3ddfb89b8bf59502
 $sweetQuery = "
     SELECT id, productName, productDescription, price, img
     FROM product_item
