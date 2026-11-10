@@ -1,5 +1,5 @@
 const User = require("./User");
-const Cart = require("./Cart");
+const Cart = require("./cart");
 
 class Customer extends User {
   constructor(db) {
