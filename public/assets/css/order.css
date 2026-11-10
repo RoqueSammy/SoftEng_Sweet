@@ -1,7 +1,9 @@
+/* ORDER LISTING SECTION */
 .order-listing {
   padding: 1px 16px 32px;
 }
 
+/* ORDER PANEL */
 /* mao ni panel*/
 .order-listing .order-panel {
   width: 100%;
@@ -12,11 +14,13 @@
   padding: 24px;
 } 
 
+/* ORDER TITLE */
 .order-listing .order-title {
   text-align: center;
   margin: 8px 0 24px;
 }
 
+/* ORDER TOOLBAR */
 .order-listing .order-toolbar {
   display: flex;
   justify-content: space-between;
@@ -26,6 +30,7 @@
   margin-bottom: 24px;
 }
 
+/* SORT CHIPS */
 .order-listing .sort-chips {
   display: flex;
   gap: 8px;
@@ -41,17 +46,20 @@
   text-decoration: none;
 }
 
+/* ACTIVE SORT CHIP */
 .order-listing .sort-chip.active {
   background: #222;
   color: #fff;
 }
 
+/* ORDER GRID */
 .order-listing .order-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 24px;
 }
 
+/* ORDER CARD */
 .order-listing .order-card {
   display: block;
   border: 1px solid #e5e5e5;
@@ -62,6 +70,7 @@
   text-decoration: none;
 }
 
+/* ORDER CARD IMAGE */
 .order-listing .order-card img {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -70,20 +79,23 @@
   transition: transform 0.3s ease;
 }
 
+/* ORDER CARD IMAGE HOVER EFFECT */
 .order-listing .order-card:hover img {
   transform: scale(1.03);
 }
 
+/* ORDER CARD TITLE */
 .order-listing .order-card h6 {
   margin: 12px 0 4px;
 }
 
+/* ORDER CARD PRICE */
 .order-listing .order-card .price {
   font-weight: 700;
   margin: 0;
 }
 
-
+/* SEARCH BOX */
 .order-listing .search-box {
   display: flex;
   align-items: center;
@@ -93,6 +105,7 @@
   background: #fff;
 }
 
+/* SEARCH INPUT */
 .order-listing .search-box input {
   border: 0;
   outline: 0;
@@ -101,6 +114,7 @@
   min-width: 140px;
 }
 
+/* SEARCH BUTTON */
 .order-listing .search-box button {
   border: 0;
   background: transparent;
@@ -108,11 +122,13 @@
   cursor: pointer;
 }
 
+/* SORT CHIP ICON */
 .order-listing .sort-chip i {
   margin-right: 4px;
   font-size: 12px;
 }
 
+/* ORDER PAGE BACKGROUND */
 .order {
   min-height: 100vh;
   background:
@@ -120,11 +136,12 @@
     url("/SoftEcoms/public/assets/img/strawberry_theme.jpg") center / cover no-repeat;
 }
 
+/* ORDER PANEL BACKGROUND */
 .order-listing .order-panel {
   background: #fff;
 }
 
-
+/* ORDER BANNER */
 .order-banner {
   height: 110px;
   display: flex;
@@ -135,6 +152,7 @@
     url("/SoftEcoms/public/assets/img/eclair_coffee.jpg") center / cover no-repeat;
 }
 
+/* ORDER BANNER TITLE */
 .order-banner h1 {
   color: #fff;
   font-size: 2rem;

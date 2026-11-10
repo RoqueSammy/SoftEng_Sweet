@@ -8,7 +8,10 @@ include_once __DIR__ . "/../app/config/config.php";
 include('includes/header.php');
 include('includes/topbar.php');
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> fed254a05750ac8eece79f3c3ddfb89b8bf59502
 $sweetQuery = "
     SELECT id, productName, productDescription, price, img
     FROM product_item
@@ -175,7 +178,7 @@ function sweetProductImage($imageName)
                                         </p>
 
                                         <p class="card-price">
-                                            $<?php echo number_format($productPrice, 2); ?>
+                                            ₱<?php echo number_format($productPrice, 2); ?>
                                         </p>
 
                                     </div>
@@ -197,8 +200,9 @@ function sweetProductImage($imageName)
 
             </div>
 
-            <div class="slider-indicator" id="productSliderStatus" aria-live="polite">
-                Showing products
+            <div class="slider-indicator"
+                 id="productSliderStatus"
+                 aria-label="Product slider indicators">
             </div>
 
         <?php else: ?>
@@ -210,7 +214,7 @@ function sweetProductImage($imageName)
         <?php endif; ?>
 
         <div class="text-center mt-4">
-            <a href="/SoftEcoms/public/products.php" class="btn2">
+            <a href="/SoftEcoms/public/order.php" class="btn2">
                 Click For More
             </a>
         </div>
@@ -298,7 +302,7 @@ function sweetProductImage($imageName)
     <div class="container py-5">
 
         <div class="section-heading text-center py-4">
-            <h1 class="our_products">Sweetness Deserved</h1>
+            <h1 class="our_products">Best Sellers!</h1>
             <h6 class="section-subtitle">
                 Experience the Sweetness with our Best Sellers at an Affordable Price!
             </h6>
@@ -337,7 +341,7 @@ function sweetProductImage($imageName)
                                     </h6>
 
                                     <p class="best-price">
-                                        $<?php echo number_format($productPrice, 2); ?>
+                                        ₱<?php echo number_format($productPrice, 2); ?>
                                     </p>
                                 </div>
 
@@ -367,7 +371,7 @@ function sweetProductImage($imageName)
     <div class="container text-white py-5">
         <div class="row py-5">
             <div class="col-lg-12 m-auto text-center">
-                <h1 class="font-weight-bold py-3">Invite All!</h1>
+                <h1 class="font-weight-bold py-3">Contact Us!</h1>
                 <h6 class="cta-subtitle">
                     Enjoy the heartfelt moments with your Loved Ones at our Shop!
                 </h6>
@@ -387,7 +391,6 @@ function sweetProductImage($imageName)
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const slider = document.getElementById("productSlider");
-
     if (!slider) return;
 
     const wrapper = slider.closest(".product-slider-wrapper");
@@ -401,11 +404,29 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const slides = Array.from(slider.querySelectorAll(".product-slide"));
-
     if (slides.length === 0) return;
 
     let activeIndex = 0;
     let resizeTimer;
+
+    // Create one clickable indicator dot for each product.
+    if (status) {
+        status.innerHTML = "";
+
+        slides.forEach(function (slide, index) {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "slider-dot";
+            dot.setAttribute("aria-label", "Go to product " + (index + 1));
+
+            dot.addEventListener("click", function () {
+                activeIndex = index;
+                updateSlider();
+            });
+
+            status.appendChild(dot);
+        });
+    }
 
     function updateSlider() {
         const wrapperWidth = wrapper.clientWidth;
@@ -422,10 +443,13 @@ document.addEventListener("DOMContentLoaded", function () {
         slider.style.paddingLeft = sidePadding + "px";
         slider.style.paddingRight = sidePadding + "px";
 
+<<<<<<< HEAD
 
+=======
+        // Center the active card.
+>>>>>>> fed254a05750ac8eece79f3c3ddfb89b8bf59502
         const slideCenter =
             activeSlide.offsetLeft + activeSlide.offsetWidth / 2;
-
         const offset = wrapperWidth / 2 - slideCenter;
 
         slider.style.transform = `translateX(${offset}px)`;
@@ -433,7 +457,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         slides.forEach(function (slide, index) {
             slide.classList.toggle("is-active", index === activeIndex);
-
             slide.classList.toggle(
                 "is-near",
                 Math.abs(index - activeIndex) === 1
@@ -445,12 +468,23 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         });
 
+        // Disable arrows at the beginning and end.
         prevButton.disabled = activeIndex === 0;
         nextButton.disabled = activeIndex === slides.length - 1;
 
+        // Highlight the indicator for the active product.
         if (status) {
-            status.textContent =
-                `Showing product ${activeIndex + 1} of ${slides.length}`;
+            const dots = status.querySelectorAll(".slider-dot");
+
+            dots.forEach(function (dot, index) {
+                dot.classList.toggle("active", index === activeIndex);
+
+                if (index === activeIndex) {
+                    dot.setAttribute("aria-current", "true");
+                } else {
+                    dot.removeAttribute("aria-current");
+                }
+            });
         }
     }
 
@@ -468,13 +502,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Recalculate the card positions when the screen size changes.
+    // Recalculate positions when the screen size changes.
     window.addEventListener("resize", function () {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(updateSlider, 100);
     });
 
-    // Wait for images to load before calculating card dimensions.
+    // Recalculate after images finish loading.
     window.addEventListener("load", updateSlider);
 
     updateSlider();

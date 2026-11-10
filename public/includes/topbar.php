@@ -1,3 +1,4 @@
+
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -6,13 +7,9 @@ if (session_status() === PHP_SESSION_NONE) {
 $current_page = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $isCartPage = ($current_page === 'cart.php');
 
+// The cart count comes from the Node.js API now.
+// Do not use $_SESSION['cart'] because the database is the source of truth.
 $cartCount = 0;
-
-if (!empty($_SESSION['cart'])) {
-    foreach ($_SESSION['cart'] as $item) {
-        $cartCount += (int) $item['quantity'];
-    }
-}
 ?>
 
 <nav class="navbar navbar-expand-lg">
@@ -20,20 +17,28 @@ if (!empty($_SESSION['cart'])) {
 
         <a class="navbar-brand" href="/SoftEcoms/public/index.php">
 
-            <!-- Full wordmark: hidden on mobile, shown from lg up -->
-            <!-- if naay changes regarding ani, consider look sa css/topbar.css -->
-            <img src="/SoftEcoms/public/assets/img/svg/sweet-claire-logo.svg"
+            <!-- Full wordmark -->
+            <img
+                src="/SoftEcoms/public/assets/img/svg/sweet-claire-logo.svg"
                 alt="Sweetclaire"
-                class="logo-full d-none d-lg-block">
+                class="logo-full d-none d-lg-block"
+            >
 
-            <!-- Small version: shown on mobile, hidden from lg up -->
-            <img src="/SoftEcoms/public/assets/img/svg/logo.svg"
+            <!-- Small logo -->
+            <img
+                src="/SoftEcoms/public/assets/img/svg/logo.svg"
                 alt="Sweetclaire"
-                class="logo-small d-block d-lg-none">
+                class="logo-small d-block d-lg-none"
+            >
 
         </a>
 
-        <?php if (!in_array($current_page, ['login.php', 'register.php', 'verifyforgetpassword.php', 'forgetpassword.php'], true)) : ?>
+        <?php if (!in_array($current_page, [
+            'login.php',
+            'register.php',
+            'verifyforgetpassword.php',
+            'forgetpassword.php'
+        ], true)) : ?>
 
             <button
                 class="navbar-toggler"
@@ -42,7 +47,8 @@ if (!empty($_SESSION['cart'])) {
                 data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll"
                 aria-expanded="false"
-                aria-label="Toggle navigation">
+                aria-label="Toggle navigation"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -51,103 +57,108 @@ if (!empty($_SESSION['cart'])) {
                 <ul class="navbar-nav ms-lg-auto my-2 my-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link <?= (!$isCartPage && $current_page === 'index.php') ? 'active' : '' ?>"
-                            href="/SoftEcoms/public/index.php">
+                        <a
+                            class="nav-link <?= (!$isCartPage && $current_page === 'index.php') ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/index.php"
+                        >
                             Home
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?= in_array($current_page, ['productpage.php', 'product.php']) ? 'active' : '' ?>"
-                            href="/SoftEcoms/public/productpage.php">
+                        <a
+                            class="nav-link <?= in_array($current_page, ['productpage.php', 'product.php']) ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/productpage.php"
+                        >
                             Menu
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?= $current_page === 'contactUs.php' ? 'active' : '' ?>"
-                            href="/SoftEcoms/public/contactUs.php">
+                        <a
+                            class="nav-link <?= $current_page === 'contactUs.php' ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/contactUs.php"
+                        >
                             Contact Us
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?= $current_page === 'order.php' ? 'active' : '' ?>"
-                            href="/SoftEcoms/public/order.php">
+                        <a
+                            class="nav-link <?= $current_page === 'order.php' ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/order.php"
+                        >
                             Order
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link <?= $current_page === 'aboutUs.php' ? 'active' : '' ?>"
-                            href="/SoftEcoms/public/aboutUs.php">
+                        <a
+                            class="nav-link <?= $current_page === 'aboutUs.php' ? 'active' : '' ?>"
+                            href="/SoftEcoms/public/aboutUs.php"
+                        >
                             About
                         </a>
-                        
                     </li>
 
                 </ul>
 
                 <div class="d-flex align-items-center gap-3">
 
-                    <!-- Order history -->
-                    <!-- <a href="/SoftEcoms/public/users/orderHistory.php"
-                       class="nav-icon"
-                       aria-label="Order history">
+                    <!-- ACCOUNT DROPDOWN -->
 
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             width="20"
-                             height="20"
-                             fill="currentColor"
-                             class="bi bi-receipt"
-                             viewBox="0 0 16 16">
-
-                            <path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .708 0l.646.647.646-.647a.5.5 0 0 1 .801.13l.5 1A.5.5 0 0 1 15 2v12a.5.5 0 0 1-.053.224l-.5 1a.5.5 0 0 1-.8.13L13 14.707l-.646.647a.5.5 0 0 1-.708 0L11 14.707l-.646.647a.5.5 0 0 1-.708 0L9 14.707l-.646.647a.5.5 0 0 1-.708 0L7 14.707l-.646.647a.5.5 0 0 1-.708 0L5 14.707l-.646.647a.5.5 0 0 1-.708 0L3 14.707l-.646.647a.5.5 0 0 1-.801-.13l-.5-1A.5.5 0 0 1 1 14V2a.5.5 0 0 1 .053-.224l.5-1a.5.5 0 0 1 .367-.27"/>
-
-                            <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/>
-                        </svg>
-                    </a> -->
-
-                    <!-- Shopping cart -->
-
-
-                    <!-- Account dropdown: populated by Node.js -->
                     <div id="accountNav" style="visibility: hidden;">
-                        <a class="nav-link"
+
+                        <a
+                            class="nav-link"
                             href="/SoftEcoms/public/login.php"
-                            style="background-color: black; color: #F1D0C9; padding: 8px 20px;  
-       display: inline-block;  ">
+                            style="
+                                background-color: black;
+                                color: #F1D0C9;
+                                padding: 8px 20px;
+                                display: inline-block;
+                            "
+                        >
                             Login
                         </a>
+
                     </div>
 
 
-                    <a href="/SoftEcoms/public/cart.php"
-                    class="nav-icon <?= $isCartPage ? 'active' : '' ?>"
-                    id="cartIcon"
-                    aria-label="Shopping cart">
+                    <!-- SHOPPING CART -->
 
-                        <svg xmlns="http://www.w3.org/2000/svg"
+                    <a
+                        href="/SoftEcoms/public/cart.php"
+                        class="nav-icon <?= $isCartPage ? 'active' : '' ?>"
+                        id="cartIcon"
+                        aria-label="Shopping cart"
+                    >
+
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
                             width="22"
                             height="22"
                             fill="currentColor"
                             class="bi bi-cart"
-                            viewBox="0 0 16 16">
+                            viewBox="0 0 16 16"
+                        >
 
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7z" />
 
                             <path d="M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
+
                         </svg>
 
-                        <span id="cartCount"
+                        <span
+                            id="cartCount"
                             class="cart-count"
-                            style="<?php echo $cartCount === 0 ? 'display:none;' : ''; ?>">
-                            <?php echo $cartCount; ?>
-                        </span>
+                            style="display: none;"
+                        >0</span>
 
                     </a>
 
                 </div>
+
             </div>
 
         <?php endif; ?>
@@ -155,130 +166,247 @@ if (!empty($_SESSION['cart'])) {
     </div>
 </nav>
 
+
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
+
+    const API_URL = "http://localhost:3000";
+
+
+    // ==========================================
+    // UPDATE CART COUNTER
+    // ==========================================
+
+    async function refreshCartCount() {
+
+        const badge = document.getElementById("cartCount");
+
+        if (!badge) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                API_URL + "/cart/count",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json"
+                    },
+                    cache: "no-store"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to retrieve cart count.");
+            }
+
+            const data = await response.json();
+
+            if (data.success !== true) {
+                throw new Error(
+                    data.message || "Unable to retrieve cart count."
+                );
+            }
+
+            const count = Math.max(
+                0,
+                Number(data.cartCount) || 0
+            );
+
+            badge.textContent = count;
+
+            badge.style.display =
+                count > 0 ? "flex" : "none";
+
+        } catch (error) {
+
+            console.error("Cart counter error:", error);
+
+        }
+
+    }
+
+
+    // Refresh the cart count on every page
+    refreshCartCount();
+
+
+    // ==========================================
+    // ACCOUNT NAVIGATION
+    // ==========================================
 
     const accountNav = document.getElementById("accountNav");
 
-    if (!accountNav) return;
+    if (!accountNav) {
+        return;
+    }
 
     function showAccountNav() {
         accountNav.style.visibility = "visible";
     }
 
-    try {
+    async function loadAccountNav() {
 
-        const response = await fetch("http://localhost:3000/me", {
-            method: "GET",
-            credentials: "include",
-            cache: "no-store"
-        });
+        try {
 
-        // Guest user: display Login button
-        if (response.status === 100) {
-            showAccountNav();
-            return;
-        }
+            const response = await fetch(
+                API_URL + "/me",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    cache: "no-store"
+                }
+            );
 
-        if (!response.ok) {
-            throw new Error("Unable to retrieve account information.");
-        }
+            // Guest user: display Login button.
+            if (response.status === 100 || response.status === 401) {
+                showAccountNav();
+                return;
+            }
 
-        const data = await response.json();
-        const user = data.user;
-
-        if (!user) {
-            showAccountNav();
-            return;
-        }
-
-        // Account dropdown
-        const wrapper = document.createElement("div");
-        wrapper.className = "nav-item dropdown";
-
-        const toggle = document.createElement("a");
-        toggle.className = "nav-link dropdown-toggle";
-        toggle.href = "#";
-        toggle.setAttribute("role", "button");
-        toggle.setAttribute("data-bs-toggle", "dropdown");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.textContent = user.username || user.fullName || "My Account";
-
-        const menu = document.createElement("ul");
-        menu.className = "dropdown-menu dropdown-menu-end";
-
-        // Profile
-        const profileItem = document.createElement("li");
-        const profileLink = document.createElement("a");
-
-        profileLink.className = "dropdown-item";
-        profileLink.href = "/SoftEcoms/public/users/profilePage.php";
-        profileLink.textContent = "Profile";
-
-        profileItem.appendChild(profileLink);
-
-        // Divider
-        const dividerItem = document.createElement("li");
-        const divider = document.createElement("hr");
-
-        divider.className = "dropdown-divider";
-        dividerItem.appendChild(divider);
-
-        // Sign Out
-        const logoutItem = document.createElement("li");
-        const logoutButton = document.createElement("button");
-
-        logoutButton.type = "button";
-        logoutButton.className = "dropdown-item";
-        logoutButton.textContent = "Sign Out";
-
-        logoutButton.addEventListener("click", async function () {
-
-            logoutButton.disabled = true;
-
-            try {
-
-                const logoutResponse = await fetch(
-                    "http://localhost:3000/logout",
-                    {
-                        method: "POST",
-                        credentials: "include"
-                    }
+            if (!response.ok) {
+                throw new Error(
+                    "Unable to retrieve account information."
                 );
+            }
 
-                if (!logoutResponse.ok) {
-                    throw new Error("Logout failed.");
+            const data = await response.json();
+            const user = data.user;
+
+            if (!user) {
+                showAccountNav();
+                return;
+            }
+
+
+            // ACCOUNT DROPDOWN
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "nav-item dropdown";
+
+            const toggle = document.createElement("a");
+
+            toggle.className = "nav-link dropdown-toggle";
+            toggle.href = "#";
+
+            toggle.setAttribute("role", "button");
+            toggle.setAttribute("data-bs-toggle", "dropdown");
+            toggle.setAttribute("aria-expanded", "false");
+
+            toggle.textContent =
+                user.username || user.fullName || "My Account";
+
+
+            const menu = document.createElement("ul");
+            menu.className = "dropdown-menu dropdown-menu-end";
+
+
+            // PROFILE
+
+            const profileItem = document.createElement("li");
+
+            const profileLink = document.createElement("a");
+
+            profileLink.className = "dropdown-item";
+
+            profileLink.href =
+                "/SoftEcoms/public/users/profilePage.php";
+
+            profileLink.textContent = "Profile";
+
+            profileItem.appendChild(profileLink);
+
+
+            // DIVIDER
+
+            const dividerItem = document.createElement("li");
+
+            const divider = document.createElement("hr");
+
+            divider.className = "dropdown-divider";
+
+            dividerItem.appendChild(divider);
+
+
+            // SIGN OUT
+
+            const logoutItem = document.createElement("li");
+
+            const logoutButton = document.createElement("button");
+
+            logoutButton.type = "button";
+
+            logoutButton.className = "dropdown-item";
+
+            logoutButton.textContent = "Sign Out";
+
+
+            logoutButton.addEventListener("click", async function () {
+
+                logoutButton.disabled = true;
+
+                try {
+
+                    const logoutResponse = await fetch(
+                        API_URL + "/logout",
+                        {
+                            method: "POST",
+                            credentials: "include"
+                        }
+                    );
+
+                    if (!logoutResponse.ok) {
+                        throw new Error("Logout failed.");
+                    }
+
+                    window.location.href =
+                        "/SoftEcoms/public/login.php";
+
+                } catch (error) {
+
+                    console.error("Sign out error:", error);
+
+                    alert(
+                        "Could not sign out. Check whether the Node.js server is running."
+                    );
+
+                    logoutButton.disabled = false;
+
                 }
 
-                window.location.href = "/SoftEcoms/public/login.php";
+            });
 
-            } catch (error) {
+            logoutItem.appendChild(logoutButton);
 
-                console.error("Sign out error:", error);
 
-                alert("Could not sign out. Check whether the Node.js server is running.");
+            // APPEND DROPDOWN
 
-                logoutButton.disabled = false;
-            }
-        });
+            menu.append(
+                profileItem,
+                dividerItem,
+                logoutItem
+            );
 
-        logoutItem.appendChild(logoutButton);
+            wrapper.append(toggle, menu);
 
-        menu.append(profileItem, dividerItem, logoutItem);
-        wrapper.append(toggle, menu);
+            accountNav.replaceChildren(wrapper);
 
-        accountNav.replaceChildren(wrapper);
+            showAccountNav();
 
-        // Reveal account after verification
-        showAccountNav();
+        } catch (error) {
 
-    } catch (error) {
+            console.error("Account navbar error:", error);
 
-        console.error("Account navbar error:", error);
+            showAccountNav();
 
-        // Show Login if authentication cannot be checked
-        showAccountNav();
+        }
+
     }
+
+    loadAccountNav();
 
 });
 </script>

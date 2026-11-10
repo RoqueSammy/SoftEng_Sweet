@@ -1,6 +1,9 @@
+/* ORDER PAGE BACKGROUND */
 .order-page {
   background-color: white;
 }
+
+/* PRODUCT IMAGE */
 .order-page .card-img-top {
   width: 100%;
   height: 250px;
@@ -10,6 +13,7 @@
   border-top-right-radius: 2rem;
 }
 
+/* IMAGE HOVER EFFECT */
 .order-page .hover-zoom {
   transition: transform 0.5s ease;
 }
@@ -18,6 +22,7 @@
   transform: scale(1.05);
 }
 
+/* PRODUCT CARD */
 .order-page .card {
   overflow: hidden;
   transition:
@@ -25,21 +30,25 @@
     box-shadow 0.2s ease;
 }
 
+/* CARD HOVER EFFECT */
 .order-page .card:hover {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   transform: translateY(-5px);
 }
 
+/* CARD TITLE HOVER EFFECT */
 .order-page .card:hover .card-title {
   text-decoration: underline;
   text-decoration-thickness: 1px;
 }
 
+/* CARD BODY */
 .order-page .card-body {
   min-height: 180px;
   max-height: 180px;
 }
 
+/* CARD TITLE */
 .order-page .card-title {
   line-height: 1.6;
 }

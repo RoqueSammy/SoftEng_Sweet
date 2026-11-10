@@ -5,7 +5,7 @@ include('includes/header.php');
 include('includes/topbar.php');
 include_once("../app/config/config.php");
 
-/* Same helper as index.php: safe image URL + placeholder fallback */
+
 if (!function_exists('sweetProductImage')) {
     function sweetProductImage($imageName)
     {
@@ -20,7 +20,6 @@ if (!function_exists('sweetProductImage')) {
     }
 }
 
-/* Sorting: ORDER BY can't use ? placeholders, so only whitelisted values get in */
 $sortOptions = [
     'new'        => 'id DESC',
     'price_asc'  => 'price ASC',
@@ -84,7 +83,7 @@ mysqli_stmt_close($stmt);
                  alt="<?= htmlspecialchars($p['productName']) ?>"
                  decoding="async">
             <h6><?= htmlspecialchars($p['productName']) ?></h6>
-            <p class="price">$<?= number_format((float) $p['price'], 2) ?></p>
+            <p class="price">₱<?= number_format((float) $p['price'], 2) ?></p>
           </a>
         <?php endforeach; ?>
       </div>

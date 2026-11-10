@@ -132,4 +132,3 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
     </div>
 
 </div>
-```

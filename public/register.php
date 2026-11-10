@@ -17,12 +17,18 @@ include __DIR__ . "/includes/topbar.php";
                 <div class="card register-card">
                     <div class="row g-0">
 
+<<<<<<< HEAD
                         <!-- LEFT SIDE: IMAGE -->
+=======
+>>>>>>> fed254a05750ac8eece79f3c3ddfb89b8bf59502
                         <div class="col-lg-5 d-none d-lg-flex register-image-column">
                             <div class="registerSide"></div>
                         </div>
 
+<<<<<<< HEAD
                         <!-- RIGHT SIDE: REGISTRATION FORM -->
+=======
+>>>>>>> fed254a05750ac8eece79f3c3ddfb89b8bf59502
                         <div class="col-lg-7 register-form-column">
                             <div class="card-body register-card-body">
 

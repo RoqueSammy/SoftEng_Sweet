@@ -148,6 +148,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <!-- LOGIN FUNCTIONALITY -->
 <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    <?php if (!empty($loginNotice)): ?>
+
+        Swal.fire({
+            icon: "info",
+            title: "Login Required",
+            text: <?php echo json_encode($loginNotice); ?>,
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#F56C6C"
+        });
+
+    <?php endif; ?>
+
+});
+</script>
+
+
+<script>
 const loginForm = document.getElementById("loginForm");
 const loginButton = document.getElementById("loginButton");
 
