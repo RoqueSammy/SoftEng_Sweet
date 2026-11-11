@@ -5,6 +5,9 @@
     box-sizing: border-box;
 }
 
+/* ==========================================
+   LOGO
+========================================== */
 
 .navbar-brand {
     display: flex;
@@ -27,72 +30,107 @@
     height: 36px;
 }
 
-/* NAVIGATION LINKS */
-.nav-link {
-    margin-right: 10px;
-    margin-left: 10px;
-    color: black;
-    font-family: "Rubik", sans-serif;
-    text-transform: uppercase;
-}
+/* ==========================================
+   NAVIGATION LINKS
+========================================== */
 
-.nav-link:hover {
-    color: black;
-}
-
-.navbar .nav-link {
+.navbar .navbar-nav .nav-link {
     position: relative;
-    transition: color 0.3s ease;
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 5px;
+    color: #704638;
+    font-family: "Rubik", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
 }
 
-/* Underline Indicator */
-.navbar .nav-link::after {
+/* Sliding Underline */
+
+.navbar .navbar-nav .nav-link::after {
     content: "";
     position: absolute;
     left: 50%;
-    bottom: 2px;
+    bottom: 3px;
     width: 0;
     height: 3px;
     background: #F56C6C;
-    border-radius: 10px;
+    border-radius: 20px;
     transform: translateX(-50%);
-    transition: width 0.3s ease;
+    transition: width 0.35s ease;
 }
 
-/* Active Page Indicator */
-.navbar .nav-link.active::after {
+/* Hover Animation */
+
+.navbar .navbar-nav .nav-link:hover {
+    color: #F56C6C !important;
+    transform: translateY(-2px);
+}
+
+.navbar .navbar-nav .nav-link:hover::after {
     width: 65%;
 }
 
-.navbar .nav-link.active {
+/* Active Page */
+
+.navbar .navbar-nav .nav-link.active {
     color: #F56C6C !important;
     font-weight: 600;
 }
 
-/* MOBILE NAVIGATION */
+.navbar .navbar-nav .nav-link.active::after {
+    width: 65%;
+}
+
+/* ==========================================
+   MOBILE NAVIGATION
+========================================== */
+
 @media (max-width: 991px) {
-    .navbar .nav-link::after {
+
+    .navbar .navbar-nav .nav-link {
+        display: block;
+        width: fit-content;
+        padding: 10px 0;
+    }
+
+    .navbar .navbar-nav .nav-link::after {
         left: 0;
         transform: none;
     }
 
-    .navbar .nav-link:hover::after,
-    .navbar .nav-link.active::after {
+    .navbar .navbar-nav .nav-link:hover::after,
+    .navbar .navbar-nav .nav-link.active::after {
         width: 40px;
     }
+
 }
 
-/* NAVBAR COLLAPSE */
+/* ==========================================
+   NAVBAR COLLAPSE
+========================================== */
+
 .navbar-collapse {
     transition: height 0.35s ease;
 }
 
-/* NAVIGATION ICONS */
+/* ==========================================
+   NAVIGATION ICONS
+========================================== */
+
 .nav-icon {
-    color: black !important;
+    color: #704638 !important;
     text-decoration: none !important;
     display: flex;
     align-items: center;
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
 }
 
 .nav-icon svg {
@@ -103,107 +141,148 @@
 .nav-icon:focus,
 .nav-icon:active,
 .nav-icon:visited {
-    color: black !important;
     text-decoration: none !important;
     outline: none;
     box-shadow: none;
 }
 
-/* SHOPPING CART ICON */
+/* ==========================================
+   SHOPPING CART ICON
+========================================== */
+
 #cartIcon {
     position: relative !important;
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
     overflow: visible !important;
-    transition: all 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        color 0.3s ease;
+}
+
+/* Cart Hover Animation */
+
+#cartIcon:hover {
+    color: #F56C6C !important;
+    transform: scale(1.12);
+}
+
+#cartIcon:hover svg {
+    fill: #F56C6C !important;
 }
 
 /* Cart Count Badge */
+
+
+/* ==========================================
+   CART COUNT BADGE
+   CONSISTENT DESIGN ON ALL PAGES
+========================================== */
+
 #cartIcon #cartCount {
     position: absolute !important;
     top: -9px !important;
     right: -9px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
     width: 22px !important;
     height: 22px !important;
     min-width: 22px !important;
-    align-items: center;
-    justify-content: center;
+    max-width: 22px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
     background: #F0445A !important;
-    color: white !important;
-    border: 2px solid white !important;
+    color: #FFFFFF !important;
+
+    border: 2px solid #FFFFFF !important;
     border-radius: 50% !important;
+
+    font-family: 'Poppins', sans-serif !important;
     font-size: 11px !important;
     font-weight: 700 !important;
     line-height: 1 !important;
+
+    text-align: center !important;
+    box-sizing: border-box !important;
+    white-space: nowrap !important;
+
     z-index: 99999 !important;
 }
 
-/* Active Shopping Cart */
+
+/* ==========================================
+   ACTIVE SHOPPING CART
+   ICON COLOR ONLY - NO UNDERLINE OR DOT
+========================================== */
+
 #cartIcon.active {
     color: #F56C6C !important;
-    transform: scale(1.1);
+    transform: scale(1.08);
+    border: none !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    text-decoration: none !important;
 }
 
 #cartIcon.active svg {
-    fill: #F56C6C;
-}
-
-#cartIcon.active::after {
-    content: "";
-    position: absolute;
-    bottom: -7px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 7px;
-    height: 7px;
-    background: #F56C6C;
-    border-radius: 50%;
-}
-
-.nav-icon.active {
-    color: #F56C6C !important;
-    border-bottom: 3px solid #F56C6C;
-    padding-bottom: 5px;
-}
-
-/* CART PAGE NAVIGATION */
-.cart-page .navbar .nav-link.active {
-    color: black !important;
-    font-weight: normal !important;
-}
-
-.cart-page .navbar .nav-link.active::after {
-    width: 0 !important;
-}
-
-/* Highlight Cart Icon on Cart Page */
-.cart-page #cartIcon {
-    color: #F56C6C !important;
-}
-
-.cart-page #cartIcon svg {
     fill: #F56C6C !important;
 }
 
+/* Remove Active Cart Decorations */
+
+#cartIcon.active::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* ==========================================
+   CART PAGE NAVIGATION
+========================================== */
+
+/* Other navigation links stay normal on cart page */
+
+.cart-page .navbar .navbar-nav .nav-link.active {
+    color: #704638 !important;
+    font-weight: 500 !important;
+}
+
+.cart-page .navbar .navbar-nav .nav-link.active::after {
+    width: 0 !important;
+}
+
+/* Highlight Cart Icon */
+
+.cart-page #cartIcon,
 .cart-page #cartIcon.active {
     color: #F56C6C !important;
-    transform: scale(1.1);
+    border: none !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
 }
 
+.cart-page #cartIcon svg,
+.cart-page #cartIcon.active svg {
+    fill: #F56C6C !important;
+}
+
+/* No Underline or Dot on Cart Page */
+
+.cart-page #cartIcon::after,
 .cart-page #cartIcon.active::after {
-    content: "";
-    position: absolute;
-    bottom: -7px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 7px;
-    height: 7px;
-    background: #F56C6C;
-    border-radius: 50%;
+    content: none !important;
+    display: none !important;
 }
 
-/* OTHER ELEMENTS */
+/* ==========================================
+   OTHER ELEMENTS
+========================================== */
+
 form.d-flex li {
     list-style: none;
 }

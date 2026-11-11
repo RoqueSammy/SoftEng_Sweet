@@ -1,89 +1,67 @@
 <?php
 session_start();
 
-include_once __DIR__ . "/../app/config/config.php";
+$pageClass = "index-page";
 
-include __DIR__ . "/admin/includes/header.php";
-include __DIR__ . "/admin/includes/topbar.php";
-
+include('includes/header.php');
+include('includes/topbar.php');
 ?>
 
-    <!-- Shared Reset Password CSS -->
-    <link rel="stylesheet" href="/SoftEcoms/public/assets/css/forgetpass.css">
+<section class="resetOverlay d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 col-md-8 m-auto">
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
+                <form id="forgetpasswordForm" autocomplete="on" class="reset-card bg-white p-5 rounded-4 shadow">
 
-<body class="reset-page">
+                    <h3 class="reset-title mb-3 fw-bold text-center">New Password</h3>
 
-<section class="resetOverlay">
-    <main class="reset-card text-center">
+                    <p class="small text-start mb-3">
+                        To make sure your account is secure, Don't use the same old password.
+                    </p>
 
-        <h3 class="reset-title mb-2">
-            Reset Your Password
-        </h3>
+                    <label for="password" class="d-block text-start small mb-1">
+                        New Password<span class="text-danger">*</span>
+                    </label>
+                    <input
+                        type="password"
+                        class="form-control reset-input mb-3"
+                        id="password"
+                        name="password"
+                        minlength="8"
+                        required
+                        autocomplete="new-password"
+                    >
 
-        <p class="reset-description mb-4">
-            Choose a new password for your Sweet! account.
-        </p>
+                    <label for="confirmPassword" class="d-block text-start small mb-1">
+                        Confirm New Password<span class="text-danger">*</span>
+                    </label>
+                    <input
+                        type="password"
+                        class="form-control reset-input mb-3"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        minlength="8"
+                        required
+                        autocomplete="new-password"
+                    >
 
-        <form id="resetPasswordForm">
+                    <button
+                        type="submit"
+                        class="btn reset-btn w-100 mb-3 rounded-pill py-2 fw-bold text-uppercase"
+                        id="loginButton"
+                    >
+                        Change Password
+                    </button>
 
-            <div class="text-start">
-                <label for="password" class="reset-label">
-                    New Password
-                </label>
+                    <p class="mb-0 small text-center">
+                        <a href="register" class="reset-link text-decoration-none">Back to Login</a>
+                    </p>
+                </form>
 
-                <input
-                    type="password"
-                    class="reset-input"
-                    id="password"
-                    name="password"
-                    placeholder="Enter your new password"
-                    minlength="8"
-                    maxlength="72"
-                    autocomplete="new-password"
-                    required
-                >
-
-                <label for="confirmPassword" class="reset-label">
-                    Confirm New Password
-                </label>
-
-                <input
-                    type="password"
-                    class="reset-input"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    placeholder="Confirm your new password"
-                    minlength="8"
-                    maxlength="72"
-                    autocomplete="new-password"
-                    required
-                >
             </div>
-
-            <button
-                type="submit"
-                class="reset-btn"
-                id="resetPasswordButton"
-            >
-                RESET PASSWORD
-            </button>
-
-        </form>
-
-        <p class="mt-4 mb-0 small">
-            Remember your password?
-            <a
-                href="/SoftEcoms/public/login.php"
-                class="reset-link"
-            >
-                Back to Login
-            </a>
-        </p>
-
-    </main>
+        </div>
+    </div>
 </section>
 
 <script>

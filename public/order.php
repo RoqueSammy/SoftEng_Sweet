@@ -83,7 +83,7 @@ mysqli_stmt_close($stmt);
                  alt="<?= htmlspecialchars($p['productName']) ?>"
                  decoding="async">
             <h6><?= htmlspecialchars($p['productName']) ?></h6>
-            <p class="price">$<?= number_format((float) $p['price'], 2) ?></p>
+            <p class="price">₱<?= number_format((float) $p['price'], 2) ?></p>
           </a>
         <?php endforeach; ?>
       </div>

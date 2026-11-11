@@ -4,16 +4,24 @@ session_start();
 
 $pageClass = "checkout-page";
 
-// Clear selected cart IDs after successful checkout.
+// ==========================================
+// CLEAR CHECKOUT SELECTION
+// ==========================================
+
 if (isset($_GET['clear_selection']) && $_GET['clear_selection'] === '1') {
+
     unset($_SESSION['checkout_selected_cart_ids']);
 
     header('Content-Type: application/json; charset=utf-8');
+
     echo json_encode(['success' => true]);
     exit;
 }
 
-// Receive selected cart IDs from cart.php.
+// ==========================================
+// RECEIVE SELECTED CART IDS
+// ==========================================
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $submitted = $_POST['selected_cart_ids'] ?? [];
@@ -25,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedIDs = [];
 
     foreach ($submitted as $id) {
+
         $validated = filter_var($id, FILTER_VALIDATE_INT);
 
         if ($validated !== false && $validated > 0) {
@@ -35,7 +44,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $selectedIDs = array_values(array_unique($selectedIDs));
 
     if (empty($selectedIDs)) {
+
         unset($_SESSION['checkout_selected_cart_ids']);
+
         header('Location: cart.php');
         exit;
     }
@@ -43,9 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['checkout_selected_cart_ids'] = $selectedIDs;
 }
 
+// ==========================================
+// GET SELECTED PRODUCTS
+// ==========================================
+
 $selectedIDs = $_SESSION['checkout_selected_cart_ids'] ?? [];
 
 if (empty($selectedIDs) || !is_array($selectedIDs)) {
+
     header('Location: cart.php');
     exit;
 }
@@ -54,26 +70,40 @@ include('./admin/includes/header.php');
 include('./admin/includes/topbar.php');
 ?>
 
-<link rel="stylesheet" href="assets/css/checkout.css">
+<link rel="stylesheet" href="assets/css/checkout.css?v=3">
 
 <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 >
 
+<!-- ==================================
+     MAP STYLES
+=================================== -->
+
 <style>
 #deliveryMap {
+    display: block;
     width: 100%;
     height: 380px;
-    border-radius: 14px;
+    min-height: 380px;
     margin-top: 12px;
-    border: 1px solid #ddd;
+    border: 1px solid #F8DED8;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
     z-index: 1;
+    background: #F8DED8;
+}
+
+#deliveryMap .leaflet-container {
+    width: 100%;
+    height: 100%;
 }
 
 .map-description {
     font-size: 14px;
-    color: #777;
+    color: #8A7770;
     margin-top: 5px;
 }
 
@@ -86,9 +116,10 @@ include('./admin/includes/topbar.php');
 
 .map-location-actions button {
     padding: 10px 16px;
-    border: 1px solid #222;
+    border: 1px solid #F8DED8;
     border-radius: 8px;
-    background: white;
+    background: #fff;
+    color: #704638;
     cursor: pointer;
     font-size: 13px;
     font-weight: 600;
@@ -96,27 +127,35 @@ include('./admin/includes/topbar.php');
 }
 
 .map-location-actions button:hover {
-    background: #222;
-    color: white;
+    background: #704638;
+    color: #fff;
+    border-color: #704638;
+}
+
+.map-location-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 #selectedCoordinates {
     display: block;
     margin-top: 12px;
     font-size: 13px;
-    color: #666;
+    color: #8A7770;
 }
 
 #checkoutForm[hidden],
 #checkoutLoading[hidden],
 #checkoutError[hidden],
-#checkoutEmpty[hidden] {
+#checkoutEmpty[hidden],
+#gcashDetails[hidden] {
     display: none !important;
 }
 
 @media (max-width: 600px) {
     #deliveryMap {
         height: 300px;
+        min-height: 300px;
     }
 
     .map-location-actions button {
@@ -128,6 +167,10 @@ include('./admin/includes/topbar.php');
 <main class="checkout-page">
 
     <div class="checkout-container">
+
+        <!-- ==================================
+             PAGE HEADER
+        =================================== -->
 
         <header class="checkout-heading">
 
@@ -141,7 +184,7 @@ include('./admin/includes/topbar.php');
                 Review your selected pastries and provide your delivery details.
             </p>
 
-            <div class="checkout-progress" aria-label="Checkout progress">
+            <div class="checkout-progress">
 
                 <div class="progress-step completed">
                     <span>✓</span>
@@ -165,6 +208,10 @@ include('./admin/includes/topbar.php');
             </div>
 
         </header>
+
+        <!-- ==================================
+             LOADING / ERROR
+        =================================== -->
 
         <div id="checkoutLoading" class="checkout-message">
             Loading your selected products...
@@ -193,6 +240,10 @@ include('./admin/includes/topbar.php');
 
         </section>
 
+        <!-- ==================================
+             CHECKOUT FORM
+        =================================== -->
+
         <form id="checkoutForm" hidden>
 
             <div class="checkout-layout">
@@ -201,13 +252,92 @@ include('./admin/includes/topbar.php');
 
                 <div class="checkout-main">
 
-                    <!-- DELIVERY INFORMATION -->
+                    <!-- ==================================
+                         01 CUSTOMER INFORMATION
+                    =================================== -->
 
                     <section class="checkout-card">
 
                         <div class="section-heading">
 
                             <div class="section-icon">01</div>
+
+                            <div>
+                                <h3>Customer Information</h3>
+                                <p>Tell us who will receive the order.</p>
+                            </div>
+
+                        </div>
+
+                        <div class="form-grid">
+
+                            <div class="form-group full-width">
+
+                                <label for="checkoutFullName">
+                                    Full Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="checkoutFullName"
+                                    name="full_name"
+                                    placeholder="Enter your full name"
+                                    maxlength="150"
+                                    autocomplete="name"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="checkoutPhone">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="checkoutPhone"
+                                    name="phone"
+                                    placeholder="09XX XXX XXXX"
+                                    maxlength="20"
+                                    autocomplete="tel"
+                                    required
+                                >
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <label for="checkoutEmail">
+                                    Email Address
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="checkoutEmail"
+                                    name="email"
+                                    placeholder="Enter your email address"
+                                    maxlength="150"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                    <!-- ==================================
+                         02 DELIVERY INFORMATION
+                    =================================== -->
+
+                    <section class="checkout-card">
+
+                        <div class="section-heading">
+
+                            <div class="section-icon">02</div>
 
                             <div>
                                 <h3>Delivery Information</h3>
@@ -228,31 +358,15 @@ include('./admin/includes/topbar.php');
                                     id="checkoutAddress"
                                     name="address"
                                     rows="4"
-                                    placeholder="House number, street, barangay, city / municipality"
+                                    placeholder="House number, street, barangay, city / municipality, and province"
                                     required
                                     maxlength="1000"
+                                    autocomplete="street-address"
                                 ></textarea>
 
                             </div>
 
-                            <div class="form-group full-width">
-
-                                <label for="checkoutPhone">
-                                    Contact Number
-                                </label>
-
-                                <input
-                                    type="tel"
-                                    id="checkoutPhone"
-                                    name="phone"
-                                    placeholder="09XX XXX XXXX"
-                                    maxlength="20"
-                                    required
-                                >
-
-                            </div>
-
-                            <!-- MAP LOCATION -->
+                            <!-- MAP -->
 
                             <div class="form-group full-width">
 
@@ -262,7 +376,8 @@ include('./admin/includes/topbar.php');
 
                                 <p class="map-description">
                                     Select your exact delivery location.
-                                    Click anywhere on the map or drag the pin.
+                                    Click anywhere on the map or drag the pin
+                                    to adjust your location.
                                 </p>
 
                                 <div id="deliveryMap"></div>
@@ -289,8 +404,15 @@ include('./admin/includes/topbar.php');
                                     No delivery location selected yet.
                                 </small>
 
-                                <input type="hidden" id="deliveryLatitude">
-                                <input type="hidden" id="deliveryLongitude">
+                                <input
+                                    type="hidden"
+                                    id="deliveryLatitude"
+                                >
+
+                                <input
+                                    type="hidden"
+                                    id="deliveryLongitude"
+                                >
 
                             </div>
 
@@ -298,22 +420,26 @@ include('./admin/includes/topbar.php');
 
                     </section>
 
-                    <!-- PAYMENT METHOD -->
+                    <!-- ==================================
+                         03 PAYMENT METHOD
+                    =================================== -->
 
                     <section class="checkout-card">
 
                         <div class="section-heading">
 
-                            <div class="section-icon">02</div>
+                            <div class="section-icon">03</div>
 
                             <div>
                                 <h3>Payment Method</h3>
-                                <p>Choose how you want to pay for your order.</p>
+                                <p>Choose how you want to pay.</p>
                             </div>
 
                         </div>
 
                         <div class="payment-options">
+
+                            <!-- CASH ON DELIVERY -->
 
                             <label class="payment-option selected">
 
@@ -327,13 +453,20 @@ include('./admin/includes/topbar.php');
                                 <span class="payment-symbol">₱</span>
 
                                 <span class="payment-details">
+
                                     <strong>Cash on Delivery</strong>
-                                    <small>Pay when your order arrives.</small>
+
+                                    <small>
+                                        Pay when your order arrives.
+                                    </small>
+
                                 </span>
 
                                 <span class="choice-check">✓</span>
 
                             </label>
+
+                            <!-- GCASH -->
 
                             <label class="payment-option">
 
@@ -346,8 +479,13 @@ include('./admin/includes/topbar.php');
                                 <span class="gcash-symbol">G</span>
 
                                 <span class="payment-details">
+
                                     <strong>GCash</strong>
-                                    <small>Choose GCash as your payment method.</small>
+
+                                    <small>
+                                        Pay using your GCash account.
+                                    </small>
+
                                 </span>
 
                                 <span class="choice-check">✓</span>
@@ -356,17 +494,52 @@ include('./admin/includes/topbar.php');
 
                         </div>
 
-                        <div class="gcash-note" id="gcashNote" hidden>
-                            GCash is recorded as your selected payment method.
-                            Payment processing or QR-code verification is not
-                            integrated yet.
+                        <!-- GCASH INFORMATION -->
+
+                        <div class="gcash-details" id="gcashDetails" hidden>
+
+                            <div class="gcash-header">
+
+                                <span class="gcash-symbol">G</span>
+
+                                <div>
+                                    <strong>GCash Payment</strong>
+
+                                    <p>GCash payment instructions</p>
+                                </div>
+
+                            </div>
+
+                            <p class="gcash-placeholder">
+                                GCash number and QR code will be displayed
+                                here once the store payment details are configured.
+                            </p>
+
+                            <div class="form-group">
+
+                                <label for="gcashReference">
+                                    GCash Reference Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="gcashReference"
+                                    name="gcash_reference"
+                                    placeholder="Enter your GCash reference number"
+                                    maxlength="100"
+                                >
+
+                            </div>
+
                         </div>
 
                     </section>
 
                 </div>
 
-                <!-- RIGHT SIDE: ORDER SUMMARY -->
+                <!-- ==================================
+                     RIGHT SIDE: ORDER SUMMARY
+                =================================== -->
 
                 <aside class="checkout-sidebar">
 
@@ -375,11 +548,13 @@ include('./admin/includes/topbar.php');
                         <div class="summary-heading">
 
                             <div>
+
                                 <span class="checkout-eyebrow">
                                     YOUR SELECTED ITEMS
                                 </span>
 
                                 <h3>Order Summary</h3>
+
                             </div>
 
                             <a href="cart.php">Edit Cart</a>
@@ -420,11 +595,11 @@ include('./admin/includes/topbar.php');
                             id="placeOrderButton"
                             class="place-order-btn"
                         >
-                            Place Order <span>→</span>
+                            PLACE ORDER <span>→</span>
                         </button>
 
                         <p class="summary-note">
-                            Your final order total is verified by the server.
+                            ♡ Thank you for choosing SweetClaire!
                         </p>
 
                     </div>
@@ -439,7 +614,78 @@ include('./admin/includes/topbar.php');
 
 </main>
 
+<!-- ==================================
+     ORDER CONFIRMATION POPUP
+=================================== -->
+
+<div
+    class="modal fade order-confirm-modal"
+    id="orderConfirmModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-body text-center">
+
+                <div class="remove-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+
+                <div class="remove-heart">
+                    <i class="fas fa-heart"></i>
+                </div>
+
+                <h4 class="remove-title">
+                    Confirm Your Order?
+                </h4>
+
+                <p class="remove-message">
+                    Are you sure you want to place your order?
+                    Please double-check your customer information,
+                    delivery address, payment method, and order details
+                    before continuing.
+                </p>
+
+                <div class="remove-actions">
+
+                    <button
+                        type="button"
+                        class="btn keep-item-btn"
+                        data-bs-dismiss="modal"
+                    >
+                        Review Order
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn confirm-remove-btn"
+                        id="confirmOrder"
+                    >
+                        Yes, Place Order
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ==================================
+     JAVASCRIPT LIBRARIES
+=================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
@@ -461,6 +707,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Initial map location: Bislig area.
     // Change this to your actual shop's service area.
+
     const defaultLocation = [8.8794, 125.0726];
 
     // ==========================================
@@ -476,14 +723,23 @@ document.addEventListener("DOMContentLoaded", function () {
     const placeOrderButton =
         document.getElementById("placeOrderButton");
 
-    const summaryProducts =
-        document.getElementById("summaryProducts");
+    const confirmOrderButton =
+        document.getElementById("confirmOrder");
+
+    const fullNameInput =
+        document.getElementById("checkoutFullName");
+
+    const emailInput =
+        document.getElementById("checkoutEmail");
 
     const addressInput =
         document.getElementById("checkoutAddress");
 
     const phoneInput =
         document.getElementById("checkoutPhone");
+
+    const gcashReferenceInput =
+        document.getElementById("gcashReference");
 
     const latitudeInput =
         document.getElementById("deliveryLatitude");
@@ -500,13 +756,30 @@ document.addEventListener("DOMContentLoaded", function () {
     const resetMapButton =
         document.getElementById("resetMapLocation");
 
+    const gcashDetails =
+        document.getElementById("gcashDetails");
+
+    const summaryProducts =
+        document.getElementById("summaryProducts");
+
     // ==========================================
     // VARIABLES
     // ==========================================
 
     let selectedCartItems = [];
+
     let deliveryMap = null;
+
     let deliveryMarker = null;
+
+    let isProcessingOrder = false;
+
+    const orderModalElement =
+        document.getElementById("orderConfirmModal");
+
+    const orderModal = new bootstrap.Modal(
+        orderModalElement
+    );
 
     // ==========================================
     // PRICE FORMATTER
@@ -515,8 +788,11 @@ document.addEventListener("DOMContentLoaded", function () {
     function formatPrice(value) {
 
         return Number(value).toLocaleString("en-PH", {
+
             minimumFractionDigits: 2,
+
             maximumFractionDigits: 2
+
         });
 
     }
@@ -534,8 +810,11 @@ document.addEventListener("DOMContentLoaded", function () {
             credentials: "include",
 
             headers: {
+
                 "Accept": "application/json",
+
                 ...(options.headers || {})
+
             }
 
         });
@@ -545,7 +824,9 @@ document.addEventListener("DOMContentLoaded", function () {
         let data;
 
         try {
+
             data = JSON.parse(responseText);
+
         } catch (error) {
 
             console.error("Server response:", responseText);
@@ -582,9 +863,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function initializeDeliveryMap() {
 
-        if (deliveryMap) return;
+        const mapElement = document.getElementById("deliveryMap");
 
-        deliveryMap = L.map("deliveryMap").setView(
+        if (!mapElement || deliveryMap) return;
+
+        if (typeof L === "undefined") {
+
+            throw new Error(
+                "The map library could not be loaded. Please check your internet connection."
+            );
+
+        }
+
+        deliveryMap = L.map(mapElement).setView(
             defaultLocation,
             14
         );
@@ -592,9 +883,12 @@ document.addEventListener("DOMContentLoaded", function () {
         L.tileLayer(
             "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             {
+
                 maxZoom: 19,
+
                 attribution:
                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
             }
         ).addTo(deliveryMap);
 
@@ -607,9 +901,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
-        setTimeout(function () {
+        // Fix map sizing after the hidden form becomes visible.
+
+        requestAnimationFrame(function () {
+
             deliveryMap.invalidateSize();
-        }, 200);
+
+            setTimeout(function () {
+
+                deliveryMap.invalidateSize();
+
+            }, 500);
+
+        });
 
     }
 
@@ -620,6 +924,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function setDeliveryLocation(lat, lng) {
 
         latitudeInput.value = Number(lat).toFixed(8);
+
         longitudeInput.value = Number(lng).toFixed(8);
 
         coordinatesLabel.textContent =
@@ -637,7 +942,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 { draggable: true }
             ).addTo(deliveryMap);
 
-            deliveryMarker.bindPopup("Your delivery location");
+            deliveryMarker.bindPopup(
+                "Your delivery location"
+            );
 
             deliveryMarker.on("dragend", function () {
 
@@ -664,63 +971,74 @@ document.addEventListener("DOMContentLoaded", function () {
     // CURRENT LOCATION
     // ==========================================
 
-    useCurrentLocationButton.addEventListener("click", function () {
+    useCurrentLocationButton.addEventListener(
+        "click",
+        function () {
 
-        if (!navigator.geolocation) {
-
-            Swal.fire(
-                "Unavailable",
-                "Your browser does not support location services.",
-                "warning"
-            );
-
-            return;
-
-        }
-
-        useCurrentLocationButton.disabled = true;
-        useCurrentLocationButton.textContent = "Getting Location...";
-
-        navigator.geolocation.getCurrentPosition(
-
-            function (position) {
-
-                setDeliveryLocation(
-                    position.coords.latitude,
-                    position.coords.longitude
-                );
-
-                useCurrentLocationButton.disabled = false;
-                useCurrentLocationButton.textContent =
-                    "📍 Use My Current Location";
-
-            },
-
-            function (error) {
-
-                console.error("Geolocation error:", error);
+            if (!navigator.geolocation) {
 
                 Swal.fire(
-                    "Location Unavailable",
-                    "Please allow location access in your browser or select your location manually on the map.",
+                    "Unavailable",
+                    "Your browser does not support location services.",
                     "warning"
                 );
 
-                useCurrentLocationButton.disabled = false;
-                useCurrentLocationButton.textContent =
-                    "📍 Use My Current Location";
+                return;
 
-            },
-
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 0
             }
 
-        );
+            useCurrentLocationButton.disabled = true;
 
-    });
+            useCurrentLocationButton.textContent =
+                "Getting Location...";
+
+            navigator.geolocation.getCurrentPosition(
+
+                function (position) {
+
+                    setDeliveryLocation(
+                        position.coords.latitude,
+                        position.coords.longitude
+                    );
+
+                    useCurrentLocationButton.disabled = false;
+
+                    useCurrentLocationButton.textContent =
+                        "📍 Use My Current Location";
+
+                },
+
+                function (error) {
+
+                    console.error("Geolocation error:", error);
+
+                    Swal.fire(
+                        "Location Unavailable",
+                        "Please allow location access in your browser or select your location manually on the map.",
+                        "warning"
+                    );
+
+                    useCurrentLocationButton.disabled = false;
+
+                    useCurrentLocationButton.textContent =
+                        "📍 Use My Current Location";
+
+                },
+
+                {
+
+                    enableHighAccuracy: true,
+
+                    timeout: 15000,
+
+                    maximumAge: 0
+
+                }
+
+            );
+
+        }
+    );
 
     // ==========================================
     // RESET MAP
@@ -729,16 +1047,18 @@ document.addEventListener("DOMContentLoaded", function () {
     resetMapButton.addEventListener("click", function () {
 
         latitudeInput.value = "";
+
         longitudeInput.value = "";
 
         coordinatesLabel.textContent =
             "No delivery location selected yet.";
 
-        coordinatesLabel.style.color = "#666";
+        coordinatesLabel.style.color = "#8A7770";
 
         if (deliveryMarker) {
 
             deliveryMap.removeLayer(deliveryMarker);
+
             deliveryMarker = null;
 
         }
@@ -770,8 +1090,11 @@ document.addEventListener("DOMContentLoaded", function () {
             'input[name="payment_method"]:checked'
         )?.value;
 
-        document.getElementById("gcashNote").hidden =
-            payment !== "GCash";
+        const isGcash = payment === "GCash";
+
+        gcashDetails.hidden = !isGcash;
+
+        gcashReferenceInput.required = isGcash;
 
     }
 
@@ -779,7 +1102,10 @@ document.addEventListener("DOMContentLoaded", function () {
         'input[name="payment_method"]'
     ).forEach(radio => {
 
-        radio.addEventListener("change", updatePaymentSelection);
+        radio.addEventListener(
+            "change",
+            updatePaymentSelection
+        );
 
     });
 
@@ -792,6 +1118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         summaryProducts.innerHTML = "";
 
         let subtotalCents = 0;
+
         let totalQuantity = 0;
 
         selectedCartItems.forEach(item => {
@@ -802,12 +1129,15 @@ document.addEventListener("DOMContentLoaded", function () {
             const quantity = Number(item.quantity);
 
             subtotalCents += priceCents * quantity;
+
             totalQuantity += quantity;
 
             const product = document.createElement("div");
+
             product.className = "summary-product";
 
             const imageWrap = document.createElement("div");
+
             imageWrap.className = "summary-image";
 
             const image = document.createElement("img");
@@ -819,27 +1149,34 @@ document.addEventListener("DOMContentLoaded", function () {
             image.alt = item.productName || "Product";
 
             image.onerror = function () {
+
                 this.style.visibility = "hidden";
+
             };
 
             const quantityBadge = document.createElement("span");
+
             quantityBadge.textContent = quantity;
 
             imageWrap.append(image, quantityBadge);
 
             const info = document.createElement("div");
+
             info.className = "summary-product-info";
 
             const name = document.createElement("strong");
+
             name.textContent = item.productName || "Product";
 
             const each = document.createElement("small");
+
             each.textContent =
                 "₱" + formatPrice(item.price) + " each";
 
             info.append(name, each);
 
             const lineTotal = document.createElement("strong");
+
             lineTotal.className = "summary-price";
 
             lineTotal.textContent =
@@ -854,6 +1191,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const taxCents = Math.round(subtotalCents * 0.12);
+
         const totalCents = subtotalCents + taxCents;
 
         document.getElementById("summaryCount").textContent =
@@ -884,6 +1222,7 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
 
                 loading.hidden = true;
+
                 emptyBox.hidden = false;
 
                 return;
@@ -912,11 +1251,14 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
 
                 emptyBox.hidden = false;
+
                 return;
 
             }
 
             renderSummary();
+
+            // Make the form visible before initializing Leaflet.
 
             form.hidden = false;
 
@@ -929,7 +1271,9 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Checkout loading error:", error);
 
             loading.hidden = true;
+
             errorBox.textContent = error.message;
+
             errorBox.hidden = false;
 
         }
@@ -937,64 +1281,53 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================================
-    // PLACE ORDER
+    // VALIDATE CHECKOUT INFORMATION
     // ==========================================
 
-    form.addEventListener("submit", async function (event) {
+    function validateCheckout() {
 
-        event.preventDefault();
+        const fullName = fullNameInput.value.trim();
 
-        if (selectedCartItems.length === 0) {
+        const phone = phoneInput.value.trim();
 
-            Swal.fire(
-                "No selected products",
-                "Return to your cart and select products first.",
-                "warning"
-            );
-
-            return;
-
-        }
+        const email = emailInput.value.trim();
 
         const address = addressInput.value.trim();
-        const phone = phoneInput.value.trim();
 
         const paymentMethod = document.querySelector(
             'input[name="payment_method"]:checked'
         )?.value;
 
         const latitude = latitudeInput.value;
+
         const longitude = longitudeInput.value;
 
-        // VALIDATE ADDRESS
+        const gcashReference =
+            gcashReferenceInput.value.trim();
 
-        if (!address) {
+        if (!fullName || !phone || !email || !address) {
 
             Swal.fire(
-                "Address Required",
-                "Please enter your complete delivery address.",
+                "Incomplete Information",
+                "Please complete your customer information and delivery address.",
                 "warning"
             );
 
-            return;
+            return false;
 
         }
 
-        // VALIDATE PHONE
-
-        if (!phone) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
 
             Swal.fire(
-                "Contact Number Required",
-                "Please enter your contact number.",
+                "Invalid Email",
+                "Please enter a valid email address.",
                 "warning"
             );
 
-            return;
+            return false;
 
         }
-
-        // VALIDATE PAYMENT
 
         if (!paymentMethod) {
 
@@ -1004,11 +1337,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 "warning"
             );
 
-            return;
+            return false;
 
         }
 
-        // VALIDATE MAP
+        if (paymentMethod === "GCash" && !gcashReference) {
+
+            Swal.fire(
+                "GCash Reference Required",
+                "Please enter your GCash reference number.",
+                "warning"
+            );
+
+            return false;
+
+        }
 
         if (!latitude || !longitude) {
 
@@ -1018,45 +1361,110 @@ document.addEventListener("DOMContentLoaded", function () {
                 "warning"
             );
 
+            return false;
+
+        }
+
+        return true;
+
+    }
+
+    // ==========================================
+    // SHOW ORDER CONFIRMATION POPUP
+    // ==========================================
+
+    form.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+
+        if (isProcessingOrder) return;
+
+        if (!form.reportValidity()) return;
+
+        if (selectedCartItems.length === 0) {
+
+            Swal.fire(
+                "No Selected Products",
+                "Return to your cart and select products first.",
+                "warning"
+            );
+
             return;
 
         }
 
-        const confirmation = await Swal.fire({
+        if (!validateCheckout()) return;
 
-            title: "Place your order?",
+        orderModal.show();
 
-            text:
-                "Please confirm that your selected products and delivery details are correct.",
+    });
 
-            icon: "question",
+    // ==========================================
+    // CONFIRM AND PLACE ORDER
+    // ==========================================
 
-            showCancelButton: true,
+    confirmOrderButton.addEventListener("click", async function () {
 
-            confirmButtonText: "Place Order",
+        if (isProcessingOrder) return;
 
-            cancelButtonText: "Review Order"
+        if (!validateCheckout()) {
 
-        });
+            orderModal.hide();
 
-        if (!confirmation.isConfirmed) return;
+            return;
+
+        }
+
+        const fullName = fullNameInput.value.trim();
+
+        const email = emailInput.value.trim();
+
+        const phone = phoneInput.value.trim();
+
+        const address = addressInput.value.trim();
+
+        const paymentMethod = document.querySelector(
+            'input[name="payment_method"]:checked'
+        )?.value;
+
+        const gcashReference =
+            gcashReferenceInput.value.trim();
+
+        const latitude = latitudeInput.value;
+
+        const longitude = longitudeInput.value;
+
+        isProcessingOrder = true;
+
+        confirmOrderButton.disabled = true;
+
+        confirmOrderButton.textContent = "Processing...";
 
         placeOrderButton.disabled = true;
+
         placeOrderButton.textContent = "Processing Order...";
 
         try {
 
-            // SEND ORDER TO NODE.JS
+            // ==================================
+            // 1. SEND ORDER TO NODE.JS
+            // ==================================
 
             const result = await apiRequest("/checkout", {
 
                 method: "POST",
 
                 headers: {
+
                     "Content-Type": "application/json"
+
                 },
 
                 body: JSON.stringify({
+
+                    full_name: fullName,
+
+                    email: email,
 
                     address: address,
 
@@ -1068,6 +1476,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     payment_method: paymentMethod,
 
+                    gcash_reference: gcashReference,
+
                     selected_cart_ids: selectedCartItems.map(
                         item => Number(item.cartID)
                     )
@@ -1076,17 +1486,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
 
-            // VALIDATE NODE RESPONSE
+            // ==================================
+            // 2. VERIFY ORDER RESPONSE
+            // ==================================
 
-            if (!result.order || !result.order.orderNumber) {
+            if (
+                !result.order ||
+                !result.order.orderNumber ||
+                !Array.isArray(result.items) ||
+                result.items.length === 0
+            ) {
 
                 throw new Error(
-                    "The order was processed, but the server returned incomplete receipt information. Contact the store before attempting another checkout."
+                    "Order response is incomplete. Please check the server."
                 );
 
             }
 
-            // SAVE RECEIPT IN PHP SESSION
+            // ==================================
+            // 3. SAVE RECEIPT IN PHP SESSION
+            // ==================================
 
             const confirmationResponse = await fetch(
                 "confirmation.php",
@@ -1097,19 +1516,65 @@ document.addEventListener("DOMContentLoaded", function () {
                     credentials: "same-origin",
 
                     headers: {
+
                         "Content-Type": "application/json",
+
                         "Accept": "application/json"
+
                     },
 
                     body: JSON.stringify({
-                        order: result.order
+
+                        order: {
+
+                            ...result.order,
+
+                            full_name: fullName,
+
+                            email: email,
+
+                            phone: phone,
+
+                            address: address,
+
+                            payment_method: paymentMethod,
+
+                            gcash_reference: gcashReference,
+
+                            latitude: Number(latitude),
+
+                            longitude: Number(longitude)
+
+                        },
+
+                        items: result.items
+
                     })
 
                 }
             );
 
-            const confirmationData =
-                await confirmationResponse.json();
+            const responseText =
+                await confirmationResponse.text();
+
+            let confirmationData;
+
+            try {
+
+                confirmationData = JSON.parse(responseText);
+
+            } catch (error) {
+
+                console.error(
+                    "Confirmation PHP response:",
+                    responseText
+                );
+
+                throw new Error(
+                    "Unable to prepare your confirmation receipt. Check confirmation.php."
+                );
+
+            }
 
             if (
                 !confirmationResponse.ok ||
@@ -1117,13 +1582,15 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
 
                 throw new Error(
-                    "Your order was placed, but the receipt could not be prepared. Order number: " +
-                    result.order.orderNumber
+                    confirmationData.message ||
+                    "Unable to save your order receipt."
                 );
 
             }
 
-            // CLEAR PHP CHECKOUT SELECTION
+            // ==================================
+            // 4. CLEAR CHECKOUT SELECTION
+            // ==================================
 
             try {
 
@@ -1137,13 +1604,17 @@ document.addEventListener("DOMContentLoaded", function () {
             } catch (error) {
 
                 console.error(
-                    "Unable to clear PHP checkout selection:",
+                    "Unable to clear checkout selection:",
                     error
                 );
 
             }
 
-            // SUCCESS
+            // ==================================
+            // 5. SUCCESS MESSAGE
+            // ==================================
+
+            orderModal.hide();
 
             await Swal.fire({
 
@@ -1159,7 +1630,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
 
-            // REDIRECT TO RECEIPT
+            // ==================================
+            // 6. REDIRECT TO CONFIRMATION
+            // ==================================
 
             window.location.href = "confirmation.php";
 
@@ -1167,16 +1640,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
             console.error("Checkout error:", error);
 
+            orderModal.hide();
+
             Swal.fire(
                 "Checkout Notice",
                 error.message,
                 "error"
             );
 
+            isProcessingOrder = false;
+
+            confirmOrderButton.disabled = false;
+
+            confirmOrderButton.textContent =
+                "Yes, Place Order";
+
             placeOrderButton.disabled = false;
 
             placeOrderButton.innerHTML =
-                'Place Order <span>→</span>';
+                'PLACE ORDER <span>→</span>';
 
         }
 

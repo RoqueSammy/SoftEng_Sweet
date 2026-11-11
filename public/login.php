@@ -4,10 +4,16 @@ session_start();
 
 $pageClass = "login-page";
 
+$loginNotice = "";
+
+if (isset($_GET['notice']) && $_GET['notice'] === 'login_required') {
+    $loginNotice = "Please log in to your account before adding products to your cart.";
+}
+
 include_once __DIR__ . "/../app/config/config.php";
 
-include __DIR__ . "/admin/includes/header.php";
-include __DIR__ . "/admin/includes/topbar.php";
+include('includes/header.php');
+include('includes/topbar.php');
 ?>
 
 <section class="loginOverlay">
@@ -121,6 +127,26 @@ include __DIR__ . "/admin/includes/topbar.php";
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- LOGIN REQUIRED NOTIFICATION -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    <?php if (!empty($loginNotice)): ?>
+
+        Swal.fire({
+            icon: "info",
+            title: "Login Required",
+            text: <?php echo json_encode($loginNotice); ?>,
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#F56C6C"
+        });
+
+    <?php endif; ?>
+
+});
+</script>
+
+<!-- LOGIN FUNCTIONALITY -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -223,4 +249,4 @@ loginForm.addEventListener("submit", async function (event) {
 </script>
 
 </body>
-</html>
+</html> 
