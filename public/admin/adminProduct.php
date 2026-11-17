@@ -71,7 +71,7 @@ if (!$product_result) {
             <div class="products-header">
 
                 <div>
-                    <h2>🛍️ Products Management</h2>
+                    <h2>Products Management</h2>
                     <p>Manage your pastry products and inventory</p>
                 </div>
 
