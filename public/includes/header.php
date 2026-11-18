@@ -28,6 +28,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/reset.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/order.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/contactUs.css">
+<link rel="stylesheet" href="/SoftEcoms/public/assets/css/customerHistory.css">
+<link rel="stylesheet" href="/SoftEcoms/public/assets/css/about.css">
 
 
 <!-- -external links that I used -carlo -->

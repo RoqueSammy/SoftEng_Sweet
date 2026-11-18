@@ -1,175 +1,641 @@
-body.cus-order-page {
-  font-family: "Inter", sans-serif;
-  background: #f5f7fb;
-  overflow-x: hidden;
-}
 
-.cus-order-page .cus-order-wrapper {
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
+
+/* =========================================
+   ORDER HISTORY PAGE
+========================================= */
+
+.cus-order-page {
   min-height: 100vh;
+  padding-bottom: 70px;
+  background: linear-gradient(
+    110deg,
+    #efd9c3 0%,
+    #f0d5c6 25%,
+    #f1d0c9 55%,
+    #f3c6d0 100%
+  );
+  color: #704638;
+  font-family: "Poppins", sans-serif;
 }
 
-.cus-order-page .cus-order-header {
+.cus-order-page * {
+  box-sizing: border-box;
+}
+
+/* =========================================
+   MAIN ORDER CONTAINER
+========================================= */
+
+.cus-order-wrapper {
+  width: min(1250px, 92%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 65px 0;
+}
+
+/* =========================================
+   ORDER HEADER
+========================================= */
+
+.cus-order-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
   flex-wrap: wrap;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
-.cus-order-page .cus-order-header h2 {
-  margin: 0;
-  font-size: 30px;
+.cus-order-header h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 34px;
   font-weight: 700;
-  color: #111827;
+  color: #f56c6c;
+  margin: 0 0 10px;
 }
 
-.cus-order-page .cus-order-header p {
+.cus-order-header p {
+  color: #8a7770;
+  font-size: 13px;
+  line-height: 1.8;
   margin: 0;
-  margin-top: 5px;
-  color: #6b7280;
-  font-size: 14px;
 }
 
-.cus-order-page .search-input {
-  width: 280px;
-  height: 45px;
-  border-radius: 12px;
-  font-size: 14px;
+/* =========================================
+   REFRESH BUTTON
+========================================= */
+
+.cus-order-page #refreshOrders {
+  min-height: 43px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(100deg, #f56c6c, #ff9b4f);
+  color: #ffffff;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
 }
+
+.cus-order-page #refreshOrders:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 17px rgba(245, 108, 108, 0.25);
+}
+
+.cus-order-page #refreshOrders:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* =========================================
+   SEARCH SECTION
+========================================= */
+
+.cus-order-page .search-input,
+.cus-order-page #searchOrder {
+  width: 100%;
+  max-width: 350px;
+  height: 46px;
+  padding: 12px 15px;
+  border: 1px solid #f0dcd5;
+  border-radius: 9px;
+  outline: none;
+  background: #fffaf8;
+  color: #704638;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  transition: 0.25s ease;
+}
+
+.cus-order-page .search-input::placeholder,
+.cus-order-page #searchOrder::placeholder {
+  color: #b5a39d;
+  font-size: 11px;
+}
+
+.cus-order-page .search-input:focus,
+.cus-order-page #searchOrder:focus {
+  border-color: #f56c6c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(245, 108, 108, 0.1);
+}
+
+/* =========================================
+   ORDER MESSAGE
+========================================= */
+
+.cus-order-page #orderMessage {
+  font-size: 12px;
+  line-height: 1.7;
+  border-radius: 9px;
+}
+
+.cus-order-page .alert-success {
+  background: #edf6ed;
+  border: 1px solid #d5e9d5;
+  color: #527b54;
+}
+
+.cus-order-page .alert-danger {
+  background: #fce9e3;
+  border: 1px solid #f8ded8;
+  color: #b94c4c;
+}
+
+.cus-order-page .alert-info {
+  background: #fff0eb;
+  border: 1px solid #f8ded8;
+  color: #704638;
+}
+
+/* =========================================
+   ORDER TABLE CARD
+========================================= */
 
 .cus-order-page .cus-order-card {
-  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid #f8ded8;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(112, 70, 56, 0.06);
   overflow: hidden;
 }
 
 .cus-order-page .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  background: #ffffff;
+  border: 1px solid #f8ded8;
+  border-radius: 14px;
 }
 
 .cus-order-page .cus-order-table {
-  min-width: 700px;
+  width: 100%;
+  min-width: 850px;
+  margin: 0;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+/* TABLE HEADER */
+
+.cus-order-page .cus-order-table thead {
+  background: #fff0eb;
 }
 
 .cus-order-page .cus-order-table th {
   white-space: nowrap;
-  padding: 16px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 17px 16px;
+  border-bottom: 1px solid #f8ded8;
+  color: #704638;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
 }
+
+/* TABLE BODY */
 
 .cus-order-page .cus-order-table td {
   white-space: nowrap;
   padding: 16px;
-  font-size: 14px;
+  border-bottom: 1px solid #f8ded8;
+  color: #8a7770;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
   vertical-align: middle;
 }
 
+.cus-order-page .cus-order-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.cus-order-page .cus-order-table tbody tr:hover {
+  background: #fffaf8;
+}
+
+.cus-order-page .cus-order-table strong {
+  color: #704638;
+  font-weight: 600;
+}
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
 .cus-order-page .btn {
-  font-size: 13px;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  transition: 0.25s ease;
 }
 
-.cus-order-page .custom-scrollbar::-webkit-scrollbar {
-  height: 8px;
+/* VIEW RECEIPT */
+
+.cus-order-page .btn-primary {
+  border: none;
+  background: linear-gradient(100deg, #f56c6c, #ff9b4f);
+  color: #ffffff;
 }
 
-.cus-order-page .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9;
+.cus-order-page .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(245, 108, 108, 0.2);
+  color: #ffffff;
+}
+
+/* CANCEL ORDER */
+
+.cus-order-page .btn-outline-danger {
+  border: 1px solid #f56c6c;
+  background: #ffffff;
+  color: #d85c5c;
+}
+
+.cus-order-page .btn-outline-danger:hover {
+  background: #f56c6c;
+  border-color: #f56c6c;
+  color: #ffffff;
+}
+
+/* SECONDARY BUTTON */
+
+.cus-order-page .btn-secondary {
+  border: none;
+  background: #8a7770;
+  color: #ffffff;
+}
+
+.cus-order-page .btn-secondary:hover {
+  background: #704638;
+  color: #ffffff;
+}
+
+/* =========================================
+   ORDER STATUS BADGES
+========================================= */
+
+.cus-order-page .badge {
+  padding: 7px 11px;
+  border-radius: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.cus-order-page .badge.bg-success {
+  background: #dceedd !important;
+  color: #527b54 !important;
+}
+
+.cus-order-page .badge.bg-warning {
+  background: #fff0d9 !important;
+  color: #a87535 !important;
+}
+
+.cus-order-page .badge.bg-info {
+  background: #f8ded8 !important;
+  color: #704638 !important;
+}
+
+.cus-order-page .badge.bg-primary {
+  background: #fce9e3 !important;
+  color: #d85c5c !important;
+}
+
+.cus-order-page .badge.bg-danger {
+  background: #f8dada !important;
+  color: #b94c4c !important;
+}
+
+.cus-order-page .badge.bg-secondary {
+  background: #eee7e3 !important;
+  color: #8a7770 !important;
+}
+
+/* =========================================
+   DELIVERY PROGRESS
+========================================= */
+
+.cus-order-page .delivery-progress {
+  min-width: 290px;
+  max-width: 390px;
+  padding: 12px 0;
+}
+
+.cus-order-page .delivery-progress-track {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  gap: 2px;
+}
+
+.cus-order-page .delivery-progress-track::before {
+  content: "";
+  position: absolute;
+  height: 3px;
+  background: #f8ded8;
+  top: 11px;
+  left: 9%;
+  right: 9%;
+  z-index: 0;
+}
+
+.cus-order-page .delivery-progress-line {
+  position: absolute;
+  height: 3px;
+  background: #f56c6c;
+  top: 11px;
+  left: 9%;
+  z-index: 1;
+  transition: width 0.2s ease;
+}
+
+.cus-order-page .delivery-step {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  font-size: 10px;
+  color: #b5a39d;
+}
+
+.cus-order-page .delivery-step-circle {
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: #f8ded8;
+  border: 2px solid #f8ded8;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #704638;
+}
+
+.cus-order-page .delivery-step.completed .delivery-step-circle,
+.cus-order-page .delivery-step.active .delivery-step-circle {
+  background: #f56c6c;
+  border-color: #f56c6c;
+  color: #ffffff;
+}
+
+.cus-order-page .delivery-step.active,
+.cus-order-page .delivery-step.completed {
+  color: #d85c5c;
+}
+
+.cus-order-page .delivery-step.active {
+  font-weight: 700;
+}
+
+.cus-order-page .delivery-cancelled {
+  display: inline-block;
+  padding: 9px 13px;
+  border-radius: 8px;
+  background: #fce9e3;
+  color: #b94c4c;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cus-order-page .delivery-progress-note {
+  font-size: 10px;
+  color: #8a7770;
+  margin-top: 8px;
+}
+
+.cus-order-page .delivery-progress-note strong {
+  color: #d85c5c;
+}
+
+/* =========================================
+   CANCELLATION INFORMATION
+========================================= */
+
+.cus-order-page .small.text-muted {
+  color: #8a7770 !important;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* =========================================
+   CANCELLATION MODAL
+========================================= */
+
+.cus-order-page .modal-content {
+  border: 1px solid #f8ded8;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(112, 70, 56, 0.12);
+}
+
+.cus-order-page .modal-header {
+  padding: 20px 24px;
+  background: #fff5f2;
+  border-bottom: 1px solid #f8ded8;
+}
+
+.cus-order-page .modal-title {
+  font-family: "Playfair Display", serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #f56c6c;
+}
+
+.cus-order-page .modal-body {
+  padding: 24px;
+  color: #704638;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+}
+
+.cus-order-page .modal-body p {
+  color: #8a7770;
+  line-height: 1.8;
+}
+
+.cus-order-page .modal-body label {
+  display: block;
+  margin-bottom: 9px;
+  color: #704638;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cus-order-page .modal-body textarea {
+  width: 100%;
+  min-height: 110px;
+  padding: 13px 15px;
+  border: 1px solid #f0dcd5;
+  border-radius: 9px;
+  outline: none;
+  resize: vertical;
+  background: #fffaf8;
+  color: #704638;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  transition: 0.25s ease;
+}
+
+.cus-order-page .modal-body textarea::placeholder {
+  color: #b5a39d;
+}
+
+.cus-order-page .modal-body textarea:focus {
+  border-color: #f56c6c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(245, 108, 108, 0.1);
+}
+
+.cus-order-page .modal-body small {
+  display: block;
+  margin-top: 7px;
+  color: #a99993;
+  font-size: 10px;
+}
+
+.cus-order-page .modal-footer {
+  padding: 15px 24px;
+  background: #fffaf8;
+  border-top: 1px solid #f8ded8;
+}
+
+/* =========================================
+   SCROLLBAR
+========================================= */
+
+.cus-order-page .custom-scrollbar::-webkit-scrollbar,
+.cus-order-page .table-responsive::-webkit-scrollbar {
+  height: 7px;
+}
+
+.cus-order-page .custom-scrollbar::-webkit-scrollbar-track,
+.cus-order-page .table-responsive::-webkit-scrollbar-track {
+  background: #fff0eb;
   border-radius: 10px;
 }
 
-.cus-order-page .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+.cus-order-page .custom-scrollbar::-webkit-scrollbar-thumb,
+.cus-order-page .table-responsive::-webkit-scrollbar-thumb {
+  background: #e8bdb3;
   border-radius: 10px;
 }
 
-.cus-order-page .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+.cus-order-page .custom-scrollbar::-webkit-scrollbar-thumb:hover,
+.cus-order-page .table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #d85c5c;
 }
+
+/* =========================================
+   RESPONSIVE DESIGN
+========================================= */
 
 @media (max-width: 992px) {
-  .cus-order-page .cus-order-header h2 {
-    font-size: 26px;
+  .cus-order-wrapper {
+    width: 94%;
+    padding: 55px 0;
+  }
+
+  .cus-order-header h2 {
+    font-size: 30px;
   }
 
   .cus-order-page .cus-order-table {
-    min-width: 650px;
+    min-width: 800px;
   }
 }
 
 @media (max-width: 768px) {
-  .cus-order-page .container-fluid {
-    padding-left: 10px;
-    padding-right: 10px;
+  .cus-order-wrapper {
+    width: 92%;
+    padding: 45px 0;
   }
 
-  .cus-order-page .cus-order-header {
+  .cus-order-header {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .cus-order-page .search-input {
+  .cus-order-header h2 {
+    font-size: 28px;
+  }
+
+  .cus-order-page #refreshOrders {
     width: 100%;
   }
 
-  .cus-order-page .cus-order-header h2 {
-    font-size: 24px;
+  .cus-order-page .search-input,
+  .cus-order-page #searchOrder {
+    max-width: 100%;
   }
 
   .cus-order-page .cus-order-card {
-    border-radius: 16px;
-  }
-
-  .cus-order-page .card-body {
-    padding: 15px;
+    border-radius: 15px;
   }
 
   .cus-order-page .cus-order-table {
-    min-width: 620px;
+    min-width: 750px;
   }
 
   .cus-order-page .cus-order-table th,
   .cus-order-page .cus-order-table td {
-    padding: 12px;
-    font-size: 13px;
+    padding: 13px;
+    font-size: 11px;
   }
 
-  .cus-order-page .btn {
-    font-size: 12px;
-    padding: 6px 12px;
+  .cus-order-page .delivery-progress {
+    min-width: 270px;
+  }
+
+  .cus-order-page .delivery-step {
+    font-size: 9px;
   }
 }
 
-@media (max-width: 480px) {
-  .cus-order-page .container-fluid {
-    padding-left: 5px;
-    padding-right: 5px;
+@media (max-width: 550px) {
+  .cus-order-wrapper {
+    width: 90%;
+    padding: 35px 0;
   }
 
-  .cus-order-page .cus-order-header h2 {
-    font-size: 21px;
+  .cus-order-header h2 {
+    font-size: 25px;
   }
 
-  .cus-order-page .cus-order-header p {
-    font-size: 13px;
-  }
-
-  .cus-order-page .card-body {
-    padding: 12px;
+  .cus-order-header p {
+    font-size: 12px;
   }
 
   .cus-order-page .cus-order-table {
-    min-width: 580px;
+    min-width: 700px;
   }
 
   .cus-order-page .cus-order-table th,
   .cus-order-page .cus-order-table td {
-    padding: 10px;
-    font-size: 12px;
+    padding: 11px;
+    font-size: 10px;
   }
 
-  .cus-order-page .btn {
-    font-size: 11px;
+  .cus-order-page .modal-header,
+  .cus-order-page .modal-body {
+    padding: 18px;
+  }
+
+  .cus-order-page .modal-title {
+    font-size: 19px;
+  }
+
+  .cus-order-page .modal-footer {
+    padding: 12px 18px;
   }
 }

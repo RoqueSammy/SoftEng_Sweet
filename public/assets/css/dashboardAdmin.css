@@ -1,41 +1,59 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
 body.dashboard-page {
-  font-family: "Inter", sans-serif;
-  background: #f1f5f9;
+  font-family: 'Poppins', sans-serif;
+  background: #FFF5F2;
+  color: #704638;
   overflow-x: hidden;
 }
 
 .dashboard-page .main-content {
   flex: 1;
   min-height: 100vh;
+  background: #FFF5F2;
 }
 
 .dashboard-page .dashboard-header h2 {
   margin: 0;
+  font-family: 'Playfair Display', serif;
   font-size: 32px;
   font-weight: 700;
-  color: #0f172a;
+  color: #D85C5C;
 }
 
 .dashboard-page .dashboard-header p {
   margin-top: 6px;
-  color: #64748b;
+  color: #8A7770;
   font-size: 14px;
 }
 
 .dashboard-page .dashboard-card {
+  background: #FFFFFF;
+  border: 1px solid #F8DED8;
   border-radius: 20px;
   overflow: hidden;
   transition: 0.25s ease;
+  box-shadow: 0 4px 14px rgba(112, 70, 56, 0.05);
 }
 
 .dashboard-page .dashboard-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 28px rgba(216, 92, 92, 0.12);
 }
 
 .dashboard-page .card-header {
+  font-family: 'Poppins', sans-serif;
   font-size: 15px;
+  font-weight: 600;
   padding: 18px 20px;
+  color: #704638;
+  background: #FFF5F2;
+  border-bottom: 1px solid #F8DED8;
+}
+
+.dashboard-page .card-body {
+  color: #704638;
 }
 
 .dashboard-page .chart-wrapper {
@@ -51,6 +69,7 @@ body.dashboard-page {
 
 .dashboard-page .recent-orders-table {
   min-width: 750px;
+  color: #704638;
 }
 
 .dashboard-page .recent-orders-table th {
@@ -58,12 +77,21 @@ body.dashboard-page {
   padding: 16px;
   font-size: 14px;
   font-weight: 600;
+  color: #704638;
+  background: #FFF5F2;
+  border-bottom: 1px solid #F8DED8;
 }
 
 .dashboard-page .recent-orders-table td {
   white-space: nowrap;
   padding: 16px;
   font-size: 14px;
+  color: #8A7770;
+  border-bottom: 1px solid #F8DED8;
+}
+
+.dashboard-page .recent-orders-table tbody tr:hover {
+  background: #FFF5F2;
 }
 
 .dashboard-page .custom-scrollbar::-webkit-scrollbar {
@@ -71,41 +99,62 @@ body.dashboard-page {
 }
 
 .dashboard-page .custom-scrollbar::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #FFF5F2;
   border-radius: 10px;
 }
 
 .dashboard-page .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #F8DED8;
   border-radius: 10px;
 }
 
+.dashboard-page .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #FFA1A1;
+}
+
 .dashboard-page .daily-summary-card {
+  background: #FFFFFF;
+  border: 1px solid #F8DED8;
   border-radius: 20px;
 }
 
 .dashboard-page .summary-label {
   display: block;
   font-size: 0.9rem;
-  color: #64748b;
+  color: #8A7770;
   margin-bottom: 6px;
 }
 
 .dashboard-page .summary-value {
   font-size: 2rem;
   font-weight: 700;
+  color: #D85C5C;
 }
 
 .dashboard-page .daily-note {
-  background: #f8fafc;
-  border-left: 4px solid #10b981;
+  background: #FFF5F2;
+  border-left: 4px solid #F56C6C;
   padding: 14px;
   border-radius: 12px;
-  color: #334155;
+  color: #704638;
   font-size: 0.95rem;
   line-height: 1.5;
 }
 
+/* Dashboard buttons */
+.dashboard-page .btn-primary {
+  background: linear-gradient(135deg, #F56C6C, #FF9B4F, #FFA1A1);
+  border: none;
+  color: #FFFFFF;
+  font-family: 'Poppins', sans-serif;
+}
+
+.dashboard-page .btn-primary:hover {
+  background: linear-gradient(135deg, #D85C5C, #F56C6C);
+  color: #FFFFFF;
+}
+
+/* Responsive */
 @media (max-width: 992px) {
   .dashboard-page .dashboard-header h2 {
     font-size: 28px;

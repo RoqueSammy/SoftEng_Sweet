@@ -113,7 +113,7 @@ include_once __DIR__ . '/../admin/includes/topbar.php';
                 <h2 id="totalAmount"></h2>
             </div>
 
-            <a href="orderHistory.php" class="continue-shopping">
+            <a href="/SoftEcoms/public/order.php" class="continue-shopping">
                 Back to My Orders
             </a>
 
@@ -282,7 +282,3 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 });
 </script>
-
-<?php
-include_once __DIR__ . '/../admin/includes/footer.php';
-?>

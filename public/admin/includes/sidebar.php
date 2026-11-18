@@ -54,7 +54,6 @@ if ($sidebar_total_orders_result) {
         <div class="panel-header">
 
             <h2>
-                <span>📊</span>
                 Admin Panel
             </h2>
 

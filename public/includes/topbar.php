@@ -176,17 +176,6 @@ $isCartPage = ($current_page === 'cart.php');
 
                     </div>
 
-                    <!-- RECEIPT / ORDER HISTORY -->
-                    <a
-                        href="/SoftEcoms/public/users/orderHistory.php"
-                        class="nav-icon <?= $current_page === 'orderhistory.php' ? 'active' : '' ?>"
-                        id="receiptIcon"
-                        aria-label="My Order History"
-                        title="Order History"
-                    >
-                        <i class="fas fa-receipt" aria-hidden="true"></i>
-                    </a>
-
                     <!-- SHOPPING CART -->
                     <a
                         href="/SoftEcoms/public/cart.php"

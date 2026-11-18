@@ -1,12 +1,11 @@
 <?php 
 session_start();
-include('../admin/includes/header.php');
+
 $pageClass = "dashboard-page";
 
-
+include('../admin/includes/header.php');
 
 include_once("../../app/config/config.php");
-
 
 // WEEKLY SALES
 $weekly_query = "
@@ -121,7 +120,7 @@ $recent_result = mysqli_query($conn, $recent_query);
             <div class="dashboard-header mb-4">
 
                 <h2>
-                    📊 Dashboard Analytics
+                     Dashboard Analytics
                 </h2>
 
                 <p>
