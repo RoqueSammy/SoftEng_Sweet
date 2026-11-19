@@ -58,7 +58,7 @@ if (!$product_result) {
 <body class="products-page">
 
 <div class="dashboard-layout">
-
+    
     <!-- SIDEBAR -->
     <?php include('../admin/includes/sidebar.php'); ?>
 
