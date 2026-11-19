@@ -512,7 +512,7 @@ async function updateOrderStatus(select) {
     }
 
     select.disabled = true;
-
+    
     try {
 
         const response = await fetch(
