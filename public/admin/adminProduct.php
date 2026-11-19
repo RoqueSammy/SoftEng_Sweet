@@ -371,7 +371,7 @@ async function addStock(productId) {
     if (!confirm(`Are you sure you want to add ${quantity} units to this product?`)) {
         return;
     }
-
+    
     button.disabled = true;
     button.textContent = "Adding...";
 
