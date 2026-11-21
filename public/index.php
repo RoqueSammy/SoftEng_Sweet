@@ -27,10 +27,17 @@ if (!$sweetResult) {
 
 
 $bestQuery = "
-    SELECT id, productName, price, img
-    FROM product_item
-    ORDER BY id DESC
-    LIMIT 4
+    SELECT
+        p.id,
+        p.uuid,
+        p.productName,
+        p.productDescription,
+        p.price,
+        p.img,
+        COALESCE((SELECT SUM(oi.quantity) FROM orderitems oi INNER JOIN orders o ON o.id = oi.order_id WHERE oi.product_id = p.id AND o.status = 'completed'), 0) AS units_sold
+    FROM product_item p
+    ORDER BY units_sold DESC, p.id DESC
+    LIMIT 1
 ";
 
 $bestResult = mysqli_query($conn, $bestQuery);
@@ -46,6 +53,11 @@ if (!$bestResult) {
 
 function sweetProductImage($imageName)
 {
+    $imageName = trim((string) $imageName);
+    if (preg_match('#^https?://#i', $imageName)) {
+        return $imageName;
+    }
+
     $imageName = basename((string) $imageName);
 
     $imageDirectory = __DIR__ . "/assets/product_img/";
@@ -77,8 +89,8 @@ function sweetProductImage($imageName)
         <div class="carousel">
             <div class="track">
 
-                <?php for ($copy = 0; $copy < 2; $copy++): ?>
-                    <div class="carousel-group" <?php echo $copy === 1 ? 'aria-hidden="true"' : ''; ?>>
+                <?php for ($copy = 0; $copy < 4; $copy++): ?>
+                    <div class="carousel-group" <?php echo $copy > 0 ? 'aria-hidden="true"' : ''; ?>>
 
                         <div class="carousel-item-custom">
                             <img src="/SoftEcoms/public/assets/img/varieties.png"
@@ -163,7 +175,7 @@ function sweetProductImage($imageName)
                                             src="<?php echo htmlspecialchars($displayImg, ENT_QUOTES, "UTF-8"); ?>"
                                             class="card-img-top"
                                             alt="<?php echo htmlspecialchars($productName, ENT_QUOTES, "UTF-8"); ?>"
-                                            loading="lazy">
+                                            loading="lazy" decoding="async" fetchpriority="low">
                                     </div>
 
                                     <div class="card-body d-flex flex-column">
@@ -301,13 +313,18 @@ function sweetProductImage($imageName)
     <div class="container py-5">
 
         <div class="section-heading text-center py-4">
+<<<<<<< HEAD
             <h1 class="our_products">Best Sellers!</h1>
+=======
+            <h1 class="our_products">Best Seller Spotlight</h1>
+>>>>>>> second
             <h6 class="section-subtitle">
-                Experience the Sweetness with our Best Sellers at an Affordable Price!
+                Our customer favorite, made fresh for you.
             </h6>
         </div>
 
         <?php if (!empty($bestProducts)): ?>
+<<<<<<< HEAD
 
             <div class="row g-4 justify-content-center">
 
@@ -353,6 +370,29 @@ function sweetProductImage($imageName)
                 <?php endforeach; ?>
 
             </div>
+=======
+            <?php $bestProduct = $bestProducts[0]; $bestImage = sweetProductImage($bestProduct["img"] ?? ""); ?>
+            <button type="button" class="best-feature-card" id="bestSellerTrigger"
+                    data-product-uuid="<?= htmlspecialchars($bestProduct["uuid"] ?? "", ENT_QUOTES, "UTF-8") ?>"
+                    data-product-name="<?= htmlspecialchars($bestProduct["productName"] ?? "", ENT_QUOTES, "UTF-8") ?>"
+                    data-product-description="<?= htmlspecialchars($bestProduct["productDescription"] ?? "", ENT_QUOTES, "UTF-8") ?>"
+                    data-product-price="<?= htmlspecialchars((string)($bestProduct["price"] ?? "0"), ENT_QUOTES, "UTF-8") ?>"
+                    data-product-image="<?= htmlspecialchars($bestImage, ENT_QUOTES, "UTF-8") ?>"
+                    aria-label="See details for <?= htmlspecialchars($bestProduct["productName"] ?? "our best seller", ENT_QUOTES, "UTF-8") ?>">
+                <span class="best-feature-badge"><i class="fa-solid fa-star"></i> BEST SELLER</span>
+                <span class="best-feature-image-wrap">
+                    <img src="<?= htmlspecialchars($bestImage, ENT_QUOTES, "UTF-8") ?>"
+                         class="best-feature-image"
+                         alt="<?= htmlspecialchars($bestProduct["productName"] ?? "Best seller pastry", ENT_QUOTES, "UTF-8") ?>"
+                         loading="lazy" decoding="async">
+                    <span class="best-feature-open"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                </span>
+                <span class="best-feature-copy">
+                    <span class="best-feature-name"><?= htmlspecialchars($bestProduct["productName"] ?? "SweetClaire favorite", ENT_QUOTES, "UTF-8") ?></span>
+                    <span class="best-feature-hint">Tap to see details and order</span>
+                </span>
+            </button>
+>>>>>>> second
 
         <?php else: ?>
 
@@ -364,6 +404,38 @@ function sweetProductImage($imageName)
 
     </div>
 </section>
+
+<div class="modal fade" id="bestSellerModal" tabindex="-1" aria-labelledby="bestSellerModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content quick-view-content">
+            <div class="modal-header">
+                <div><span class="quick-view-eyebrow">SWEETCLAIRE CUSTOMER FAVORITE</span><h2 class="modal-title" id="bestSellerModalTitle">Product details</h2></div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="quick-view-layout">
+                    <div class="quick-view-image-wrap"><img id="bestSellerModalImage" src="" alt=""></div>
+                    <div class="quick-view-details">
+                        <h3 id="bestSellerModalName"></h3>
+                        <p class="quick-view-price" id="bestSellerModalPrice"></p>
+                        <p class="quick-view-description" id="bestSellerModalDescription"></p>
+                        <div id="bestSellerModalMessage" class="quick-view-message" role="status" aria-live="polite"></div>
+                        <label class="quick-view-quantity-label" for="bestSellerQuantity">Quantity</label>
+                        <div class="quick-view-quantity">
+                            <button type="button" id="bestSellerDecrease" aria-label="Decrease quantity">−</button>
+                            <input type="number" id="bestSellerQuantity" min="1" step="1" value="1" inputmode="numeric">
+                            <button type="button" id="bestSellerIncrease" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer quick-view-footer">
+                <button type="button" class="btn quick-view-back" data-bs-dismiss="modal">Back</button>
+                <button type="button" class="btn quick-view-add" id="bestSellerOrderNow"><i class="fa-solid fa-bag-shopping"></i> Order Now</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- CALL TO ACTION -->
 <section class="e_clair py-5">
@@ -387,6 +459,102 @@ function sweetProductImage($imageName)
 
 
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    const trigger = document.getElementById("bestSellerTrigger");
+    const modalElement = document.getElementById("bestSellerModal");
+    if (!trigger || !modalElement || !window.bootstrap) return;
+
+    const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    const quantityInput = document.getElementById("bestSellerQuantity");
+    const message = document.getElementById("bestSellerModalMessage");
+    const orderButton = document.getElementById("bestSellerOrderNow");
+    let currentProduct = null;
+
+    trigger.addEventListener("click", () => {
+        currentProduct = { ...trigger.dataset };
+        document.getElementById("bestSellerModalTitle").textContent = currentProduct.productName;
+        document.getElementById("bestSellerModalName").textContent = currentProduct.productName;
+        document.getElementById("bestSellerModalDescription").textContent = currentProduct.productDescription || "Freshly prepared by SweetClaire.";
+        document.getElementById("bestSellerModalPrice").textContent = "₱" + Number(currentProduct.productPrice).toLocaleString("en-PH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const image = document.getElementById("bestSellerModalImage");
+        image.src = currentProduct.productImage;
+        image.alt = currentProduct.productName;
+        quantityInput.value = "1";
+        message.textContent = "";
+        message.className = "quick-view-message";
+        orderButton.disabled = false;
+        orderButton.innerHTML = '<i class="fa-solid fa-bag-shopping"></i> Order Now';
+        modal.show();
+    });
+
+    document.getElementById("bestSellerDecrease").addEventListener("click", () => {
+        quantityInput.value = Math.max(1, (parseInt(quantityInput.value, 10) || 1) - 1);
+    });
+    document.getElementById("bestSellerIncrease").addEventListener("click", () => {
+        quantityInput.value = (parseInt(quantityInput.value, 10) || 1) + 1;
+    });
+
+    orderButton.addEventListener("click", async () => {
+        if (!currentProduct) return;
+        const quantity = Number(quantityInput.value);
+        if (!Number.isSafeInteger(quantity) || quantity < 1) {
+            message.textContent = "Choose a valid quantity.";
+            message.className = "quick-view-error";
+            return;
+        }
+
+        orderButton.disabled = true;
+        orderButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing checkout...';
+        message.textContent = "";
+
+        try {
+            const addResponse = await fetch("/api/cart/add", {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+                body: JSON.stringify({ product_uuid: currentProduct.productUuid, quantity })
+            });
+            const addData = await addResponse.json();
+            if (addResponse.status === 401) {
+                window.location.href = addData.redirect || "/SoftEcoms/public/login.php";
+                return;
+            }
+            if (!addResponse.ok || !addData.success) {
+                throw new Error(addData.message || "Could not add this item to your cart.");
+            }
+
+            const cartResponse = await fetch("/api/cart", {
+                credentials: "include",
+                headers: { Accept: "application/json" }
+            });
+            const cartData = await cartResponse.json();
+            if (!cartResponse.ok || !cartData.success) {
+                throw new Error(cartData.message || "Could not open checkout.");
+            }
+            const cartItem = (cartData.cart || []).find(item =>
+                String(item.uuid) === String(currentProduct.productUuid)
+            );
+            if (!cartItem) throw new Error("The item was added, but checkout could not find it in your cart.");
+
+            const checkoutForm = document.createElement("form");
+            checkoutForm.method = "POST";
+            checkoutForm.action = "/SoftEcoms/public/checkout.php";
+            const selectedItem = document.createElement("input");
+            selectedItem.type = "hidden";
+            selectedItem.name = "selected_cart_ids[]";
+            selectedItem.value = cartItem.cartID;
+            checkoutForm.appendChild(selectedItem);
+            document.body.appendChild(checkoutForm);
+            checkoutForm.submit();
+        } catch (error) {
+            message.textContent = error.message || "Unable to start checkout.";
+            message.className = "quick-view-error";
+            orderButton.disabled = false;
+            orderButton.innerHTML = '<i class="fa-solid fa-bag-shopping"></i> Try again';
+        }
+    });
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     const slider = document.getElementById("productSlider");
     if (!slider) return;
@@ -401,11 +569,50 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    const originalSlides = Array.from(slider.querySelectorAll(".product-slide"));
+    if (originalSlides.length === 0) return;
+
+    const productCount = originalSlides.length;
+    const cloneSlides = () => originalSlides.map((slide) => {
+        const clone = slide.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        clone.inert = true;
+        return clone;
+    });
+    const leftClones = cloneSlides();
+    const rightClones = cloneSlides();
+    slider.prepend(...leftClones);
+    slider.append(...rightClones);
     const slides = Array.from(slider.querySelectorAll(".product-slide"));
+<<<<<<< HEAD
     if (slides.length === 0) return;
 
     let activeIndex = 0;
+=======
+
+    let activeIndex = productCount;
+>>>>>>> second
     let resizeTimer;
+    let isMoving = false;
+
+    // Create one clickable indicator dot for each product.
+    if (status) {
+        status.innerHTML = "";
+
+        originalSlides.forEach(function (slide, index) {
+            const dot = document.createElement("button");
+            dot.type = "button";
+            dot.className = "slider-dot";
+            dot.setAttribute("aria-label", "Go to product " + (index + 1));
+
+            dot.addEventListener("click", function () {
+                activeIndex = productCount + index;
+                updateSlider();
+            });
+
+            status.appendChild(dot);
+        });
+    }
 
     // Create one clickable indicator dot for each product.
     if (status) {
@@ -460,18 +667,31 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         });
 
+<<<<<<< HEAD
         // Disable arrows at the beginning and end.
         prevButton.disabled = activeIndex === 0;
         nextButton.disabled = activeIndex === slides.length - 1;
+=======
+        prevButton.disabled = false;
+        nextButton.disabled = false;
+>>>>>>> second
 
         // Highlight the indicator for the active product.
         if (status) {
             const dots = status.querySelectorAll(".slider-dot");
 
+<<<<<<< HEAD
             dots.forEach(function (dot, index) {
                 dot.classList.toggle("active", index === activeIndex);
 
                 if (index === activeIndex) {
+=======
+            const logicalIndex = ((activeIndex - productCount) % productCount + productCount) % productCount;
+            dots.forEach(function (dot, index) {
+                dot.classList.toggle("active", index === logicalIndex);
+
+                if (index === logicalIndex) {
+>>>>>>> second
                     dot.setAttribute("aria-current", "true");
                 } else {
                     dot.removeAttribute("aria-current");
@@ -481,19 +701,46 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     prevButton.addEventListener("click", function () {
-        if (activeIndex > 0) {
-            activeIndex--;
-            updateSlider();
-        }
+        if (isMoving) return;
+        isMoving = true;
+        activeIndex--;
+        updateSlider();
     });
 
     nextButton.addEventListener("click", function () {
-        if (activeIndex < slides.length - 1) {
-            activeIndex++;
-            updateSlider();
-        }
+        if (isMoving) return;
+        isMoving = true;
+        activeIndex++;
+        updateSlider();
     });
 
+<<<<<<< HEAD
+=======
+    slider.addEventListener("transitionend", function (event) {
+        // Child slides also animate their scale; only rebase when the track itself finishes.
+        if (event.target !== slider || event.propertyName !== "transform") return;
+        let needsReposition = false;
+        while (activeIndex < productCount) {
+            activeIndex += productCount;
+            needsReposition = true;
+        }
+        while (activeIndex >= productCount * 2) {
+            activeIndex -= productCount;
+            needsReposition = true;
+        }
+        if (needsReposition) {
+            slider.style.transition = "none";
+            updateSlider();
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    slider.style.transition = "";
+                });
+            });
+        }
+        isMoving = false;
+    });
+
+>>>>>>> second
     // Recalculate positions when the screen size changes.
     window.addEventListener("resize", function () {
         clearTimeout(resizeTimer);
@@ -511,7 +758,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
     try {
-        const response = await fetch("http://localhost:3000/me", {
+        const response = await fetch("/api/me", {
             method: "GET",
             credentials: "include",
             headers: {
@@ -653,7 +900,7 @@ async function showProfileCompletion() {
         });
 
         const response = await fetch(
-            "http://localhost:3000/complete-profile",
+            "/api/complete-profile",
             {
                 method: "POST",
                 credentials: "include",

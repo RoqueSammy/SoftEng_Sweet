@@ -667,6 +667,63 @@
 
 }
 
+<<<<<<< HEAD
+=======
+/* Final order review before the order is submitted */
+.order-confirm-modal .modal-dialog { max-width: 860px; }
+.order-confirm-modal .review-modal-body { padding: 28px; text-align: left; }
+.review-modal-heading { display:flex; align-items:center; gap:16px; margin-bottom:22px; }
+.review-modal-heading .remove-icon { flex:0 0 58px; width:58px; height:58px; margin:0; }
+.review-modal-heading .remove-title { margin:3px 0 2px; font-size:25px; }
+.review-modal-heading .remove-message { margin:0; font-family:'Poppins',sans-serif; }
+.review-details-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.review-detail-card { min-width:0; padding:16px; border:1px solid #F2DCD6; border-radius:13px; background:#FFFBFA; }
+.review-detail-card h5,.review-section-heading h5 { display:flex; align-items:center; gap:8px; margin:0 0 13px; color:#704638; font-size:13px; font-weight:700; }
+.review-detail-card h5 i { color:#D85C5C; }
+.review-detail-card dl { display:grid; gap:10px; margin:0; }
+.review-detail-card dl div { min-width:0; }
+.review-detail-card dt { margin:0 0 2px; color:#8A7770; font-size:10px; font-weight:500; }
+.review-detail-card dd { margin:0; color:#493630; font-size:12px; font-weight:600; overflow-wrap:anywhere; }
+.review-map-info { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:13px; padding-top:11px; border-top:1px solid #F2DCD6; color:#704638; font-size:11px; }
+.review-map-info>i { color:#D85C5C; }
+.review-map-info span { flex:1; min-width:130px; font-weight:600; }
+.review-map-info a { color:#B9474D; font-weight:700; text-decoration:none; }
+.review-map-info a:hover { text-decoration:underline; }
+.review-payment-card { grid-column:1 / -1; }
+.review-payment-card dl { grid-template-columns:1fr 1fr; }
+.review-items-section { margin-top:15px; padding:16px; border:1px solid #F2DCD6; border-radius:13px; }
+.review-section-heading { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.review-section-heading h5 { margin-bottom:5px; }
+.review-section-heading span { color:#8A7770; font-size:11px; }
+.review-order-items { max-height:230px; overflow:auto; }
+.review-order-item { display:grid; grid-template-columns:46px minmax(0,1fr) auto; align-items:center; gap:11px; padding:11px 0; border-top:1px solid #F6E9E5; }
+.review-order-item:first-child { border-top:0; }
+.review-order-item img { width:46px; height:46px; border-radius:9px; background:#FFF0EC; object-fit:cover; }
+.review-item-details { display:grid; gap:3px; min-width:0; }
+.review-item-details strong { color:#493630; font-size:12px; overflow-wrap:anywhere; }
+.review-item-details small { color:#8A7770; font-size:10px; }
+.review-item-price { color:#493630; font-size:12px; white-space:nowrap; }
+.review-totals { display:grid; gap:9px; max-width:390px; margin:15px 0 0 auto; padding:0 3px; }
+.review-totals>div { display:flex; justify-content:space-between; gap:16px; color:#8A7770; font-size:12px; }
+.review-totals strong { color:#493630; }
+.review-totals .review-grand-total { margin-top:3px; padding-top:12px; border-top:1px solid #F2DCD6; color:#493630; font-size:14px; font-weight:700; }
+.review-totals .review-grand-total strong { color:#D85C5C; font-size:19px; }
+.order-confirm-modal .review-modal-body .remove-actions { justify-content:flex-end; margin-top:22px; }
+.order-confirm-modal .review-modal-body .keep-item-btn,.order-confirm-modal .review-modal-body .confirm-remove-btn { min-height:44px; border-radius:10px; font-family:'Poppins',sans-serif; font-size:12px; }
+.order-confirm-modal .review-modal-body .confirm-remove-btn { min-width:190px; }
+@media(max-width:600px) {
+ .order-confirm-modal .review-modal-body { padding:18px; }
+ .review-modal-heading { align-items:flex-start; gap:11px; }
+ .review-modal-heading .remove-icon { flex-basis:44px; width:44px; height:44px; font-size:18px; }
+ .review-modal-heading .remove-title { font-size:21px; }
+ .review-details-grid { grid-template-columns:1fr; }
+ .review-payment-card { grid-column:auto; }
+ .review-payment-card dl { grid-template-columns:1fr; }
+ .order-confirm-modal .review-modal-body .remove-actions { flex-direction:column-reverse; }
+ .order-confirm-modal .review-modal-body .keep-item-btn,.order-confirm-modal .review-modal-body .confirm-remove-btn { width:100%; }
+}
+
+>>>>>>> second
 /* =====================================
    CONFIRMATION PAGE
 ===================================== */

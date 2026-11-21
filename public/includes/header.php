@@ -7,6 +7,35 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+    (() => {
+        const isLocal = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+        if (!isLocal) return;
+        const nativeFetch = window.fetch.bind(window);
+        window.fetch = (input, options = {}) => {
+            const target = typeof input === "string" && input.startsWith("/api/")
+                ? "http://localhost:3000" + input.slice(4)
+                : input;
+            const requestOptions = typeof target === "string" && target.startsWith("http://localhost:3000/")
+                ? { credentials: "include", ...options }
+                : options;
+            return nativeFetch(target, requestOptions);
+        };
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll('form[action^="/api/"]').forEach(form => {
+                form.action = "http://localhost:3000" + form.action.replace(/^https?:\/\/[^/]+/, "").slice(4);
+            });
+        });
+    })();
+    </script>
+    <script>
+    try {
+        const savedTheme = localStorage.getItem("softecoms-theme") || "system";
+        const systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.siteTheme = savedTheme === "system" ? (systemDark ? "dark" : "light") : savedTheme;
+        document.documentElement.dataset.reduceMotion = localStorage.getItem("softecoms-reduced-motion") === "true";
+    } catch (_) {}
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +57,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/reset.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/order.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/contactUs.css">
+<<<<<<< HEAD
+=======
+<link rel="stylesheet" href="/SoftEcoms/public/assets/css/customerHistory.css">
+<link rel="stylesheet" href="/SoftEcoms/public/assets/css/about.css">
+>>>>>>> second
 
 
 <!-- -external links that I used -carlo -->

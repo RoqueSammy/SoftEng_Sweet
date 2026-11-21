@@ -1,13 +1,16 @@
 
 <?php
 
-include_once("../../app/config/config.php");
+// Load database configuration
+require_once __DIR__ . '/../../../app/config/config.php';
 
+// TOTAL REVENUE
+$sidebar_total_sales = 0;
 
 $sidebar_total_sales_query = "
-SELECT SUM(totalPrice) as total
-FROM orders
-WHERE status = 'completed'
+    SELECT COALESCE(SUM(totalPrice), 0) AS total
+    FROM orders
+    WHERE status = 'completed'
 ";
 
 $sidebar_total_sales_result = mysqli_query(
@@ -15,15 +18,19 @@ $sidebar_total_sales_result = mysqli_query(
     $sidebar_total_sales_query
 );
 
-$sidebar_total_sales =
-mysqli_fetch_assoc($sidebar_total_sales_result)['total'] ?? 0;
+if ($sidebar_total_sales_result) {
+    $sales_row = mysqli_fetch_assoc($sidebar_total_sales_result);
+    $sidebar_total_sales = $sales_row['total'] ?? 0;
+}
 
 
+// TOTAL COMPLETED ORDERS
+$sidebar_total_orders = 0;
 
 $sidebar_total_orders_query = "
-SELECT COUNT(*) as count
-FROM orders
-WHERE status = 'completed'
+    SELECT COUNT(*) AS count
+    FROM orders
+    WHERE status = 'completed'
 ";
 
 $sidebar_total_orders_result = mysqli_query(
@@ -31,12 +38,15 @@ $sidebar_total_orders_result = mysqli_query(
     $sidebar_total_orders_query
 );
 
-$sidebar_total_orders =
-mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
+if ($sidebar_total_orders_result) {
+    $orders_row = mysqli_fetch_assoc($sidebar_total_orders_result);
+    $sidebar_total_orders = $orders_row['count'] ?? 0;
+}
 
 ?>
 
-<div class="admin-sidebar-wrapper">
+<!-- ADMIN SIDEBAR -->
+<aside class="admin-sidebar-wrapper">
 
     <div class="side-panel">
 
@@ -44,28 +54,24 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
         <div class="panel-header">
 
             <h2>
-                <span>📊</span> Admin Panel
+                <span>📊</span>
+                Admin Panel
             </h2>
 
-            <?php if (isset($_SESSION['user_id'])) { ?>
-
-                <p>
-                    Hello <?php echo $_SESSION['authUser']['username']; ?>
-                </p>
-
-            <?php } ?>
+            <p>Management Dashboard</p>
 
         </div>
 
-        <!-- NAVIGATION -->
-        <div class="nav-menu">
 
-            <a href="index.php" class="nav-item">
+        <!-- NAVIGATION -->
+        <nav class="nav-menu">
+
+            <a href="adminDashboard.php" class="nav-item">
                 <span class="nav-icon">📈</span>
                 <span>Dashboard</span>
             </a>
 
-            <a href="orders.php" class="nav-item">
+            <a href="adminOrders.php" class="nav-item">
                 <span class="nav-icon">📦</span>
                 <span>Orders</span>
             </a>
@@ -75,19 +81,25 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
                 <span>Products</span>
             </a>
 
-            <a href="customers.php" class="nav-item">
+            <a href="adminCustomers.php" class="nav-item">
                 <span class="nav-icon">👥</span>
                 <span>Customers</span>
             </a>
 
-            <a href="changelog.php" class="nav-item">
+            <a href="adminOrders.php" class="nav-item">
                 <span class="nav-icon">📝</span>
                 <span>ChangeLog</span>
             </a>
 
-        </div>
+            <a href="contact_messages.php" class="nav-item">
+                <span class="nav-icon">✉️</span>
+                <span>Contact Messages</span>
+            </a>
 
-        <!-- STATS -->
+        </nav>
+
+
+        <!-- STATISTICS -->
         <div class="stats-panel">
 
             <div class="stat-item">
@@ -97,10 +109,11 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
                 </div>
 
                 <div class="stat-value">
-                    ₱<?php echo number_format($sidebar_total_sales, 2); ?>
+                    ₱<?php echo number_format((float)$sidebar_total_sales, 2); ?>
                 </div>
 
             </div>
+
 
             <div class="stat-item">
 
@@ -109,7 +122,7 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
                 </div>
 
                 <div class="stat-value">
-                    <?php echo number_format($sidebar_total_orders); ?>
+                    <?php echo number_format((int)$sidebar_total_orders); ?>
                     <small>orders</small>
                 </div>
 
@@ -117,11 +130,14 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
 
         </div>
 
+
+        <!-- LOGOUT -->
         <div class="logout-section">
 
-            <form action="/E-commerce/app/controllers/adminController.php" method="POST">
+            <form action="/api/logout" method="POST">
 
-                <button type="submit" name="logout" class="btn btn-danger">
+                <button type="submit" class="logout-btn">
+                    <span>🚪</span>
                     Logout
                 </button>
 
@@ -131,5 +147,4 @@ mysqli_fetch_assoc($sidebar_total_orders_result)['count'] ?? 0;
 
     </div>
 
-</div>
-```
+</aside>

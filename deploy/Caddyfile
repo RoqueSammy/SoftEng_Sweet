@@ -1,0 +1,21 @@
+:{$PORT:80} {
+	encode zstd gzip
+
+	handle_path /api/* {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	handle /verify-email {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	handle_path /SoftEcoms/public/* {
+		root * /app/public
+		php_server
+	}
+
+	handle {
+		root * /app/public
+		php_server
+	}
+}

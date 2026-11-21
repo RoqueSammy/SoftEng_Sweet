@@ -1,0 +1,332 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
+
+/* =========================================
+   ABOUT PAGE
+========================================= */
+
+.about {
+  min-height: 100vh;
+  padding-bottom: 70px;
+  background: linear-gradient(
+    110deg,
+    #efd9c3 0%,
+    #f0d5c6 25%,
+    #f1d0c9 55%,
+    #f3c6d0 100%
+  );
+  color: #704638;
+  font-family: "Poppins", sans-serif;
+}
+
+/* =========================================
+   ABOUT SECTION
+========================================= */
+
+.about-section {
+  padding: 45px 18px 0;
+}
+
+.about-section .about-panel {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 55px 65px 70px;
+  background: #fffaf7;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  box-shadow: 0 15px 45px rgba(112, 70, 56, 0.09);
+}
+
+/* =========================================
+   ABOUT TAGLINE
+========================================= */
+
+.about-section .about-tagline {
+  max-width: 750px;
+  margin: 0 auto 55px;
+  color: #b84e50;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.15rem, 2vw, 1.45rem);
+  font-weight: 600;
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* =========================================
+   ABOUT INTRODUCTION
+========================================= */
+
+.about-section .about-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 55px;
+  align-items: center;
+  max-width: 1030px;
+  margin: 0 auto;
+}
+
+.about-section .about-text h2 {
+  margin: 0 0 16px;
+  color: #d85c5c;
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.about-section .about-text p {
+  margin: 0 0 16px;
+  color: #806b63;
+  font-size: 0.87rem;
+  line-height: 1.9;
+  text-align: justify;
+}
+
+.about-section .about-text section + section {
+  margin-top: 32px;
+}
+
+.about-section .about-photo {
+  position: relative;
+  padding: 12px;
+  border: 1px solid #f1d9d1;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(112, 70, 56, 0.08);
+}
+
+.about-section .about-photo img {
+  width: 100%;
+  min-height: 350px;
+  max-height: 470px;
+  display: block;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* =========================================
+   OUR PROMISES SECTION
+========================================= */
+
+.about-section .about-bake {
+  max-width: 1030px;
+  margin: 90px auto 0;
+  padding-top: 55px;
+  border-top: 1px solid #f0dcd5;
+  text-align: center;
+}
+
+.about-section .about-bake h2 {
+  margin: 0 0 12px;
+  color: #d85c5c;
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.about-section .about-mascot {
+  width: 95px;
+  height: auto;
+  display: block;
+  margin: 0 auto 12px;
+}
+
+.about-section .about-bake-intro {
+  max-width: 580px;
+  margin: 0 auto 42px;
+  color: #8a7770;
+  font-size: 0.85rem;
+  line-height: 1.9;
+}
+
+/* =========================================
+   THREE PROMISES
+========================================= */
+
+.about-section .about-promises {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  align-items: stretch;
+}
+
+.about-section .promise {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 20px 30px;
+  border: 1px solid #f4e0da;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 7px 22px rgba(112, 70, 56, 0.045);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-section .promise:hover {
+  transform: translateY(-7px);
+  box-shadow: 0 14px 30px rgba(112, 70, 56, 0.1);
+}
+
+.about-section .promise-img {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 22px;
+  border-radius: 12px;
+  background: #f5e5df;
+  object-fit: cover;
+}
+
+.about-section .promise h3 {
+  margin: 0 0 10px;
+  color: #704638;
+  font-family: "Playfair Display", serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.about-section .promise p {
+  max-width: 250px;
+  margin: 0;
+  color: #8a7770;
+  font-size: 0.82rem;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* =========================================
+   TABLET RESPONSIVE
+========================================= */
+
+@media (max-width: 992px) {
+  .about-section .about-panel {
+    padding: 45px 35px 55px;
+  }
+
+  .about-section .about-intro {
+    gap: 30px;
+  }
+
+  .about-section .about-photo img {
+    min-height: 300px;
+  }
+
+  .about-section .about-promises {
+    gap: 18px;
+  }
+
+  .about-section .promise {
+    padding: 20px 14px 25px;
+  }
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+  .about {
+    padding-bottom: 40px;
+  }
+
+  .about-banner {
+    height: 145px;
+  }
+
+  .about-section {
+    padding: 25px 12px 0;
+  }
+
+  .about-section .about-panel {
+    padding: 35px 20px 45px;
+  }
+
+  .about-section .about-tagline {
+    margin-bottom: 35px;
+    font-size: 1.1rem;
+  }
+
+  .about-section .about-intro {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .about-section .about-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .about-section .about-text p {
+    font-size: 0.82rem;
+    text-align: left;
+  }
+
+  .about-section .about-photo {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .about-section .about-photo img {
+    min-height: 250px;
+    max-height: 350px;
+  }
+
+  .about-section .about-bake {
+    margin-top: 60px;
+    padding-top: 40px;
+  }
+
+  .about-section .about-bake h2 {
+    font-size: 1.7rem;
+  }
+
+  .about-section .about-promises {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .about-section .promise {
+    padding: 25px 20px 28px;
+  }
+
+  .about-section .promise-img {
+    max-width: 240px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+  .about-banner {
+    height: 120px;
+  }
+
+  .about-banner h1 {
+    font-size: 2rem;
+  }
+
+  .about-section .about-panel {
+    padding: 28px 16px 38px;
+  }
+
+  .about-section .about-tagline {
+    font-size: 1rem;
+  }
+
+  .about-section .about-text h2 {
+    font-size: 1.3rem;
+  }
+
+  .about-section .about-bake h2 {
+    font-size: 1.5rem;
+  }
+
+  .about-section .about-bake-intro {
+    font-size: 0.8rem;
+  }
+}

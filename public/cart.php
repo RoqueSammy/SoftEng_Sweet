@@ -5,11 +5,10 @@ session_start();
 $pageClass = "cart-page";
 
 include('./admin/includes/header.php');
-include('./admin/includes/topbar.php');
+include('./includes/topbar.php');
 ?>
 
-<link rel="stylesheet" href="assets/css/cart_page.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
 <style>
 
@@ -206,9 +205,10 @@ include('./admin/includes/topbar.php');
 
 <script>
 
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    const API_URL = "http://localhost:3000";
+    const API_URL = "/api";
 
     const cartLoading = document.getElementById("cartLoading");
     const cartError = document.getElementById("cartError");
@@ -216,7 +216,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartItems = document.getElementById("cartItems");
     const emptyCart = document.getElementById("emptyCart");
 
+<<<<<<< HEAD
     // ORDER SUMMARY COLUMN
+=======
+>>>>>>> second
     const orderSummaryColumn = document.getElementById("orderSummaryColumn");
 
     const subtotalElement = document.getElementById("subtotal");
@@ -237,8 +240,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentCart = [];
     let selectedCartIDs = new Set();
     let pendingRemoveCartID = null;
+<<<<<<< HEAD
     let hasLoadedCart = false;
 
+=======
+    let summaryRequestNumber = 0;
+>>>>>>> second
 
     // ==========================================
     // FORMAT PRICE
@@ -249,6 +256,28 @@ document.addEventListener("DOMContentLoaded", () => {
         maximumFractionDigits: 2
     });
 
+<<<<<<< HEAD
+=======
+    // ==========================================
+    // CHECK PRODUCT STOCK
+    // ==========================================
+
+    function getStockStatus(item) {
+
+        const stock = Number(item.stock);
+        const quantity = Number(item.quantity);
+
+        if (!Number.isFinite(stock) || stock <= 0) {
+            return "out_of_stock";
+        }
+
+        if (stock < quantity) {
+            return "insufficient_stock";
+        }
+
+        return "available";
+    }
+>>>>>>> second
 
     // ==========================================
     // API REQUEST
@@ -293,17 +322,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!response.ok || data.success === false) {
 
+<<<<<<< HEAD
             throw new Error(
                 data.message || "Something went wrong."
             );
 
+=======
+            const error = new Error(data.message || "Something went wrong.");
+
+            error.status = response.status;
+            error.stockError = data.stockError || false;
+            error.unavailableItems = data.unavailableItems || [];
+
+            throw error;
+>>>>>>> second
         }
 
         return data;
 
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> second
     // ==========================================
     // UPDATE HEADER CART BADGE
     // ==========================================
@@ -312,14 +354,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const badge = document.getElementById("cartCount");
 
+<<<<<<< HEAD
         if (!badge) {
             return;
         }
+=======
+        if (!badge) return;
+>>>>>>> second
 
         try {
 
             const data = await apiRequest("/cart/count");
 
+<<<<<<< HEAD
             const count = Math.max(
                 0,
                 Number(data.cartCount) || 0
@@ -339,6 +386,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+=======
+            const count = Math.max(0, Number(data.cartCount) || 0);
+
+            badge.textContent = count;
+            badge.style.display = count > 0 ? "flex" : "none";
+
+        } catch (error) {
+            console.error("Cart badge error:", error);
+        }
+    }
+
+>>>>>>> second
     // ==========================================
     // LOAD CART
     // ==========================================
@@ -353,18 +412,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await apiRequest("/cart");
 
+<<<<<<< HEAD
             currentCart = Array.isArray(data.cart)
                 ? data.cart
                 : [];
+=======
+            currentCart = Array.isArray(data.cart) ? data.cart : [];
+>>>>>>> second
 
             const validIDs = new Set(
-                currentCart.map(item => String(item.cartID))
+                currentCart
+                    .filter(item => getStockStatus(item) === "available")
+                    .map(item => String(item.cartID))
             );
 
+<<<<<<< HEAD
+=======
+            // Remove unavailable items from the checkout selection.
+>>>>>>> second
             selectedCartIDs = new Set(
                 [...selectedCartIDs].filter(id => validIDs.has(id))
             );
 
+<<<<<<< HEAD
 
             // Do not automatically select products.
             // Customers must manually select items for checkout.
@@ -372,6 +442,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             hasLoadedCart = true;
 
+=======
+>>>>>>> second
             displayCart();
 
             cartContent.style.display = "flex";
@@ -384,14 +456,15 @@ document.addEventListener("DOMContentLoaded", () => {
             cartError.style.display = "block";
 
         } finally {
-
             cartLoading.style.display = "none";
-
         }
 
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> second
     // ==========================================
     // DISPLAY CART PRODUCTS
     // ==========================================
@@ -402,12 +475,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const isCartEmpty = currentCart.length === 0;
 
+<<<<<<< HEAD
         // SHOW EMPTY CART MESSAGE
         emptyCart.style.display = isCartEmpty ? "block" : "none";
 
         // HIDE ORDER SUMMARY WHEN CART IS EMPTY
         orderSummaryColumn.style.display = isCartEmpty ? "none" : "block";
 
+=======
+        emptyCart.style.display = isCartEmpty ? "block" : "none";
+        orderSummaryColumn.style.display = isCartEmpty ? "none" : "block";
+>>>>>>> second
 
         currentCart.forEach(item => {
 
@@ -415,11 +493,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const price = Number(item.price);
             const quantity = Number(item.quantity);
 
+            const stock = Number(item.stock);
+            const stockStatus = getStockStatus(item);
+
+            const isAvailable = stockStatus === "available";
+
             const card = document.createElement("div");
 
-            card.className =
-                "card cart-item-card mb-4 shadow-sm rounded-4";
-
+            card.className = "card cart-item-card mb-4 shadow-sm rounded-4";
             card.dataset.cartId = cartID;
 
             if (selectedCartIDs.has(cartID)) {
@@ -440,10 +521,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const image = document.createElement("img");
 
-            image.src =
-                "assets/product_img/" +
-                encodeURIComponent(item.img || "");
-
+            image.src = /^https?:\/\//i.test(String(item.img || "")) ? item.img : "assets/product_img/" + encodeURIComponent(item.img || "");
             image.alt = item.productName || "Product";
             image.className = "img-fluid rounded-4";
             image.style.height = "120px";
@@ -469,6 +547,33 @@ document.addEventListener("DOMContentLoaded", () => {
             priceText.className = "text-muted mb-2";
             priceText.textContent = "₱" + formatPrice(price);
 
+<<<<<<< HEAD
+=======
+            // STOCK STATUS DISPLAY
+
+            const stockMessage = document.createElement("p");
+            stockMessage.className = "small mb-2";
+
+            if (stockStatus === "out_of_stock") {
+
+                stockMessage.classList.add("text-danger", "fw-bold");
+                stockMessage.textContent = "Out of stock";
+
+            } else if (stockStatus === "insufficient_stock") {
+
+                stockMessage.classList.add("text-warning", "fw-bold");
+                stockMessage.textContent =
+                    `Only ${stock} left in stock. Please reduce your quantity.`;
+
+            } else {
+
+                stockMessage.classList.add("text-success");
+                stockMessage.textContent = `In stock: ${stock}`;
+            }
+
+            // SELECT PRODUCT
+
+>>>>>>> second
             const selectLabel = document.createElement("label");
             selectLabel.className =
                 "d-flex align-items-center gap-2 mt-2";
@@ -477,14 +582,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
             selectCheckbox.type = "checkbox";
             selectCheckbox.className = "form-check-input";
-            selectCheckbox.checked = selectedCartIDs.has(cartID);
+            selectCheckbox.checked =
+                isAvailable && selectedCartIDs.has(cartID);
+
+            selectCheckbox.disabled = !isAvailable;
 
             const selectText = document.createElement("span");
-            selectText.textContent = "Select this product";
+
+            selectText.textContent = isAvailable
+                ? "Select this product"
+                : "Unavailable for checkout";
 
             selectLabel.append(selectCheckbox, selectText);
 
-            detailsColumn.append(name, priceText, selectLabel);
+            detailsColumn.append(
+                name,
+                priceText,
+                stockMessage,
+                selectLabel
+            );
 
 
             // QUANTITY
@@ -493,8 +609,7 @@ document.addEventListener("DOMContentLoaded", () => {
             quantityColumn.className = "col-md-3 mb-3 mb-md-0";
 
             const quantityForm = document.createElement("form");
-            quantityForm.className =
-                "d-flex align-items-center gap-2 quantity-form";
+            quantityForm.className = "d-flex align-items-center gap-2 quantity-form";
 
             const quantityInput = document.createElement("input");
 
@@ -505,6 +620,11 @@ document.addEventListener("DOMContentLoaded", () => {
             quantityInput.className = "form-control quantity-input";
             quantityInput.style.width = "75px";
             quantityInput.required = true;
+
+            // Prevent entering a quantity greater than stock.
+            if (Number.isFinite(stock) && stock > 0) {
+                quantityInput.max = String(stock);
+            }
 
             const updateButton = document.createElement("button");
 
@@ -523,9 +643,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const itemSubtotal = document.createElement("p");
             itemSubtotal.className = "fw-bold product-subtotal";
-
-            itemSubtotal.textContent =
-                "₱" + formatPrice(price * quantity);
+            itemSubtotal.textContent = "₱" + formatPrice(price * quantity);
 
             const removeButton = document.createElement("button");
 
@@ -553,6 +671,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             selectCheckbox.addEventListener("change", () => {
 
+                if (!isAvailable) {
+                    selectCheckbox.checked = false;
+                    return;
+                }
+
                 if (selectCheckbox.checked) {
 
                     selectedCartIDs.add(cartID);
@@ -566,7 +689,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 updateSummary();
-
             });
 
 
@@ -574,20 +696,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
             card.addEventListener("click", event => {
 
-                if (
-                    event.target.closest(
-                        "button, a, input, form, select, textarea, label"
-                    )
-                ) {
+                if (event.target.closest(
+                    "button, a, input, form, select, textarea, label"
+                )) {
                     return;
                 }
 
+<<<<<<< HEAD
                 selectCheckbox.checked = !selectCheckbox.checked;
 
                 selectCheckbox.dispatchEvent(
                     new Event("change")
                 );
+=======
+                if (!isAvailable) return;
+>>>>>>> second
 
+                selectCheckbox.checked = !selectCheckbox.checked;
+
+                selectCheckbox.dispatchEvent(new Event("change"));
             });
 
 
@@ -614,6 +741,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
 
+                if (newQuantity > stock) {
+
+                    Swal.fire(
+                        "Insufficient stock",
+                        `Only ${stock} item(s) are currently available.`,
+                        "warning"
+                    );
+
+                    return;
+                }
+
                 updateButton.disabled = true;
                 updateButton.textContent = "Updating...";
 
@@ -631,6 +769,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
 
                     await loadCart();
+                    await updateCartBadge();
 
                     await updateCartBadge();
 
@@ -651,9 +790,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     updateButton.disabled = false;
                     updateButton.textContent = "Update";
-
                 }
-
             });
 
 
@@ -667,48 +804,58 @@ document.addEventListener("DOMContentLoaded", () => {
                     item.productName || "this product";
 
                 removeModal.show();
-
             });
 
         });
 
         updateSummary();
-
     }
 
+<<<<<<< HEAD
 
     // ==========================================
     // UPDATE SUMMARY
+=======
+    // ==========================================
+    // UPDATE ORDER SUMMARY
+>>>>>>> second
     // ==========================================
 
-    function updateSummary() {
+    async function updateSummary() {
 
-        let subtotalCents = 0;
-        let totalItems = 0;
+        const requestNumber = ++summaryRequestNumber;
 
-        currentCart.forEach(item => {
+        const selectedIDs = [...selectedCartIDs];
 
-            if (!selectedCartIDs.has(String(item.cartID))) {
-                return;
-            }
+        const selectedItems = currentCart
+            .filter(item =>
+                selectedCartIDs.has(String(item.cartID))
+            )
+            .reduce((sum, item) => sum + Number(item.quantity), 0);
 
+<<<<<<< HEAD
             const priceCents = Math.round(
                 Number(item.price) * 100
             );
 
             const quantity = Number(item.quantity);
+=======
+        selectedCountElement.textContent = selectedItems;
+>>>>>>> second
 
-            subtotalCents += priceCents * quantity;
-            totalItems += quantity;
+        if (selectedIDs.length === 0) {
 
-        });
+            subtotalElement.textContent = formatPrice(0);
+            taxElement.textContent = formatPrice(0);
+            grandTotalElement.textContent = formatPrice(0);
 
-        const taxCents = Math.round(subtotalCents * 0.12);
-        const grandTotalCents = subtotalCents + taxCents;
+            proceedCheckoutButton.disabled = true;
+            proceedCheckoutButton.setAttribute("aria-disabled", "true");
 
-        subtotalElement.textContent =
-            formatPrice(subtotalCents / 100);
+            return;
+        }
 
+<<<<<<< HEAD
         taxElement.textContent =
             formatPrice(taxCents / 100);
 
@@ -728,6 +875,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+=======
+        proceedCheckoutButton.disabled = true;
+        proceedCheckoutButton.setAttribute("aria-disabled", "true");
+
+        try {
+
+            const data = await apiRequest("/cart/summary", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    cartIDs: selectedIDs
+                })
+            });
+
+            if (requestNumber !== summaryRequestNumber) {
+                return;
+            }
+
+            subtotalElement.textContent = formatPrice(data.subtotal);
+            taxElement.textContent = formatPrice(data.tax);
+            grandTotalElement.textContent = formatPrice(data.total);
+
+            proceedCheckoutButton.disabled = false;
+            proceedCheckoutButton.setAttribute("aria-disabled", "false");
+
+        } catch (error) {
+
+            if (requestNumber !== summaryRequestNumber) {
+                return;
+            }
+
+            console.error("Order summary error:", error);
+
+            subtotalElement.textContent = formatPrice(0);
+            taxElement.textContent = formatPrice(0);
+            grandTotalElement.textContent = formatPrice(0);
+
+            proceedCheckoutButton.disabled = true;
+            proceedCheckoutButton.setAttribute("aria-disabled", "true");
+
+            if (error.stockError || error.status === 409) {
+
+                Swal.fire(
+                    "Stock unavailable",
+                    error.message,
+                    "warning"
+                );
+
+                // Reload to get the latest stock information.
+                await loadCart();
+
+                return;
+            }
+
+            Swal.fire(
+                "Unable to calculate order summary",
+                error.message,
+                "error"
+            );
+        }
+    }
+>>>>>>> second
 
     // ==========================================
     // CONFIRM REMOVE
@@ -763,11 +974,15 @@ document.addEventListener("DOMContentLoaded", () => {
             pendingRemoveCartID = null;
 
             await loadCart();
+<<<<<<< HEAD
 
             // Refresh badge after removing product.
             await updateCartBadge();
 
             // No success notification here.
+=======
+            await updateCartBadge();
+>>>>>>> second
 
         } catch (error) {
 
@@ -781,12 +996,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             confirmRemoveButton.disabled = false;
             confirmRemoveButton.textContent = "Remove";
-
         }
-
     });
 
 
+<<<<<<< HEAD
     removeModalElement.addEventListener(
         "hidden.bs.modal",
         () => {
@@ -795,11 +1009,13 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
+=======
+>>>>>>> second
     // ==========================================
     // PROCEED TO CHECKOUT
     // ==========================================
 
-    proceedCheckoutForm.addEventListener("submit", event => {
+    proceedCheckoutForm.addEventListener("submit", async event => {
 
         event.preventDefault();
 
@@ -812,32 +1028,67 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             return;
-
         }
 
-        selectedCartInputs.innerHTML = "";
-
-        [...selectedCartIDs].forEach(id => {
-
-            const input = document.createElement("input");
-
-            input.type = "hidden";
-            input.name = "selected_cart_ids[]";
-            input.value = id;
-
-            selectedCartInputs.appendChild(input);
-
-        });
-
+        // Recheck stock immediately before opening checkout.
         proceedCheckoutButton.disabled = true;
+<<<<<<< HEAD
 
         proceedCheckoutButton.textContent =
             "Opening Checkout...";
 
         proceedCheckoutForm.submit();
+=======
+        proceedCheckoutButton.textContent = "Checking stock...";
 
+        try {
+>>>>>>> second
+
+            const selectedIDs = [...selectedCartIDs];
+
+            await apiRequest("/cart/summary", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    cartIDs: selectedIDs
+                })
+            });
+
+            selectedCartInputs.innerHTML = "";
+
+            selectedIDs.forEach(id => {
+
+                const input = document.createElement("input");
+
+                input.type = "hidden";
+                input.name = "selected_cart_ids[]";
+                input.value = id;
+
+                selectedCartInputs.appendChild(input);
+            });
+
+            proceedCheckoutButton.textContent = "Opening Checkout...";
+
+            proceedCheckoutForm.submit();
+
+        } catch (error) {
+
+            proceedCheckoutButton.disabled = true;
+            proceedCheckoutButton.textContent = "PROCEED TO CHECKOUT";
+
+            Swal.fire(
+                "Unable to proceed",
+                error.message,
+                error.stockError ? "warning" : "error"
+            );
+
+            await loadCart();
+        }
     });
 
+<<<<<<< HEAD
 
     // ==========================================
     // INITIAL LOAD
@@ -850,10 +1101,20 @@ document.addEventListener("DOMContentLoaded", () => {
         // Get the badge count after the cart has loaded.
         await updateCartBadge();
 
+=======
+    // ==========================================
+    // INITIAL LOAD
+    // ==========================================
+
+    async function initializeCart() {
+        await loadCart();
+        await updateCartBadge();
+>>>>>>> second
     }
 
     initializeCart();
 
 });
+
 
 </script>

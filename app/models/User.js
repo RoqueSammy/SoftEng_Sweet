@@ -5,7 +5,7 @@ class User {
 
   async findByEmail(email) {
     const [users] = await this.db.execute(
-      `SELECT id, uuid, firstName, lastName, middleName, username,
+      `SELECT id, uuid, firstName, lastName, middleName, username, profile,
               emailAddress, password, role, accountStatus,
               contactNumber, street, barangay, city
        FROM users
@@ -49,8 +49,8 @@ class User {
       `INSERT INTO users (
         uuid, firstName, lastName, middleName, emailAddress,
         contactNumber, username, password, street, barangay, city,
-        role, accountStatus
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        role, accountStatus, profile
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         uuid,
         firstName.trim(),
@@ -65,6 +65,7 @@ class User {
         city?.trim() || null,
         role || "customer",
         "unverified",
+        "default-avatar.svg",
       ],
     );
 

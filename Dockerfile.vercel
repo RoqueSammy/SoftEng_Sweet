@@ -1,0 +1,20 @@
+FROM dunglas/frankenphp:1-php8.4-alpine
+
+WORKDIR /app
+
+RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
+    && apk add --no-cache nodejs npm python3 make g++ \
+    && install-php-extensions mysqli
+
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
+
+COPY . .
+COPY deploy/Caddyfile /etc/caddy/Caddyfile
+COPY deploy/vercel-entrypoint.sh /usr/local/bin/vercel-entrypoint
+RUN chmod +x /usr/local/bin/vercel-entrypoint
+
+ENV APP_ENV=production NODE_ENV=production PORT=80
+EXPOSE 80
+
+CMD ["/usr/local/bin/vercel-entrypoint"]

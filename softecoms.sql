@@ -133,7 +133,8 @@ CREATE TABLE `product_item` (
   `productName` varchar(255) DEFAULT NULL,
   `productDescription` varchar(255) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `img` varchar(20) DEFAULT NULL
+  `img` varchar(255) DEFAULT NULL,
+  `stock` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -181,7 +182,7 @@ CREATE TABLE `users` (
   `street` varchar(255) DEFAULT NULL,
   `barangay` varchar(255) DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
-  `profile` varchar(255) NOT NULL,
+  `profile` varchar(255) NOT NULL DEFAULT 'default-avatar.svg',
   `role` enum('customer','admin') NOT NULL,
   `dateCreated` timestamp NOT NULL DEFAULT current_timestamp(),
   `accountStatus` varchar(20) NOT NULL DEFAULT 'unverified',
@@ -196,9 +197,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `uuid`, `firstName`, `lastName`, `middleName`, `emailAddress`, `contactNumber`, `username`, `password`, `street`, `barangay`, `city`, `profile`, `role`, `dateCreated`, `accountStatus`, `emailVerificationToken`, `emailVerificationExpires`, `reset_token_hash`, `reset_token_expires`) VALUES
-(1, '16ddf72a-b54d-47d2-8ef1-c82db25c56c2', 'sam', 'roque', 'lagcao', 'roque.sam05@gmail.com', '04120941294', 'sammy', '$2b$12$xIuEMLVj3iL/8Yi8iTL8GesKmVvI8bcfJN.UvRDv2HQY8MERpeD6O', 'manok', 'manok', 'manok', '', 'customer', '2026-10-19 19:09:48', 'active', NULL, NULL, '69302de056b9a0f3993b355380717f277cc7eabe448075d4874f7d08398bc3cb', '2026-10-30 23:16:05'),
-(3, '8e256248-04f6-4b04-ac19-548cdc935c9e', 'sam', 'roque', NULL, 'samroque87@gmail.com', NULL, 'samroque87_d2cff004', '$2b$12$Qnx/M0CPN5K7AmI6dOqxmujZB0cUvFup0fo3Pz5tUMsm5qh066FhK', NULL, NULL, NULL, '', 'customer', '2026-10-27 19:01:24', 'active', NULL, NULL, NULL, NULL),
-(5, 'c36e74a3-8f15-47c2-bd73-ce70aa1be418', 'sam', 'roque', NULL, 'samroque959@gmail.com', '094219041', 'samroque959_18fba6e3', '$2b$12$9hqmxvBzAeJEbam4/JFHaO1/e/7kDXrM72FvbygRR/JydxK4CnDx.', 'pad', 'nazareth', 'cdo', '', 'customer', '2026-10-30 06:32:49', 'active', NULL, NULL, NULL, NULL);
+(1, '16ddf72a-b54d-47d2-8ef1-c82db25c56c2', 'sam', 'roque', 'lagcao', 'roque.sam05@gmail.com', '04120941294', 'sammy', '$2b$12$xIuEMLVj3iL/8Yi8iTL8GesKmVvI8bcfJN.UvRDv2HQY8MERpeD6O', 'manok', 'manok', 'manok', 'default-avatar.svg', 'customer', '2026-10-19 19:09:48', 'active', NULL, NULL, '69302de056b9a0f3993b355380717f277cc7eabe448075d4874f7d08398bc3cb', '2026-10-30 23:16:05'),
+(3, '8e256248-04f6-4b04-ac19-548cdc935c9e', 'sam', 'roque', NULL, 'samroque87@gmail.com', NULL, 'samroque87_d2cff004', '$2b$12$Qnx/M0CPN5K7AmI6dOqxmujZB0cUvFup0fo3Pz5tUMsm5qh066FhK', NULL, NULL, NULL, 'default-avatar.svg', 'customer', '2026-10-27 19:01:24', 'active', NULL, NULL, NULL, NULL),
+(5, 'c36e74a3-8f15-47c2-bd73-ce70aa1be418', 'sam', 'roque', NULL, 'samroque959@gmail.com', '094219041', 'samroque959_18fba6e3', '$2b$12$9hqmxvBzAeJEbam4/JFHaO1/e/7kDXrM72FvbygRR/JydxK4CnDx.', 'pad', 'nazareth', 'cdo', 'default-avatar.svg', 'customer', '2026-10-30 06:32:49', 'active', NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables

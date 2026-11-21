@@ -189,7 +189,7 @@ loginForm.addEventListener("submit", async function (event) {
     loginButton.textContent = "Logging in...";
 
     try {
-        const response = await fetch("http://localhost:3000/login", {
+        const response = await fetch("/api/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -215,7 +215,7 @@ loginForm.addEventListener("submit", async function (event) {
         // Admin redirect
         if (data.role === "admin") {
             window.location.href =
-                data.redirect || "/SoftEcoms/public/admin/index.php";
+                data.redirect || "/SoftEcoms/public/admin/adminDashboard.php";
             return;
         }
 

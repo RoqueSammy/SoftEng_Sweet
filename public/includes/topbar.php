@@ -16,6 +16,7 @@ $urlPage = strtolower(
     basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH))
 );
 
+<<<<<<< HEAD
 // Use the actual PHP script filename, with URL fallback.
 $current_page = !empty($scriptPage) ? $scriptPage : $urlPage;
 
@@ -27,10 +28,37 @@ $isAboutPage = ($current_page === 'aboutus.php');
 $isCartPage = ($current_page === 'cart.php');
 
 $cartCount = 0;
+=======
+$current_page = !empty($scriptPage) ? $scriptPage : $urlPage;
+
+$isHomePage = ($current_page === 'index.php');
+
+$isMenuPage = in_array(
+    $current_page,
+    ['productpage.php', 'product.php'],
+    true
+);
+
+$isContactPage = ($current_page === 'contactus.php');
+
+$isOrdersPage = in_array(
+    $current_page,
+    ['order.php', 'orderhistory.php'],
+    true
+);
+
+$isAboutPage = ($current_page === 'aboutus.php');
+
+$isCartPage = ($current_page === 'cart.php');
+>>>>>>> second
 ?>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container">
+
+        <!-- ==========================================
+             LOGO
+        ========================================== -->
 
         <a class="navbar-brand" href="/SoftEcoms/public/index.php">
 
@@ -56,11 +84,17 @@ $cartCount = 0;
             'verifyforgetpassword.php',
             'forgetpassword.php'
         ], true)) : ?>
+<<<<<<< HEAD
+=======
+
+            <!-- ==========================================
+                 MOBILE NAVBAR TOGGLE
+            ========================================== -->
+>>>>>>> second
 
             <button
                 class="navbar-toggler"
                 type="button"
-                data-bs-toggle="collapse"
                 data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll"
                 aria-expanded="false"
@@ -71,8 +105,15 @@ $cartCount = 0;
 
             <div class="collapse navbar-collapse" id="navbarScroll">
 
-                <ul class="navbar-nav ms-lg-auto my-2 my-lg-0">
+                <!-- ==========================================
+                     NAVIGATION LINKS
+                ========================================== -->
 
+<<<<<<< HEAD
+=======
+                <ul class="navbar-nav my-2 my-lg-0">
+
+>>>>>>> second
                     <!-- HOME -->
                     <li class="nav-item">
                         <a
@@ -95,7 +136,11 @@ $cartCount = 0;
                         </a>
                     </li>
 
+<<<<<<< HEAD
                     <!-- CONTACT US -->
+=======
+                    <!-- CONTACT -->
+>>>>>>> second
                     <li class="nav-item">
                         <a
                             class="nav-link <?= $isContactPage ? 'active' : '' ?>"
@@ -130,8 +175,9 @@ $cartCount = 0;
 
                 </ul>
 
-                <div class="d-flex align-items-center gap-3">
+            </div>
 
+<<<<<<< HEAD
                     <!-- ACCOUNT DROPDOWN -->
 
                     <div id="accountNav" style="visibility: hidden;">
@@ -155,10 +201,22 @@ $cartCount = 0;
                     <!-- SHOPPING CART -->
 
                     <a
+=======
+            <div class="navbar-actions">
+                <div id="accountNav">
+                    <a class="account-login" href="/SoftEcoms/public/login.php">Login</a>
+                </div>
+
+                <a
+>>>>>>> second
                         href="/SoftEcoms/public/cart.php"
                         class="nav-icon <?= $isCartPage ? 'active' : '' ?>"
                         id="cartIcon"
                         aria-label="Shopping cart"
+<<<<<<< HEAD
+=======
+                        title="Shopping Cart"
+>>>>>>> second
                     >
 
                         <svg
@@ -169,7 +227,10 @@ $cartCount = 0;
                             class="bi bi-cart"
                             viewBox="0 0 16 16"
                         >
+<<<<<<< HEAD
 
+=======
+>>>>>>> second
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7z" />
 
                             <path d="M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
@@ -182,10 +243,14 @@ $cartCount = 0;
                             style="display: none;"
                         >0</span>
 
+<<<<<<< HEAD
                     </a>
 
                 </div>
 
+=======
+                </a>
+>>>>>>> second
             </div>
 
         <?php endif; ?>
@@ -193,12 +258,40 @@ $cartCount = 0;
     </div>
 </nav>
 
+<<<<<<< HEAD
+=======
+<!-- ==========================================
+     NAVBAR JAVASCRIPT
+========================================== -->
+>>>>>>> second
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
+<<<<<<< HEAD
     const API_URL = "http://localhost:3000";
 
+=======
+    const API_URL = "/api";
+    const navToggle = document.querySelector(".navbar-toggler");
+    const navCollapse = document.getElementById("navbarScroll");
+
+    if (navToggle && navCollapse) {
+        navToggle.addEventListener("click", function () {
+            const isOpen = navCollapse.classList.toggle("show");
+            navToggle.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        navCollapse.querySelectorAll(".nav-link").forEach(link => {
+            link.addEventListener("click", () => {
+                if (window.innerWidth < 992) {
+                    navCollapse.classList.remove("show");
+                    navToggle.setAttribute("aria-expanded", "false");
+                }
+            });
+        });
+    }
+>>>>>>> second
 
     // ==========================================
     // UPDATE CART COUNTER
@@ -253,6 +346,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Cart counter error:", error);
 
         }
+<<<<<<< HEAD
 
     }
 
@@ -261,6 +355,10 @@ document.addEventListener("DOMContentLoaded", function () {
     refreshCartCount();
 
 
+=======
+    }
+
+>>>>>>> second
     // ==========================================
     // ACCOUNT NAVIGATION
     // ==========================================
@@ -270,6 +368,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!accountNav) {
         return;
     }
+<<<<<<< HEAD
+=======
+
+    // Start the cart request alongside the account request to avoid a serial delay.
+    refreshCartCount();
+>>>>>>> second
 
     function showAccountNav() {
         accountNav.style.visibility = "visible";
@@ -288,8 +392,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
 
+<<<<<<< HEAD
             // Guest user: display Login button.
             if (response.status === 100 || response.status === 401) {
+=======
+            // Guest user
+            if (response.status === 401) {
+>>>>>>> second
                 showAccountNav();
                 return;
             }
@@ -308,6 +417,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+<<<<<<< HEAD
 
             // ACCOUNT DROPDOWN
 
@@ -333,12 +443,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // PROFILE
 
+=======
+            // ==========================================
+            // ACCOUNT DROPDOWN
+            // ==========================================
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "dropdown account-dropdown";
+
+            const toggle = document.createElement("button");
+            toggle.type = "button";
+            toggle.className = "account-toggle dropdown-toggle";
+            toggle.setAttribute("aria-haspopup", "true");
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.setAttribute("aria-label", "Open account menu");
+
+            const avatar = document.createElement("img");
+            avatar.className = "account-avatar";
+            avatar.alt = "";
+            avatar.src = user.profileImageUrl || (user.profile
+                ? "/SoftEcoms/public/assets/profile_img/" + encodeURIComponent(user.profile)
+                : "/SoftEcoms/public/assets/profile_img/default-avatar.svg");
+            avatar.onerror = () => {
+                avatar.onerror = null;
+                avatar.src = "/SoftEcoms/public/assets/profile_img/default-avatar.svg";
+            };
+            const displayName = document.createElement("span");
+            displayName.className = "account-name";
+            displayName.textContent = user.username || user.fullName || user.firstName || "My Account";
+            toggle.append(avatar, displayName);
+
+            const menu = document.createElement("ul");
+            menu.className = "dropdown-menu dropdown-menu-end account-menu";
+
+            toggle.addEventListener("click", function () {
+                const isOpen = menu.classList.toggle("show");
+                toggle.setAttribute("aria-expanded", String(isOpen));
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!wrapper.contains(event.target)) {
+                    menu.classList.remove("show");
+                    toggle.setAttribute("aria-expanded", "false");
+                }
+            });
+
+            document.addEventListener("keydown", function (event) {
+                if (event.key === "Escape") {
+                    menu.classList.remove("show");
+                    toggle.setAttribute("aria-expanded", "false");
+                    toggle.focus();
+                }
+            });
+
+            // PROFILE
+>>>>>>> second
             const profileItem = document.createElement("li");
 
             const profileLink = document.createElement("a");
 
             profileLink.className = "dropdown-item";
+<<<<<<< HEAD
 
+=======
+>>>>>>> second
             profileLink.href =
                 "/SoftEcoms/public/users/profilePage.php";
 
@@ -346,6 +514,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             profileItem.appendChild(profileLink);
 
+<<<<<<< HEAD
 
             // DIVIDER
 
@@ -353,24 +522,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const divider = document.createElement("hr");
 
+=======
+            // DIVIDER
+            const dividerItem = document.createElement("li");
+
+            const divider = document.createElement("hr");
+>>>>>>> second
             divider.className = "dropdown-divider";
 
             dividerItem.appendChild(divider);
 
+<<<<<<< HEAD
 
             // SIGN OUT
 
+=======
+            // SIGN OUT
+>>>>>>> second
             const logoutItem = document.createElement("li");
 
             const logoutButton = document.createElement("button");
 
             logoutButton.type = "button";
+<<<<<<< HEAD
 
             logoutButton.className = "dropdown-item";
 
             logoutButton.textContent = "Sign Out";
 
 
+=======
+            logoutButton.className = "dropdown-item";
+            logoutButton.textContent = "Sign Out";
+
+>>>>>>> second
             logoutButton.addEventListener("click", async function () {
 
                 logoutButton.disabled = true;
@@ -408,6 +593,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             logoutItem.appendChild(logoutButton);
 
+<<<<<<< HEAD
 
             // APPEND DROPDOWN
 
@@ -431,6 +617,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
+=======
+            // APPEND DROPDOWN
+            menu.append(
+                profileItem,
+                dividerItem,
+                logoutItem
+            );
+
+            const settingsItem = document.createElement("li");
+            const settingsLink = document.createElement("a");
+            settingsLink.className = "dropdown-item";
+            settingsLink.href = "/SoftEcoms/public/users/settings.php";
+            settingsLink.textContent = "Settings";
+            settingsItem.appendChild(settingsLink);
+            menu.insertBefore(settingsItem, dividerItem);
+
+            wrapper.append(toggle, menu);
+
+            accountNav.replaceChildren(wrapper);
+
+            showAccountNav();
+
+        } catch (error) {
+
+            console.error("Account navbar error:", error);
+
+            showAccountNav();
+
+        }
+>>>>>>> second
     }
 
     loadAccountNav();

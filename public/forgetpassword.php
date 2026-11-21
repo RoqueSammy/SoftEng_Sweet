@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
 
             const response = await fetch(
-                "http://localhost:3000/forgot-password",
+                "/api/forgot-password",
                 {
                     method: "POST",
                     headers: {
