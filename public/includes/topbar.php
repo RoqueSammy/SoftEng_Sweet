@@ -16,19 +16,6 @@ $urlPage = strtolower(
     basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH))
 );
 
-<<<<<<< HEAD
-// Use the actual PHP script filename, with URL fallback.
-$current_page = !empty($scriptPage) ? $scriptPage : $urlPage;
-
-$isHomePage = ($current_page === 'index.php');
-$isMenuPage = in_array($current_page, ['productpage.php', 'product.php'], true);
-$isContactPage = ($current_page === 'contactus.php');
-$isOrdersPage = ($current_page === 'order.php');
-$isAboutPage = ($current_page === 'aboutus.php');
-$isCartPage = ($current_page === 'cart.php');
-
-$cartCount = 0;
-=======
 $current_page = !empty($scriptPage) ? $scriptPage : $urlPage;
 
 $isHomePage = ($current_page === 'index.php');
@@ -50,7 +37,6 @@ $isOrdersPage = in_array(
 $isAboutPage = ($current_page === 'aboutus.php');
 
 $isCartPage = ($current_page === 'cart.php');
->>>>>>> second
 ?>
 
 <nav class="navbar navbar-expand-lg">
@@ -84,13 +70,10 @@ $isCartPage = ($current_page === 'cart.php');
             'verifyforgetpassword.php',
             'forgetpassword.php'
         ], true)) : ?>
-<<<<<<< HEAD
-=======
 
             <!-- ==========================================
                  MOBILE NAVBAR TOGGLE
             ========================================== -->
->>>>>>> second
 
             <button
                 class="navbar-toggler"
@@ -109,11 +92,8 @@ $isCartPage = ($current_page === 'cart.php');
                      NAVIGATION LINKS
                 ========================================== -->
 
-<<<<<<< HEAD
-=======
                 <ul class="navbar-nav my-2 my-lg-0">
 
->>>>>>> second
                     <!-- HOME -->
                     <li class="nav-item">
                         <a
@@ -136,11 +116,7 @@ $isCartPage = ($current_page === 'cart.php');
                         </a>
                     </li>
 
-<<<<<<< HEAD
-                    <!-- CONTACT US -->
-=======
                     <!-- CONTACT -->
->>>>>>> second
                     <li class="nav-item">
                         <a
                             class="nav-link <?= $isContactPage ? 'active' : '' ?>"
@@ -177,46 +153,17 @@ $isCartPage = ($current_page === 'cart.php');
 
             </div>
 
-<<<<<<< HEAD
-                    <!-- ACCOUNT DROPDOWN -->
-
-                    <div id="accountNav" style="visibility: hidden;">
-
-                        <a
-                            class="nav-link"
-                            href="/SoftEcoms/public/login.php"
-                            style="
-                                background-color: black;
-                                color: #F1D0C9;
-                                padding: 8px 20px;
-                                display: inline-block;
-                            "
-                        >
-                            Login
-                        </a>
-
-                    </div>
-
-
-                    <!-- SHOPPING CART -->
-
-                    <a
-=======
             <div class="navbar-actions">
                 <div id="accountNav">
                     <a class="account-login" href="/SoftEcoms/public/login.php">Login</a>
                 </div>
 
                 <a
->>>>>>> second
                         href="/SoftEcoms/public/cart.php"
                         class="nav-icon <?= $isCartPage ? 'active' : '' ?>"
                         id="cartIcon"
                         aria-label="Shopping cart"
-<<<<<<< HEAD
-=======
                         title="Shopping Cart"
->>>>>>> second
                     >
 
                         <svg
@@ -227,14 +174,9 @@ $isCartPage = ($current_page === 'cart.php');
                             class="bi bi-cart"
                             viewBox="0 0 16 16"
                         >
-<<<<<<< HEAD
-
-=======
->>>>>>> second
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7z" />
 
                             <path d="M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4" />
-
                         </svg>
 
                         <span
@@ -243,14 +185,7 @@ $isCartPage = ($current_page === 'cart.php');
                             style="display: none;"
                         >0</span>
 
-<<<<<<< HEAD
-                    </a>
-
-                </div>
-
-=======
                 </a>
->>>>>>> second
             </div>
 
         <?php endif; ?>
@@ -258,20 +193,13 @@ $isCartPage = ($current_page === 'cart.php');
     </div>
 </nav>
 
-<<<<<<< HEAD
-=======
 <!-- ==========================================
      NAVBAR JAVASCRIPT
 ========================================== -->
->>>>>>> second
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-<<<<<<< HEAD
-    const API_URL = "http://localhost:3000";
-
-=======
     const API_URL = "/api";
     const navToggle = document.querySelector(".navbar-toggler");
     const navCollapse = document.getElementById("navbarScroll");
@@ -291,7 +219,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
->>>>>>> second
 
     // ==========================================
     // UPDATE CART COUNTER
@@ -346,19 +273,8 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Cart counter error:", error);
 
         }
-<<<<<<< HEAD
-
     }
 
-
-    // Refresh cart count on every page
-    refreshCartCount();
-
-
-=======
-    }
-
->>>>>>> second
     // ==========================================
     // ACCOUNT NAVIGATION
     // ==========================================
@@ -368,12 +284,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!accountNav) {
         return;
     }
-<<<<<<< HEAD
-=======
 
     // Start the cart request alongside the account request to avoid a serial delay.
     refreshCartCount();
->>>>>>> second
 
     function showAccountNav() {
         accountNav.style.visibility = "visible";
@@ -392,13 +305,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
 
-<<<<<<< HEAD
-            // Guest user: display Login button.
-            if (response.status === 100 || response.status === 401) {
-=======
             // Guest user
             if (response.status === 401) {
->>>>>>> second
                 showAccountNav();
                 return;
             }
@@ -417,33 +325,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-<<<<<<< HEAD
-
-            // ACCOUNT DROPDOWN
-
-            const wrapper = document.createElement("div");
-            wrapper.className = "nav-item dropdown";
-
-            const toggle = document.createElement("a");
-
-            toggle.className = "nav-link dropdown-toggle";
-            toggle.href = "#";
-
-            toggle.setAttribute("role", "button");
-            toggle.setAttribute("data-bs-toggle", "dropdown");
-            toggle.setAttribute("aria-expanded", "false");
-
-            toggle.textContent =
-                user.username || user.fullName || "My Account";
-
-
-            const menu = document.createElement("ul");
-            menu.className = "dropdown-menu dropdown-menu-end";
-
-
-            // PROFILE
-
-=======
             // ==========================================
             // ACCOUNT DROPDOWN
             // ==========================================
@@ -497,16 +378,11 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
             // PROFILE
->>>>>>> second
             const profileItem = document.createElement("li");
 
             const profileLink = document.createElement("a");
 
             profileLink.className = "dropdown-item";
-<<<<<<< HEAD
-
-=======
->>>>>>> second
             profileLink.href =
                 "/SoftEcoms/public/users/profilePage.php";
 
@@ -514,48 +390,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
             profileItem.appendChild(profileLink);
 
-<<<<<<< HEAD
-
-            // DIVIDER
-
-            const dividerItem = document.createElement("li");
-
-            const divider = document.createElement("hr");
-
-=======
             // DIVIDER
             const dividerItem = document.createElement("li");
 
             const divider = document.createElement("hr");
->>>>>>> second
             divider.className = "dropdown-divider";
 
             dividerItem.appendChild(divider);
 
-<<<<<<< HEAD
-
             // SIGN OUT
-
-=======
-            // SIGN OUT
->>>>>>> second
             const logoutItem = document.createElement("li");
 
             const logoutButton = document.createElement("button");
 
             logoutButton.type = "button";
-<<<<<<< HEAD
-
-            logoutButton.className = "dropdown-item";
-
-            logoutButton.textContent = "Sign Out";
-
-
-=======
             logoutButton.className = "dropdown-item";
             logoutButton.textContent = "Sign Out";
 
->>>>>>> second
             logoutButton.addEventListener("click", async function () {
 
                 logoutButton.disabled = true;
@@ -593,31 +444,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             logoutItem.appendChild(logoutButton);
 
-<<<<<<< HEAD
-
-            // APPEND DROPDOWN
-
-            menu.append(
-                profileItem,
-                dividerItem,
-                logoutItem
-            );
-
-            wrapper.append(toggle, menu);
-
-            accountNav.replaceChildren(wrapper);
-
-            showAccountNav();
-
-        } catch (error) {
-
-            console.error("Account navbar error:", error);
-
-            showAccountNav();
-
-        }
-
-=======
             // APPEND DROPDOWN
             menu.append(
                 profileItem,
@@ -646,7 +472,6 @@ document.addEventListener("DOMContentLoaded", function () {
             showAccountNav();
 
         }
->>>>>>> second
     }
 
     loadAccountNav();

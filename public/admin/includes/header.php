@@ -49,11 +49,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/reset.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/confirmation.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/contactUs.css">
-<<<<<<< HEAD
-=======
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/checkout.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/about.css">
->>>>>>> second
 
 <!-- adminInclude --> 
  <link rel="stylesheet" href="/SoftEcoms/public/assets/css/adminSidebar.css">

@@ -70,11 +70,7 @@ include('./admin/includes/header.php');
 include('./includes/topbar.php');
 ?>
 
-<<<<<<< HEAD
-<link rel="stylesheet" href="assets/css/checkout.css?v=3">
-=======
 <link rel="stylesheet" href="assets/css/checkout.css?v=4">
->>>>>>> second
 
 <link
     rel="stylesheet"
@@ -379,14 +375,8 @@ include('./includes/topbar.php');
                                 </label>
 
                                 <p class="map-description">
-<<<<<<< HEAD
-                                    Select your exact delivery location.
-                                    Click anywhere on the map or drag the pin
-                                    to adjust your location.
-=======
                                     Enter a full address or a short place name, like “Hamersons Hotel,” and we’ll find it in CDO.
                                     You can also click the map or drag the pin to adjust the location.
->>>>>>> second
                                 </p>
 
                                 <div id="deliveryMap"></div>
@@ -413,13 +403,10 @@ include('./includes/topbar.php');
                                     No delivery location selected yet.
                                 </small>
 
-<<<<<<< HEAD
-=======
                                 <div id="deliveryEstimate" class="map-description" aria-live="polite">
                                     Select your delivery location to calculate the delivery fee.
                                 </div>
 
->>>>>>> second
                                 <input
                                     type="hidden"
                                     id="deliveryLatitude"
@@ -553,13 +540,7 @@ include('./includes/topbar.php');
 
                 </div>
 
-<<<<<<< HEAD
-                <!-- ==================================
-                     RIGHT SIDE: ORDER SUMMARY
-                =================================== -->
-=======
                 <!-- CART TOTALS -->
->>>>>>> second
 
                 <aside class="checkout-sidebar">
 
@@ -568,19 +549,10 @@ include('./includes/topbar.php');
                         <div class="summary-heading">
 
                             <div>
-<<<<<<< HEAD
-
-                                <span class="checkout-eyebrow">
-                                    YOUR SELECTED ITEMS
-                                </span>
-
-                                <h3>Order Summary</h3>
-=======
 
                                 <span class="checkout-eyebrow">CART &amp; PRICING</span>
 
                                 <h3>Your Cart</h3>
->>>>>>> second
 
                             </div>
 
@@ -627,11 +599,7 @@ include('./includes/topbar.php');
                             id="placeOrderButton"
                             class="place-order-btn"
                         >
-<<<<<<< HEAD
-                            PLACE ORDER <span>→</span>
-=======
                             ORDER SUMMARY <span>→</span>
->>>>>>> second
                         </button>
 
                         <p class="summary-note">
@@ -661,32 +629,6 @@ include('./includes/topbar.php');
     aria-hidden="true"
 >
 
-<<<<<<< HEAD
-    <div class="modal-dialog modal-dialog-centered">
-
-        <div class="modal-content">
-
-            <div class="modal-body text-center">
-
-                <div class="remove-icon">
-                    <i class="fas fa-shopping-bag"></i>
-                </div>
-
-                <div class="remove-heart">
-                    <i class="fas fa-heart"></i>
-                </div>
-
-                <h4 class="remove-title">
-                    Confirm Your Order?
-                </h4>
-
-                <p class="remove-message">
-                    Are you sure you want to place your order?
-                    Please double-check your customer information,
-                    delivery address, payment method, and order details
-                    before continuing.
-                </p>
-=======
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
 
         <div class="modal-content">
@@ -749,7 +691,6 @@ include('./includes/topbar.php');
                     <div><span>Delivery fee</span><strong id="reviewTotalDelivery">₱0.00</strong></div>
                     <div class="review-grand-total"><span>Total to pay</span><strong id="reviewTotal">₱0.00</strong></div>
                 </section>
->>>>>>> second
 
                 <div class="remove-actions">
 
@@ -758,11 +699,7 @@ include('./includes/topbar.php');
                         class="btn keep-item-btn"
                         data-bs-dismiss="modal"
                     >
-<<<<<<< HEAD
-                        Review Order
-=======
                         Back to checkout
->>>>>>> second
                     </button>
 
                     <button
@@ -770,11 +707,7 @@ include('./includes/topbar.php');
                         class="btn confirm-remove-btn"
                         id="confirmOrder"
                     >
-<<<<<<< HEAD
-                        Yes, Place Order
-=======
                         Confirm and place order
->>>>>>> second
                     </button>
 
                 </div>
@@ -814,12 +747,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     ?>;
 
-<<<<<<< HEAD
-    // Initial map location: Bislig area.
-    // Change this to your actual shop's service area.
-
-    const defaultLocation = [8.8794, 125.0726];
-=======
     // Sweet! shop location (fixed delivery origin).
     // The map opens centered on the shop. Customers must select
     // their own delivery location before placing an order.
@@ -827,7 +754,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const SHOP_LATITUDE = 8.474078;
     const SHOP_LONGITUDE = 124.644512;
     const defaultLocation = [SHOP_LATITUDE, SHOP_LONGITUDE];
->>>>>>> second
 
     // ==========================================
     // HTML ELEMENTS
@@ -899,15 +825,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let isProcessingOrder = false;
 
-<<<<<<< HEAD
-=======
     // Null means no eligible delivery location has been selected.
     let currentDeliveryFeeCents = null;
     let currentDistanceKm = null;
     let addressSearchTimer = null;
     let addressSearchController = null;
 
->>>>>>> second
     const orderModalElement =
         document.getElementById("orderConfirmModal");
 
@@ -1319,7 +1242,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         latitudeInput.value = Number(lat).toFixed(8);
-
         longitudeInput.value = Number(lng).toFixed(8);
 
         coordinatesLabel.textContent =
@@ -1335,9 +1257,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 { draggable: true }
             ).addTo(deliveryMap);
 
-            deliveryMarker.bindPopup(
-                "Your delivery location"
-            );
+            deliveryMarker.bindPopup("Your delivery location");
 
             deliveryMarker.on("dragend", function () {
                 const position = deliveryMarker.getLatLng();
@@ -1459,7 +1379,6 @@ document.addEventListener("DOMContentLoaded", function () {
     resetMapButton.addEventListener("click", function () {
 
         latitudeInput.value = "";
-
         longitudeInput.value = "";
         lastGeocodedCoordinates = "";
 
@@ -1477,15 +1396,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
         coordinatesLabel.textContent =
             "No delivery location selected yet.";
-<<<<<<< HEAD
-
-=======
->>>>>>> second
         coordinatesLabel.style.color = "#8A7770";
 
         if (deliveryMarker) {
             deliveryMap.removeLayer(deliveryMarker);
-
             deliveryMarker = null;
         }
 
@@ -1724,16 +1638,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const taxCents = Math.round(subtotalCents * 0.12);
 
-<<<<<<< HEAD
-        const totalCents = subtotalCents + taxCents;
-=======
         // The browser estimate is for display only. The Node.js
         // checkout controller recalculates and validates the fee.
         const deliveryFeeCents = currentDeliveryFeeCents ?? 0;
 
         const totalCents =
             subtotalCents + taxCents + deliveryFeeCents;
->>>>>>> second
 
         document.getElementById("summaryCount").textContent =
             totalQuantity;
@@ -2003,8 +1913,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
-<<<<<<< HEAD
-=======
         if (
             currentDistanceKm === null ||
             currentDeliveryFeeCents === null
@@ -2022,7 +1930,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
->>>>>>> second
         return true;
 
     }
@@ -2053,10 +1960,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!validateCheckout()) return;
 
-<<<<<<< HEAD
-=======
         renderOrderReview();
->>>>>>> second
         orderModal.show();
 
     });
@@ -2315,20 +2219,12 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmOrderButton.disabled = false;
 
             confirmOrderButton.textContent =
-<<<<<<< HEAD
-                "Yes, Place Order";
-=======
                 "Confirm and place order";
->>>>>>> second
 
             placeOrderButton.disabled = false;
 
             placeOrderButton.innerHTML =
-<<<<<<< HEAD
-                'PLACE ORDER <span>→</span>';
-=======
                 'ORDER SUMMARY <span>→</span>';
->>>>>>> second
 
         }
 

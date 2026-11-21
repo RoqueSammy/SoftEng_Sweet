@@ -21,23 +21,6 @@ include_once __DIR__ . '/includes/topbar.php';
         </button>
     </div>
 
-<<<<<<< HEAD
-    <?php if (empty($products)): ?>
-      <p class="text-center text-muted py-4">No pastries found.</p>
-    <?php else: ?>
-      <div class="order-grid">
-        <?php foreach ($products as $p): ?>
-          <a class="order-card" href="productpage.php?id=<?= (int) $p['id'] ?>">
-            <img src="<?= htmlspecialchars(sweetProductImage($p['img'])) ?>"
-                 alt="<?= htmlspecialchars($p['productName']) ?>"
-                 decoding="async">
-            <h6><?= htmlspecialchars($p['productName']) ?></h6>
-            <p class="price">₱<?= number_format((float) $p['price'], 2) ?></p>
-          </a>
-        <?php endforeach; ?>
-      </div>
-    <?php endif; ?>
-=======
     <div class="mb-3">
         <input
             type="text"
@@ -46,7 +29,6 @@ include_once __DIR__ . '/includes/topbar.php';
             placeholder="Search order number or payment method..."
         >
     </div>
->>>>>>> second
 
     <div id="orderMessage" class="mb-3"></div>
 

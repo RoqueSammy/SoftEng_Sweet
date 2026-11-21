@@ -139,8 +139,6 @@ if ($sidebar_total_orders_result) {
     </form>
 
 </div>
-<<<<<<< HEAD
-=======
 
 <script>
 document.getElementById("logoutForm").addEventListener("submit", async function (e) {
@@ -166,4 +164,3 @@ document.getElementById("logoutForm").addEventListener("submit", async function 
 });
 </script>
 </aside>
->>>>>>> second

@@ -313,64 +313,13 @@ function sweetProductImage($imageName)
     <div class="container py-5">
 
         <div class="section-heading text-center py-4">
-<<<<<<< HEAD
-            <h1 class="our_products">Best Sellers!</h1>
-=======
             <h1 class="our_products">Best Seller Spotlight</h1>
->>>>>>> second
             <h6 class="section-subtitle">
                 Our customer favorite, made fresh for you.
             </h6>
         </div>
 
         <?php if (!empty($bestProducts)): ?>
-<<<<<<< HEAD
-
-            <div class="row g-4 justify-content-center">
-
-                <?php foreach ($bestProducts as $row): ?>
-                    <?php
-                    $displayImg = sweetProductImage($row["img"] ?? "");
-                    $productId = (int) $row["id"];
-                    $productName = (string) ($row["productName"] ?? "");
-                    $productPrice = (float) ($row["price"] ?? 0);
-                    ?>
-
-                    <div class="col-6 col-md-4 col-lg-3">
-
-                        <a href="/SoftEcoms/public/productpage.php?id=<?php echo $productId; ?>"
-                           class="product-card-link">
-
-                            <div class="best-card card border-0 h-100 rounded-4 overflow-hidden shadow-sm">
-
-                                <div class="best-img-wrapper">
-                                    <img
-                                        src="<?php echo htmlspecialchars($displayImg, ENT_QUOTES, "UTF-8"); ?>"
-                                        class="best-img"
-                                        alt="<?php echo htmlspecialchars($productName, ENT_QUOTES, "UTF-8"); ?>"
-                                        loading="lazy">
-                                </div>
-
-                                <div class="card-body text-center">
-                                    <h6 class="best-title">
-                                        <?php echo htmlspecialchars($productName, ENT_QUOTES, "UTF-8"); ?>
-                                    </h6>
-
-                                    <p class="best-price">
-                                        ₱<?php echo number_format($productPrice, 2); ?>
-                                    </p>
-                                </div>
-
-                            </div>
-
-                        </a>
-
-                    </div>
-
-                <?php endforeach; ?>
-
-            </div>
-=======
             <?php $bestProduct = $bestProducts[0]; $bestImage = sweetProductImage($bestProduct["img"] ?? ""); ?>
             <button type="button" class="best-feature-card" id="bestSellerTrigger"
                     data-product-uuid="<?= htmlspecialchars($bestProduct["uuid"] ?? "", ENT_QUOTES, "UTF-8") ?>"
@@ -392,7 +341,6 @@ function sweetProductImage($imageName)
                     <span class="best-feature-hint">Tap to see details and order</span>
                 </span>
             </button>
->>>>>>> second
 
         <?php else: ?>
 
@@ -584,14 +532,8 @@ document.addEventListener("DOMContentLoaded", function () {
     slider.prepend(...leftClones);
     slider.append(...rightClones);
     const slides = Array.from(slider.querySelectorAll(".product-slide"));
-<<<<<<< HEAD
-    if (slides.length === 0) return;
-
-    let activeIndex = 0;
-=======
 
     let activeIndex = productCount;
->>>>>>> second
     let resizeTimer;
     let isMoving = false;
 
@@ -607,25 +549,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             dot.addEventListener("click", function () {
                 activeIndex = productCount + index;
-                updateSlider();
-            });
-
-            status.appendChild(dot);
-        });
-    }
-
-    // Create one clickable indicator dot for each product.
-    if (status) {
-        status.innerHTML = "";
-
-        slides.forEach(function (slide, index) {
-            const dot = document.createElement("button");
-            dot.type = "button";
-            dot.className = "slider-dot";
-            dot.setAttribute("aria-label", "Go to product " + (index + 1));
-
-            dot.addEventListener("click", function () {
-                activeIndex = index;
                 updateSlider();
             });
 
@@ -667,31 +590,18 @@ document.addEventListener("DOMContentLoaded", function () {
             );
         });
 
-<<<<<<< HEAD
-        // Disable arrows at the beginning and end.
-        prevButton.disabled = activeIndex === 0;
-        nextButton.disabled = activeIndex === slides.length - 1;
-=======
         prevButton.disabled = false;
         nextButton.disabled = false;
->>>>>>> second
 
         // Highlight the indicator for the active product.
         if (status) {
             const dots = status.querySelectorAll(".slider-dot");
 
-<<<<<<< HEAD
-            dots.forEach(function (dot, index) {
-                dot.classList.toggle("active", index === activeIndex);
-
-                if (index === activeIndex) {
-=======
             const logicalIndex = ((activeIndex - productCount) % productCount + productCount) % productCount;
             dots.forEach(function (dot, index) {
                 dot.classList.toggle("active", index === logicalIndex);
 
                 if (index === logicalIndex) {
->>>>>>> second
                     dot.setAttribute("aria-current", "true");
                 } else {
                     dot.removeAttribute("aria-current");
@@ -714,8 +624,6 @@ document.addEventListener("DOMContentLoaded", function () {
         updateSlider();
     });
 
-<<<<<<< HEAD
-=======
     slider.addEventListener("transitionend", function (event) {
         // Child slides also animate their scale; only rebase when the track itself finishes.
         if (event.target !== slider || event.propertyName !== "transform") return;
@@ -740,7 +648,6 @@ document.addEventListener("DOMContentLoaded", function () {
         isMoving = false;
     });
 
->>>>>>> second
     // Recalculate positions when the screen size changes.
     window.addEventListener("resize", function () {
         clearTimeout(resizeTimer);

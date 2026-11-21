@@ -198,11 +198,7 @@ $cartCount = 0;
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-<<<<<<< HEAD
-    const API_URL = "http://localhost:3000";
-=======
     const API_URL = "/api";
->>>>>>> second
 
 
     // ==========================================

@@ -667,8 +667,6 @@
 
 }
 
-<<<<<<< HEAD
-=======
 /* Final order review before the order is submitted */
 .order-confirm-modal .modal-dialog { max-width: 860px; }
 .order-confirm-modal .review-modal-body { padding: 28px; text-align: left; }
@@ -723,7 +721,6 @@
  .order-confirm-modal .review-modal-body .keep-item-btn,.order-confirm-modal .review-modal-body .confirm-remove-btn { width:100%; }
 }
 
->>>>>>> second
 /* =====================================
    CONFIRMATION PAGE
 ===================================== */

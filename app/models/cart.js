@@ -1,3 +1,4 @@
+const Product = require("./product");
 
 class Cart {
   constructor(db) {
@@ -27,14 +28,19 @@ class Cart {
       throw new Error("Invalid product quantity.");
     }
 
-    const [customers] = await this.db.execute(
-      `SELECT id
-       FROM users
-       WHERE id = ?
-       AND role IN ('user', 'customer')
-       LIMIT 1`,
-      [parsedUserId]
-    );
+    const connection = await this.db.getConnection();
+
+    try {
+      await connection.beginTransaction();
+
+      const [customers] = await connection.execute(
+        `SELECT id
+         FROM users
+         WHERE id = ?
+         AND role IN ('user', 'customer')
+         LIMIT 1`,
+        [parsedUserId],
+      );
 
       if (customers.length === 0) {
         throw new Error("Customer not found.");
@@ -113,42 +119,6 @@ class Cart {
     } finally {
       connection.release();
     }
-
-    const [products] = await this.db.execute(
-      `SELECT id
-       FROM product_item
-       WHERE uuid = ?
-       LIMIT 1`,
-      [cleanUUID]
-    );
-
-    if (products.length === 0) {
-      throw new Error("Product not found.");
-    }
-
-    const productID = products[0].id;
-
-    await this.db.execute(
-      `INSERT INTO cart (
-        user_id,
-        product_id,
-        quantity
-      )
-      VALUES (?, ?, ?)
-      ON DUPLICATE KEY UPDATE
-        quantity = quantity + VALUES(quantity)`,
-      [parsedUserId, productID, parsedQuantity]
-    );
-
-    const cartCount = await this.getCartCount(parsedUserId);
-
-    return {
-      success: true,
-      message: "Product added to cart!",
-      productID,
-      quantity: parsedQuantity,
-      cartCount
-    };
   }
 
   // ==========================================
@@ -184,7 +154,7 @@ class Cart {
         ON cart.product_id = product_item.id
       WHERE cart.user_id = ?
       ORDER BY cart.id DESC`,
-      [parsedUserId]
+      [parsedUserId],
     );
 
     return rows;
@@ -199,19 +169,11 @@ class Cart {
     const parsedCartID = Number(cartID);
     const parsedQuantity = Number(quantity);
 
-<<<<<<< HEAD
-    if (!Number.isInteger(parsedUserId) || parsedUserId < 1) {
-      throw new Error("Invalid customer ID.");
-    }
-
-    if (!Number.isInteger(parsedCartID) || parsedCartID < 1) {
-=======
     if (!Number.isSafeInteger(parsedUserId) || parsedUserId < 1) {
       throw new Error("Invalid customer ID.");
     }
 
     if (!Number.isSafeInteger(parsedCartID) || parsedCartID < 1) {
->>>>>>> second
       throw new Error("Invalid cart item ID.");
     }
 
@@ -219,17 +181,7 @@ class Cart {
       throw new Error("Invalid product quantity.");
     }
 
-<<<<<<< HEAD
-    const [result] = await this.db.execute(
-      `UPDATE cart
-       SET quantity = ?
-       WHERE id = ?
-       AND user_id = ?`,
-      [parsedQuantity, parsedCartID, parsedUserId]
-    );
-=======
     const connection = await this.db.getConnection();
->>>>>>> second
 
     try {
       await connection.beginTransaction();
@@ -306,19 +258,11 @@ class Cart {
     const parsedUserId = Number(userId);
     const parsedCartID = Number(cartID);
 
-<<<<<<< HEAD
-    if (!Number.isInteger(parsedUserId) || parsedUserId < 1) {
-      throw new Error("Invalid customer ID.");
-    }
-
-    if (!Number.isInteger(parsedCartID) || parsedCartID < 1) {
-=======
     if (!Number.isSafeInteger(parsedUserId) || parsedUserId < 1) {
       throw new Error("Invalid customer ID.");
     }
 
     if (!Number.isSafeInteger(parsedCartID) || parsedCartID < 1) {
->>>>>>> second
       throw new Error("Invalid cart item ID.");
     }
 
@@ -326,11 +270,7 @@ class Cart {
       `DELETE FROM cart
        WHERE id = ?
        AND user_id = ?`,
-<<<<<<< HEAD
-      [parsedCartID, parsedUserId]
-=======
       [parsedCartID, parsedUserId],
->>>>>>> second
     );
 
     return result.affectedRows > 0;
@@ -350,7 +290,7 @@ class Cart {
     const [result] = await this.db.execute(
       `DELETE FROM cart
        WHERE user_id = ?`,
-      [parsedUserId]
+      [parsedUserId],
     );
 
     return result.affectedRows;
@@ -358,7 +298,6 @@ class Cart {
 
   // ==========================================
   // GET CART ITEM COUNT
-  // Total quantity of all products
   // ==========================================
 
   async getCartCount(userId) {
@@ -372,7 +311,7 @@ class Cart {
       `SELECT COALESCE(SUM(quantity), 0) AS totalItems
        FROM cart
        WHERE user_id = ?`,
-      [parsedUserId]
+      [parsedUserId],
     );
 
     return Number(rows[0].totalItems);
@@ -455,30 +394,7 @@ class Cart {
   // ==========================================
 
   async getCartTotal(userId) {
-<<<<<<< HEAD
-    const parsedUserId = Number(userId);
-
-    if (!Number.isInteger(parsedUserId) || parsedUserId < 1) {
-      throw new Error("Invalid customer ID.");
-    }
-
-    const [rows] = await this.db.execute(
-      `SELECT
-        COALESCE(
-          SUM(cart.quantity * product_item.price),
-          0
-        ) AS totalAmount
-       FROM cart
-       INNER JOIN product_item
-         ON cart.product_id = product_item.id
-       WHERE cart.user_id = ?`,
-      [parsedUserId]
-    );
-
-    return Number(rows[0].totalAmount);
-=======
     return await this.subtotal(userId);
->>>>>>> second
   }
 }
 

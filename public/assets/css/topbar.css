@@ -4,8 +4,6 @@
   box-sizing: border-box;
 }
 
-<<<<<<< HEAD
-=======
 html {
   scrollbar-gutter: stable;
 }
@@ -75,7 +73,6 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
   .account-toggle { gap: 6px; padding-inline: 5px; }
 }
 
->>>>>>> second
 /* ==========================================
    LOGO
 ========================================== */
@@ -104,62 +101,6 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
 /* ==========================================
    NAVIGATION LINKS
 ========================================== */
-<<<<<<< HEAD
-
-.navbar .navbar-nav .nav-link {
-    position: relative;
-    display: inline-block;
-    margin: 0 10px;
-    padding: 10px 5px;
-    color: #704638;
-    font-family: "Rubik", sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition:
-        color 0.3s ease,
-        transform 0.3s ease;
-}
-
-/* Sliding Underline */
-
-.navbar .navbar-nav .nav-link::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    bottom: 3px;
-    width: 0;
-    height: 3px;
-    background: #F56C6C;
-    border-radius: 20px;
-    transform: translateX(-50%);
-    transition: width 0.35s ease;
-}
-
-/* Hover Animation */
-
-.navbar .navbar-nav .nav-link:hover {
-    color: #F56C6C !important;
-    transform: translateY(-2px);
-}
-
-.navbar .navbar-nav .nav-link:hover::after {
-    width: 65%;
-}
-
-/* Active Page */
-
-.navbar .navbar-nav .nav-link.active {
-    color: #F56C6C !important;
-    font-weight: 600;
-}
-
-.navbar .navbar-nav .nav-link.active::after {
-    width: 65%;
-}
-
-=======
 
 .navbar .navbar-nav .nav-link {
   position: relative;
@@ -214,31 +155,11 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
   width: 65%;
 }
 
->>>>>>> second
 /* ==========================================
    MOBILE NAVIGATION
 ========================================== */
 
 @media (max-width: 991px) {
-<<<<<<< HEAD
-
-    .navbar .navbar-nav .nav-link {
-        display: block;
-        width: fit-content;
-        padding: 10px 0;
-    }
-
-    .navbar .navbar-nav .nav-link::after {
-        left: 0;
-        transform: none;
-    }
-
-    .navbar .navbar-nav .nav-link:hover::after,
-    .navbar .navbar-nav .nav-link.active::after {
-        width: 40px;
-    }
-
-=======
   .navbar .navbar-nav .nav-link {
     display: block;
     width: fit-content;
@@ -254,7 +175,6 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
   .navbar .navbar-nav .nav-link.active::after {
     width: 40px;
   }
->>>>>>> second
 }
 
 /* ==========================================
@@ -270,15 +190,6 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
 ========================================== */
 
 .nav-icon {
-<<<<<<< HEAD
-    color: #704638 !important;
-    text-decoration: none !important;
-    display: flex;
-    align-items: center;
-    transition:
-        color 0.3s ease,
-        transform 0.3s ease;
-=======
   color: #704638 !important;
   text-decoration: none !important;
   display: flex;
@@ -287,7 +198,6 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
   transition:
     color 0.3s ease,
     transform 0.3s ease;
->>>>>>> second
 }
 
 .nav-icon svg {
@@ -298,15 +208,9 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
 .nav-icon:focus,
 .nav-icon:active,
 .nav-icon:visited {
-<<<<<<< HEAD
-    text-decoration: none !important;
-    outline: none;
-    box-shadow: none;
-=======
   text-decoration: none !important;
   outline: none;
   box-shadow: none;
->>>>>>> second
 }
 
 /* ==========================================
@@ -314,111 +218,6 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
 ========================================== */
 
 #cartIcon {
-<<<<<<< HEAD
-    position: relative !important;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    overflow: visible !important;
-    transition:
-        transform 0.3s ease,
-        color 0.3s ease;
-}
-
-/* Cart Hover Animation */
-
-#cartIcon:hover {
-    color: #F56C6C !important;
-    transform: scale(1.12);
-}
-
-#cartIcon:hover svg {
-    fill: #F56C6C !important;
-}
-
-/* Cart Count Badge */
-
-
-/* ==========================================
-   CART COUNT BADGE
-   CONSISTENT DESIGN ON ALL PAGES
-========================================== */
-
-#cartIcon #cartCount {
-    position: absolute !important;
-    top: -9px !important;
-    right: -9px !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    width: 22px !important;
-    height: 22px !important;
-    min-width: 22px !important;
-    max-width: 22px !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    background: #F0445A !important;
-    color: #FFFFFF !important;
-
-    border: 2px solid #FFFFFF !important;
-    border-radius: 50% !important;
-
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    line-height: 1 !important;
-
-    text-align: center !important;
-    box-sizing: border-box !important;
-    white-space: nowrap !important;
-
-    z-index: 99999 !important;
-}
-
-
-/* ==========================================
-   ACTIVE SHOPPING CART
-   ICON COLOR ONLY - NO UNDERLINE OR DOT
-========================================== */
-
-#cartIcon.active {
-    color: #F56C6C !important;
-    transform: scale(1.08);
-    border: none !important;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-    text-decoration: none !important;
-}
-
-#cartIcon.active svg {
-    fill: #F56C6C !important;
-}
-
-/* Remove Active Cart Decorations */
-
-#cartIcon.active::after {
-    content: none !important;
-    display: none !important;
-}
-
-/* ==========================================
-   CART PAGE NAVIGATION
-========================================== */
-
-/* Other navigation links stay normal on cart page */
-
-.cart-page .navbar .navbar-nav .nav-link.active {
-    color: #704638 !important;
-    font-weight: 500 !important;
-}
-
-.cart-page .navbar .navbar-nav .nav-link.active::after {
-    width: 0 !important;
-=======
   position: relative !important;
   display: inline-flex !important;
   align-items: center;
@@ -555,46 +354,29 @@ body:not(.dashboard-page):not(.customers-page):not(.orders-page):not(.products-p
 
 .cart-page .navbar .navbar-nav .nav-link.active::after {
   width: 0 !important;
->>>>>>> second
 }
 
 /* Highlight Cart Icon */
 
 .cart-page #cartIcon,
 .cart-page #cartIcon.active {
-<<<<<<< HEAD
-    color: #F56C6C !important;
-    border: none !important;
-    border-bottom: none !important;
-    padding-bottom: 0 !important;
-=======
   color: #f56c6c !important;
   border: none !important;
   border-bottom: none !important;
   padding-bottom: 0 !important;
->>>>>>> second
 }
 
 .cart-page #cartIcon svg,
 .cart-page #cartIcon.active svg {
-<<<<<<< HEAD
-    fill: #F56C6C !important;
-=======
   fill: #f56c6c !important;
->>>>>>> second
 }
 
 /* No Underline or Dot on Cart Page */
 
 .cart-page #cartIcon::after,
 .cart-page #cartIcon.active::after {
-<<<<<<< HEAD
-    content: none !important;
-    display: none !important;
-=======
   content: none !important;
   display: none !important;
->>>>>>> second
 }
 
 /* ==========================================
