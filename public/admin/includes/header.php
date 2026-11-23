@@ -61,6 +61,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/adminProduct.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/sidebars.css">
 <link rel="stylesheet" href="/SoftEcoms/public/assets/css/adminTheme.css">
+<link rel="stylesheet" href="/SoftEcoms/public/assets/css/receipt.css">
 
 <!-- -external links that I used -carlo -->
 <link rel="preconnect" href="https://googleapis.com">

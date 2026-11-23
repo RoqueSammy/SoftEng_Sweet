@@ -330,6 +330,91 @@
 }
 
 /* =========================================
+   LOGIN REQUIRED NOTICE
+========================================= */
+
+.contact-login-notice {
+  width: 100%;
+  padding: 40px 30px;
+  text-align: center;
+  background: #fff5f2;
+  border: 1px solid #f8ded8;
+  border-radius: 15px;
+  font-family: "Poppins", sans-serif;
+}
+
+.contact-login-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8ded8;
+  color: #d85c5c;
+  border-radius: 50%;
+  font-size: 27px;
+}
+
+.contact-login-notice .section-eyebrow {
+  color: #d85c5c;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+.contact-login-notice h3 {
+  font-family: "Playfair Display", serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #704638;
+  margin: 0 0 12px;
+}
+
+.contact-login-notice p {
+  max-width: 390px;
+  margin: 0 auto 25px;
+  color: #8a7770;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  line-height: 1.9;
+}
+
+.contact-login-btn {
+  width: 100%;
+  min-height: 47px;
+  padding: 13px 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(100deg, #f56c6c, #ff9b4f);
+  color: #ffffff !important;
+  font-family: "Poppins", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: 0.25s ease;
+}
+
+.contact-login-btn:hover {
+  color: #ffffff !important;
+  text-decoration: none !important;
+  box-shadow: 0 7px 17px rgba(245, 108, 108, 0.2);
+}
+
+.contact-login-note {
+  display: block;
+  margin-top: 18px;
+  color: #a99993;
+  font-family: "Poppins", sans-serif;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+/* =========================================
    SUCCESS MESSAGE
 ========================================= */
 
@@ -472,6 +557,14 @@
 
   .contact-info h2 {
     font-size: 28px;
+  }
+
+  .contact-login-notice {
+    padding: 30px 20px;
+  }
+
+  .contact-login-notice h3 {
+    font-size: 25px;
   }
 
   .contact-bottom {

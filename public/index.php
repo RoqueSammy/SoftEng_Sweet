@@ -135,7 +135,7 @@ function sweetProductImage($imageName)
                 </h6>
             </div>
 
-            <a href="/SoftEcoms/public/order.php" class="view-all-link">
+            <a href="/SoftEcoms/public/productpage.php" class="view-all-link">
                 View All <span>&gt;</span>
             </a>
 
@@ -378,7 +378,6 @@ function sweetProductImage($imageName)
                 </div>
             </div>
             <div class="modal-footer quick-view-footer">
-                <button type="button" class="btn quick-view-back" data-bs-dismiss="modal">Back</button>
                 <button type="button" class="btn quick-view-add" id="bestSellerOrderNow"><i class="fa-solid fa-bag-shopping"></i> Order Now</button>
             </div>
         </div>

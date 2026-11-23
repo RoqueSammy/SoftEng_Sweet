@@ -137,7 +137,6 @@ if ($sidebar_total_orders_result) {
             <form action="/api/logout" method="POST">
 
                 <button type="submit" class="logout-btn">
-                    <span>🚪</span>
                     Logout
                 </button>
 

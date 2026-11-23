@@ -556,7 +556,7 @@ include('./includes/topbar.php');
 
                             </div>
 
-                            <a href="cart.php">Edit Cart</a>
+                            <a href="cart.php">Back →</a> 
 
                         </div>
 
@@ -599,7 +599,7 @@ include('./includes/topbar.php');
                             id="placeOrderButton"
                             class="place-order-btn"
                         >
-                            ORDER SUMMARY <span>→</span>
+                            ORDER SUMMARY 
                         </button>
 
                         <p class="summary-note">

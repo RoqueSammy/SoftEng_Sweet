@@ -563,7 +563,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (response.status === 401) {
-                showMessage("Your session has expired. Please log in again.");
+
 
                 ordersTable.innerHTML = `
                     <tr>

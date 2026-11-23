@@ -109,16 +109,35 @@ include('./includes/topbar.php');
             </div>
 
             <!-- LOGIN NOTICE -->
-            <div id="contactLoginNotice" style="display:none;">
-                <h3>Login Required</h3>
-                <p>You need to log in to your customer account before sending us a message.</p>
-                <a href="/SoftEcoms/public/login.php">
+            <div id="contactLoginNotice" class="contact-login-notice" style="display:none;">
+
+                <div class="contact-login-icon">
+                    <i class="fas fa-user-lock"></i>
+                </div>
+
+                <span class="section-eyebrow">WELCOME TO SWEETCLAIRE</span>
+
+                <h3>One Sweet Step Away!</h3>
+
+                <p>
+                    Please log in to your customer account before sending us a message.
+                    We'd love to hear from you and help with anything you need!
+                </p>
+
+                <a href="/SoftEcoms/public/login.php" class="contact-login-btn">
                     Login to Your Account
+                    <i class="fas fa-arrow-right"></i>
                 </a>
+
+                <span class="contact-login-note">
+                    Your SweetClaire account makes it easier to connect with us.
+                </span>
+
             </div>
 
             <!-- ACCOUNT INFORMATION -->
             <div id="contactAccountInfo" style="display:none;">
+
                 <div class="form-group">
                     <label for="contactName">Name</label>
                     <input
@@ -138,6 +157,7 @@ include('./includes/topbar.php');
                         readonly
                     >
                 </div>
+
             </div>
 
             <!-- CONTACT FORM -->
@@ -186,6 +206,7 @@ include('./includes/topbar.php');
 
             <!-- SUCCESS MESSAGE -->
             <div class="contact-success" id="contactSuccess" style="display:none;">
+
                 <div class="success-icon">
                     <i class="fas fa-check"></i>
                 </div>
@@ -200,6 +221,7 @@ include('./includes/topbar.php');
                 <button type="button" id="sendAnotherMessage">
                     Send Another Message
                 </button>
+
             </div>
 
         </div>
@@ -219,5 +241,6 @@ include('./includes/topbar.php');
 
 <!-- CONTACT JAVASCRIPT -->
 <script src="assets/js/contact.js"></script>
+
 </body>
 </html>
